@@ -1,0 +1,17 @@
+﻿---
+IncludeBlocks: Preserve
+IndentWidth: 4
+SortIncludes: Never
+SortUsingDeclarations: 'false'
+NamespaceIndentation: None
+IndentPPDirectives: AfterHash
+SpacesInParentheses: false
+SpacesInContainerLiterals: false
+SpaceBeforeParens: ControlStatements
+PointerAlignment: Left
+AllowShortLambdasOnASingleLine: "Empty"
+ColumnLimit: 160
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: InlineOnly
+DerivePointerAlignment: false
+...
