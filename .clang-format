@@ -16,4 +16,5 @@ AllowShortFunctionsOnASingleLine: InlineOnly
 DerivePointerAlignment: false
 AlwaysBreakTemplateDeclarations: Yes
 InsertNewlineAtEOF: true
+SkipMacroDefinitionBody: true
 ...

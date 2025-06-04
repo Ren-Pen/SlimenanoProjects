@@ -8,6 +8,14 @@
 namespace slimenano {
 namespace gc {
 
+auto GarbageCollectorManager::Initialize() -> void {
+    GarbageCollectorManager::Initialize(GarbageCollectorConfig());
+}
+
+auto GarbageCollectorManager::Initialize(GarbageCollectorConfig&& config) -> void {
+    GarbageCollectorManager::Initialize(config);
+}
+
 auto GarbageCollectorManager::Initialize(GarbageCollectorConfig& config) -> void {
     if (AvailableGarbageCollectors().empty()) {
         throw std::runtime_error("No available garbage collector.");
@@ -24,11 +32,12 @@ auto GarbageCollectorManager::Initialize(GarbageCollectorConfig& config) -> void
     const auto& gc_factory = iterator->second;
     try {
         instance() = gc_factory();
+        config.Put("gc_type", gc_name);
+        
+        GetGarbageCollector().Start();
     } catch (const std::exception& e) {
-        throw std::runtime_error("Failed to create garbage collector: \n" + std::string(e.what()));
+        throw std::runtime_error("Failed to initialize garbage collector: \n" + std::string(e.what()));
     }
-    config.Put("gc_type", gc_name);
-
 }
 
 auto GarbageCollectorManager::RegisterFactory(const std::string& name, const GarbageCollectorFactoryFunc& factory) -> void {
@@ -37,11 +46,24 @@ auto GarbageCollectorManager::RegisterFactory(const std::string& name, const Gar
 
 auto GarbageCollectorManager::AvailableGarbageCollectors() -> std::vector<std::string> {
     std::vector<std::string> result;
-    for (const auto& [name, _] : factories()) {
-        result.push_back(name);
+    for (const auto& pair : factories()) {
+        result.push_back(pair.first);
     }
     return result;
 }
+
+auto GarbageCollectorManager::GetGarbageCollector() -> IGarbageCollector& {
+    auto& ptr = instance();
+    if (!ptr) {
+        throw std::runtime_error("Garbage collector not initialized");
+    }
+    return *ptr;
+}
+
+auto GarbageCollectorManager::Release() -> void{
+    GetGarbageCollector().Shutdown();
+}
+
 auto GarbageCollectorManager::instance() -> std::unique_ptr<IGarbageCollector>& {
     static std::unique_ptr<IGarbageCollector> instance;
     return instance;
@@ -50,32 +72,6 @@ auto GarbageCollectorManager::factories() -> std::unordered_map<std::string, Gar
     static std::unordered_map<std::string, GarbageCollectorFactoryFunc> factories;
     return factories;
 }
-
-GarbageCollectorManager::GarbageCollectorConfig::GarbageCollectorConfig() : m_config() {
-}
-
-GarbageCollectorManager::GarbageCollectorConfig::GarbageCollectorConfig(const GarbageCollectorConfig& other) = default;
-
-GarbageCollectorManager::GarbageCollectorConfig::GarbageCollectorConfig(GarbageCollectorConfig&& other) noexcept : m_config(std::move(other.m_config)) {
-}
-
-auto GarbageCollectorManager::GarbageCollectorConfig::operator=(const GarbageCollectorConfig& other) -> GarbageCollectorConfig& {
-    if (this == &other) {
-        return *this;
-    }
-    m_config = other.m_config;
-    return *this;
-}
-
-auto GarbageCollectorManager::GarbageCollectorConfig::operator=(GarbageCollectorConfig&& other) noexcept -> GarbageCollectorConfig& {
-    if (this == &other) {
-        return *this;
-    }
-    m_config = std::move(other.m_config);
-    return *this;
-}
-
-GarbageCollectorManager::GarbageCollectorConfig::~GarbageCollectorConfig() = default;
 
 auto GarbageCollectorManager::GarbageCollectorConfig::Get(const std::string& key) const -> std::string {
     const auto value_iter = m_config.find(key);

@@ -24,6 +24,8 @@ set(INCLUDE_FILES
         "${SRC_DIR}/GCHandle.hpp"
         "${SRC_DIR}/IGarbageCollector.hpp"
         "${SRC_DIR}/GarbageCollectorManager.hpp"
+        "${SRC_DIR}/mem/IGCAllocator.hpp"
+
 )
 
 add_library(slimenano-object ${SRC_FILES} ${INCLUDE_FILES})

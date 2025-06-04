@@ -19,10 +19,13 @@ class GarbageCollectorManager {
     using GarbageCollectorFactoryFunc = std::function<auto()->std::unique_ptr<IGarbageCollector>>;
     class GarbageCollectorConfig;
     class GarbageCollectorFactory;
+    static auto Initialize() -> void;
     static auto Initialize(GarbageCollectorConfig& config) -> void;
+    static auto Initialize(GarbageCollectorConfig&& config) -> void;
     static auto RegisterFactory(const std::string& name, const GarbageCollectorFactoryFunc& factory) -> void;
     static auto AvailableGarbageCollectors() -> std::vector<std::string>;
     static auto GetGarbageCollector() -> IGarbageCollector&;
+    static auto Release() -> void;
 
   private:
     static auto instance() -> std::unique_ptr<IGarbageCollector>&;
@@ -33,12 +36,8 @@ class GarbageCollectorManager {
 
 class GarbageCollectorManager::GarbageCollectorConfig {
   public:
-    GarbageCollectorConfig();
-    GarbageCollectorConfig(const GarbageCollectorConfig& other);
-    GarbageCollectorConfig(GarbageCollectorConfig&& other) noexcept;
-    auto operator=(const GarbageCollectorConfig& other) -> GarbageCollectorConfig&;
-    auto operator=(GarbageCollectorConfig&& other) noexcept -> GarbageCollectorConfig&;
-    ~GarbageCollectorConfig();
+    GarbageCollectorConfig() = default;
+    ~GarbageCollectorConfig() = default;
 
     auto Get(const std::string& key) const -> std::string;
     auto Put(const std::string& key, const std::string& value) -> GarbageCollectorConfig&;
