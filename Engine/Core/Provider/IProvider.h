@@ -1,4 +1,4 @@
-#[[
+/*
     Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
@@ -14,8 +14,24 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-]]#
-cmake_minimum_required(VERSION 3.10.0)
-project(SlimenanoProject)
+*/
+#pragma once
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_H
+#define SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_H
 
-add_subdirectory(Engine)
+/**
+ * This interface defines a contract for service providers.
+ * Implementations of this interface should be registered with the ProviderManager.
+ * When the system requires a specific module, it retrieves a Provider from the ProviderManager,
+ * and then obtains the corresponding Service interface from the Provider for use.
+ */
+class IProvider {
+
+    IProvider() = default;
+    virtual ~IProvider() = default;
+    
+
+};
+
+
+#endif //SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_H

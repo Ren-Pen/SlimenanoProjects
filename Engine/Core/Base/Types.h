@@ -1,4 +1,4 @@
-#[[
+/*
     Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
@@ -14,8 +14,13 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-]]#
-cmake_minimum_required(VERSION 3.10.0)
-project(SlimenanoProject)
+*/
+#pragma once
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
+#define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
 
-add_subdirectory(Engine)
+
+
+
+
+#endif //SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H

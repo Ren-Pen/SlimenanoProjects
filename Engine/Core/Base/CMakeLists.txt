@@ -15,7 +15,5 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]#
-cmake_minimum_required(VERSION 3.10.0)
-project(SlimenanoProject)
 
-add_subdirectory(Engine)
+target_sources(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Types.h)

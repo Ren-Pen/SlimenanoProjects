@@ -15,7 +15,17 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]#
-cmake_minimum_required(VERSION 3.10.0)
-project(SlimenanoProject)
 
-add_subdirectory(Engine)
+cmake_minimum_required(VERSION 3.10.0)
+
+project(SlimenanoEngine
+    VERSION 1.0.0
+    LANGUAGES CXX
+)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED 20)
+
+set(NAMESPACE Slimenano)
+
+add_subdirectory(Core)
