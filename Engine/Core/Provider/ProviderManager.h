@@ -1,4 +1,4 @@
-#[[
+/*
     Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
@@ -14,26 +14,31 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-]]#
-cmake_minimum_required(VERSION 3.10.0)
+*/
+#pragma once
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_MANAGER_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_MANAGER_H
+#    include "Base/Types.h"
+#    include "Provider/IProvider.h"
+#    include "Memory/Memory.h"
 
-project(SlimenanoEngineCore
-    VERSION 1.0.0
-    LANGUAGES CXX
-)
+namespace slimenano {
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED 20)
+class ProviderManager {
 
-set(LIB_NAME Core)
-set(TARGET_NAME ${NAMESPACE}-${LIB_NAME})
+  public:
+    template <typename T>
+    auto RegisterProvider() -> void;
+};
 
-add_library(${TARGET_NAME})
-add_library(${NAMESPACE}::${LIB_NAME} ALIAS ${TARGET_NAME})
+template <typename T>
+auto ProviderManager::RegisterProvider() -> void{
+    RawPtr ptr = Memory::Malloc(sizeof(T));
+    IBaseProvider* provider = static_cast<IBaseProvider*>(new (ptr) T());
+    auto id = provider->getTypeId();
 
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/LibMain.cpp)
-target_include_directories(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+}
 
-add_subdirectory(Base)
-add_subdirectory(Memory)
-add_subdirectory(Provider)
+} // namespace slimenano
+
+#endif // SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_MANAGER_H

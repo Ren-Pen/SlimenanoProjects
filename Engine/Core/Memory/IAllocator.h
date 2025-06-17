@@ -1,4 +1,4 @@
-#[[
+/*
     Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
@@ -14,26 +14,19 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-]]#
-cmake_minimum_required(VERSION 3.10.0)
+*/
+#pragma once
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_ALLOCATOR_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_ALLOCATOR_H
+#    include <cstddef>
 
-project(SlimenanoEngineCore
-    VERSION 1.0.0
-    LANGUAGES CXX
-)
+namespace slimenano {
+class IAllocator {
+  public:
+    virtual auto Malloc(size_t size, size_t alignment = alignof(std::max_align_t)) -> void* = 0;
+    virtual auto Free(void* ptr) -> void = 0;
+    virtual ~IAllocator() = default;
+};
+} // namespace slimenano
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED 20)
-
-set(LIB_NAME Core)
-set(TARGET_NAME ${NAMESPACE}-${LIB_NAME})
-
-add_library(${TARGET_NAME})
-add_library(${NAMESPACE}::${LIB_NAME} ALIAS ${TARGET_NAME})
-
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/LibMain.cpp)
-target_include_directories(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
-
-add_subdirectory(Base)
-add_subdirectory(Memory)
-add_subdirectory(Provider)
+#endif // SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_ALLOCATOR_H

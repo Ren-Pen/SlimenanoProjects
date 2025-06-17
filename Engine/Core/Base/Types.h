@@ -17,10 +17,21 @@
 */
 #pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-#define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
 
+namespace slimenano {
 
+using RawPtr = void*;
 
+class TypeId {
+  public:
+    template <typename T>
+    static TypeId* Get() {
+        static TypeId id;
+        return &id;
+    }
+};
 
+} // namespace slimenano
 
-#endif //SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
+#endif // SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
