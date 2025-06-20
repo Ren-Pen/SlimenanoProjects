@@ -1,4 +1,4 @@
-#[[
+/*
     Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
@@ -14,6 +14,21 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-]]#
+*/
 
-target_sources(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/IProvider.h)
+#include "ProviderManager.h"
+
+namespace slimenano {
+
+    ProviderManager::~ProviderManager(){
+        auto begin = this->m_Providers.begin();
+        auto end = this->m_Providers.end();
+        while (begin != end) {
+            delete begin->second;
+            begin->second = nullptr;
+            begin ++;
+        }
+        this->m_Providers.clear();
+    }
+
+}

@@ -15,3 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#pragma once
+#ifndef SLIMENANO_PROJECT_ENGINE_ENGINE_H
+#    define SLIMENANO_PROJECT_ENGINE_ENGINE_H
+#    include "Core/Base/Types.h"
+#    include "Core/Provider/IProvider.h"
+#    include "Core/Provider/ProviderManager.h"
+#endif // SLIMENANO_PROJECT_ENGINE_ENGINE_H

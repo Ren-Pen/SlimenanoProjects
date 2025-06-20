@@ -27,3 +27,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 set(NAMESPACE Slimenano)
+
+add_executable(SandBox ${PROJECT_SOURCE_DIR}/SandBox.cpp)
+
+target_link_libraries(SandBox Slimenano::Engine)

@@ -18,25 +18,36 @@
 #pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_MANAGER_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_MANAGER_H
-#    include "Base/Types.h"
-#    include "Provider/IProvider.h"
-#    include "Memory/Memory.h"
+#    include <unordered_map>
+
+#    include "../Base/Types.h"
+
+#    include "IProvider.h"
 
 namespace slimenano {
 
 class ProviderManager {
-
   public:
-    template <typename T>
+    ProviderManager() = default;
+    ~ProviderManager();
+
+    ProviderManager(const ProviderManager&) = delete;
+    ProviderManager& operator=(const ProviderManager&) = delete;
+    ProviderManager(ProviderManager&&) = delete;
+    ProviderManager& operator=(ProviderManager&&) = delete;
+
+    template <class T>
     auto RegisterProvider() -> void;
+
+  private:
+    std::unordered_map<TypeId*, IBaseProvider*> m_Providers;
 };
 
-template <typename T>
-auto ProviderManager::RegisterProvider() -> void{
-    RawPtr ptr = Memory::Malloc(sizeof(T));
-    IBaseProvider* provider = static_cast<IBaseProvider*>(new (ptr) T());
-    auto id = provider->getTypeId();
-
+template <class T>
+auto ProviderManager::RegisterProvider() -> void {
+    T* providerPtr = new T();
+    TypeId id = providerPtr->getTypeId();
+    m_Providers[&id] = providerPtr;
 }
 
 } // namespace slimenano

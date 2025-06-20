@@ -25,15 +25,13 @@ project(SlimenanoEngineCore
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
-set(LIB_NAME Core)
-set(TARGET_NAME ${NAMESPACE}-${LIB_NAME})
+set(TARGET_NAME Slimenano-Engine-Core)
 
 add_library(${TARGET_NAME})
-add_library(${NAMESPACE}::${LIB_NAME} ALIAS ${TARGET_NAME})
+add_library(Slimenano::Engine::Core ALIAS ${TARGET_NAME})
 
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/LibMain.cpp)
-target_include_directories(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Types.h)
 
-add_subdirectory(Base)
-add_subdirectory(Memory)
-add_subdirectory(Provider)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/IProvider.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/ProviderManager.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/ProviderManager.cpp)

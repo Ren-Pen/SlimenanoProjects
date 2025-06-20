@@ -1,4 +1,4 @@
-#[[
+/*
     Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
@@ -14,7 +14,11 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-]]#
+*/
+#pragma once
+#ifndef SLIMENANO_PROJECT_ENGINE_ENTRYPOINT_H
+#    define SLIMENANO_PROJECT_ENGINE_ENTRYPOINT_H
 
-target_sources(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Memory.h)
-target_sources(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/IAllocator.h)
+
+
+#endif

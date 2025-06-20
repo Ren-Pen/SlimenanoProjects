@@ -16,17 +16,16 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_ALLOCATOR_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_ALLOCATOR_H
-#    include <cstddef>
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_BASE_APPLICATION_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_BASE_APPLICATION_H
 
-namespace slimenano {
-class IAllocator {
-  public:
-    virtual auto Malloc(size_t size, size_t alignment = alignof(std::max_align_t)) -> void* = 0;
-    virtual auto Free(void* ptr) -> void = 0;
-    virtual ~IAllocator() = default;
-};
-} // namespace slimenano
+namespace slimenano{
 
-#endif // SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_ALLOCATOR_H
+    class BaseApplication{
+        
+    };
+
+}
+
+
+#endif // SLIMENANO_PROJECT_ENGINE_CORE_BASE_BASE_APPLICATION_H

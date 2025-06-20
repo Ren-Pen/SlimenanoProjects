@@ -19,7 +19,7 @@
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_I_PROVIDER_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_I_PROVIDER_H
 #    include <memory>
-#    include "Base/Types.h"
+#    include "../Base/Types.h"
 
 namespace slimenano {
 
@@ -60,7 +60,7 @@ class IBaseProvider {
  * the `ProviderManager` will retrieve a `Provider` implementation and utilize
  * the corresponding service interface provided by it.
  */
-template <typename T>
+template <class T>
 class IProvider : private IBaseProvider {
 
   public:
@@ -89,12 +89,12 @@ class IProvider : private IBaseProvider {
     virtual auto getTypeId() const -> TypeId* override;
 };
 
-template <typename T>
+template <class T>
 auto IProvider<T>::getRawPtr() -> RawPtr {
     return static_cast<RawPtr>(this);
 }
 
-template <typename T>
+template <class T>
 auto IProvider<T>::getTypeId() const -> TypeId* {
     return TypeId::Get<T>();
 }

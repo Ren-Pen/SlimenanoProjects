@@ -26,11 +26,22 @@ project(SlimenanoEngine
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
-set(NAMESPACE Slimenano)
-
 add_subdirectory(Asset)
 add_subdirectory(Audio)
 add_subdirectory(Core)
 add_subdirectory(Renderer)
 add_subdirectory(Runtime)
 add_subdirectory(Scripting)
+
+set(TARGET_NAME Slimenano-Engine)
+
+add_library(${TARGET_NAME})
+add_library(Slimenano::Engine ALIAS ${TARGET_NAME})
+
+target_include_directories(${TARGET_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Entrypoint.cpp)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Entrypoint.h)
+
+target_link_libraries(${TARGET_NAME} Slimenano::Engine::Core)
