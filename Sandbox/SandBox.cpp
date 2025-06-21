@@ -25,7 +25,7 @@ class Sandbox final : public slimenano::IApplication {
     auto Shutdown() -> void override {}
 };
 
-auto main(int argc, char** argv) -> int {
-    slimenano::Entrypoint::App<Sandbox>(0, nullptr);
+auto main(const int argc, const char** argv) -> int {
+    slimenano::Entrypoint::App<Sandbox>(argc, argv);
     return 0;
 }

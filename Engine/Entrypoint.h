@@ -26,7 +26,7 @@ namespace slimenano {
 class Entrypoint final {
   public:
     template <class IApplication>
-    static auto App(int argc, char** argv) -> int;
+    static auto App(const int argc, const char** argv) -> int;
 };
 
 template <class App>
@@ -42,7 +42,7 @@ auto ApplicationProvider<App>::provide() -> std::unique_ptr<IApplication> {
 }
 
 template <class Application>
-auto Entrypoint::App(int argc, char** argv) -> int {
+auto Entrypoint::App(const int argc, const char** argv) -> int {
 
     ProviderManager::GetInstance().RegisterProvider<ApplicationProvider<Application>>();
 
