@@ -1,5 +1,5 @@
 /*
-    Slimenano Engine
+Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
     This program is free software: you can redistribute it and/or modify
@@ -16,22 +16,18 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_ENGINE_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_ENGINE_H
 
 namespace slimenano {
 
-using RawPtr = void*;
+class Engine final {
 
-class TypeId {
-  public:
-    template <typename T>
-    constexpr static auto Get() -> const TypeId* {
-        static constexpr TypeId id;
-        return &id;
-    }
+private:
+    Engine() = default;
+
 };
 
 } // namespace slimenano
 
-#endif // SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
+#endif // SLIMENANO_PROJECT_ENGINE_CORE_BASE_ENGINE_H

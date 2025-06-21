@@ -20,15 +20,20 @@
 
 namespace slimenano {
 
-    ProviderManager::~ProviderManager(){
-        auto begin = this->m_Providers.begin();
-        auto end = this->m_Providers.end();
-        while (begin != end) {
-            delete begin->second;
-            begin->second = nullptr;
-            begin ++;
-        }
-        this->m_Providers.clear();
+ProviderManager::~ProviderManager() {
+    auto begin = this->m_Providers.begin();
+    const auto end = this->m_Providers.end();
+    while (begin != end) {
+        delete begin->second;
+        begin->second = nullptr;
+        ++begin;
     }
-
+    this->m_Providers.clear();
 }
+
+auto ProviderManager::GetInstance() -> ProviderManager& {
+    static ProviderManager instance;
+    return instance;
+}
+
+} // namespace slimenano

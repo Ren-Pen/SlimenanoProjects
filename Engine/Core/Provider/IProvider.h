@@ -47,7 +47,7 @@ class IBaseProvider {
      * @brief Retrieves the unique type identifier (TypeId) of the provider.
      * @return A pointer to the TypeId of the provider.
      */
-    virtual auto getTypeId() const -> TypeId* = 0;
+    [[nodiscard]] virtual auto getTypeId() const -> const TypeId* = 0;
 };
 
 /**
@@ -62,16 +62,17 @@ class IBaseProvider {
  */
 template <class T>
 class IProvider : private IBaseProvider {
+    friend class ProviderManager;
 
   public:
     IProvider() = default;
-    virtual ~IProvider() = default;
+    ~IProvider() override = default;
 
     /**
      * @brief Provides a unique pointer to the specific service instance.
      * @return A unique pointer containing the service interface of type `T`.
      */
-    virtual auto provide() -> std::unique_ptr<T*> = 0;
+    virtual auto provide() -> std::unique_ptr<T> = 0;
 
   private:
     /**
@@ -79,14 +80,14 @@ class IProvider : private IBaseProvider {
      * Overrides the implementation in `IBaseProvider`.
      * @return A void pointer to the actual provider.
      */
-    virtual auto getRawPtr() -> RawPtr override;
+    auto getRawPtr() -> RawPtr final;
 
     /**
      * @brief Retrieves the unique type identifier (TypeId) of the provider.
      * Overrides the implementation in `IBaseProvider`.
      * @return A pointer to the TypeId of the provider.
      */
-    virtual auto getTypeId() const -> TypeId* override;
+    [[nodiscard]] auto getTypeId() const -> const TypeId* final;
 };
 
 template <class T>
@@ -95,10 +96,10 @@ auto IProvider<T>::getRawPtr() -> RawPtr {
 }
 
 template <class T>
-auto IProvider<T>::getTypeId() const -> TypeId* {
+auto IProvider<T>::getTypeId() const -> const TypeId* {
     return TypeId::Get<T>();
 }
 
 } // namespace slimenano
 
-#endif // SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_H
+#endif // SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_I_PROVIDER_H

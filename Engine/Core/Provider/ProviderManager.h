@@ -28,6 +28,8 @@ namespace slimenano {
 
 class ProviderManager {
   public:
+    static auto GetInstance() -> ProviderManager&;
+
     ProviderManager() = default;
     ~ProviderManager();
 
@@ -40,14 +42,14 @@ class ProviderManager {
     auto RegisterProvider() -> void;
 
   private:
-    std::unordered_map<TypeId*, IBaseProvider*> m_Providers;
+    std::unordered_map<const TypeId*, IBaseProvider*> m_Providers;
 };
 
 template <class T>
 auto ProviderManager::RegisterProvider() -> void {
-    T* providerPtr = new T();
-    TypeId id = providerPtr->getTypeId();
-    m_Providers[&id] = providerPtr;
+    auto providerPtr = new T();
+    auto id = providerPtr->getTypeId();
+    m_Providers[id] = providerPtr;
 }
 
 } // namespace slimenano

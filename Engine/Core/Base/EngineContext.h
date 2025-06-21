@@ -1,5 +1,5 @@
 /*
-    Slimenano Engine
+Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
     This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,6 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_ENGINE_H
-#    define SLIMENANO_PROJECT_ENGINE_ENGINE_H
-#    include "Core/Base/Types.h"
-#    include "Core/Provider/IProvider.h"
-#    include "Core/Provider/ProviderManager.h"
-#endif // SLIMENANO_PROJECT_ENGINE_ENGINE_H
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_ENGINE_CONTEXT_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_ENGINE_CONTEXT_H
+#endif // SLIMENANO_PROJECT_ENGINE_CORE_BASE_ENGINE_CONTEXT_H

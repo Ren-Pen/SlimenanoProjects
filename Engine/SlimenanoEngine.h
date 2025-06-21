@@ -16,39 +16,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_ENTRYPOINT_H
-#    define SLIMENANO_PROJECT_ENGINE_ENTRYPOINT_H
+#ifndef SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
+#    define SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
+#    include "Core/Base/Types.h"
 #    include "Core/Base/IApplication.h"
 #    include "Core/Provider/IProvider.h"
 #    include "Core/Provider/ProviderManager.h"
 
-namespace slimenano {
-class Entrypoint final {
-  public:
-    template <class IApplication>
-    static auto App(int argc, char** argv) -> int;
-};
-
-template <class App>
-class ApplicationProvider final : public IProvider<IApplication> {
-
-  public:
-    auto provide() -> std::unique_ptr<IApplication> override;
-};
-
-template <class App>
-auto ApplicationProvider<App>::provide() -> std::unique_ptr<IApplication> {
-    return std::make_unique<App>();
-}
-
-template <class Application>
-auto Entrypoint::App(int argc, char** argv) -> int {
-
-    ProviderManager::GetInstance().RegisterProvider<ApplicationProvider<Application>>();
-
-    return 0;
-}
-
-} // namespace slimenano
-
-#endif
+#    include "Entrypoint.h"
+#endif // SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H

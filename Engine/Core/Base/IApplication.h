@@ -16,16 +16,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_BASE_APPLICATION_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_BASE_APPLICATION_H
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_I_APPLICATION_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_I_APPLICATION_H
 
-namespace slimenano{
+namespace slimenano {
 
-    class BaseApplication{
-        
-    };
+class IApplication {
 
-}
+  public:
+    IApplication() = default;
+    virtual ~IApplication() = default;
 
+    virtual auto Initialize() -> void = 0;
+    virtual auto Shutdown() -> void = 0;
+};
 
-#endif // SLIMENANO_PROJECT_ENGINE_CORE_BASE_BASE_APPLICATION_H
+} // namespace slimenano
+
+#endif // SLIMENANO_PROJECT_ENGINE_CORE_BASE_I_APPLICATION_H
