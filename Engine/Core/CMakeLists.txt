@@ -33,6 +33,7 @@ add_library(Slimenano::Engine::Core ALIAS ${TARGET_NAME})
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Types.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/IApplication.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Engine.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Engine.cpp)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/EngineContext.h)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/IProvider.h)

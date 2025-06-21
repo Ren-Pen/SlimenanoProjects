@@ -18,6 +18,7 @@
 #pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_ENTRYPOINT_H
 #    define SLIMENANO_PROJECT_ENGINE_ENTRYPOINT_H
+#    include "Core/Base/Engine.h"
 #    include "Core/Base/IApplication.h"
 #    include "Core/Provider/IProvider.h"
 #    include "Core/Provider/ProviderManager.h"
@@ -45,6 +46,9 @@ template <class Application>
 auto Entrypoint::App(const int argc, const char** argv) -> int {
 
     ProviderManager::GetInstance().RegisterProvider<ApplicationProvider<Application>>();
+    Engine::GetInstance().Initialize();
+    // Engine::GetInstance().Start();
+
 
     return 0;
 }

@@ -41,6 +41,9 @@ class ProviderManager {
     template <class T>
     auto RegisterProvider() -> void;
 
+    template <class T>
+    auto GetProvider() -> IProvider<T>&;
+
   private:
     std::unordered_map<const TypeId*, IBaseProvider*> m_Providers;
 };
@@ -51,6 +54,13 @@ auto ProviderManager::RegisterProvider() -> void {
     auto id = providerPtr->getTypeId();
     m_Providers[id] = providerPtr;
 }
+
+template <class T>
+auto ProviderManager::GetProvider() -> IProvider<T>& {
+    auto id = TypeId::Get<T>();
+    return *static_cast<IProvider<T>*>(m_Providers[id]->getRawPtr());
+}
+
 
 } // namespace slimenano
 

@@ -16,11 +16,16 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include <SlimenanoEngine.h>
+#include <iostream>
 
 class Sandbox final : public slimenano::IApplication {
   public:
     ~Sandbox() override = default;
-    auto Initialize() -> void override {}
+    auto Initialize() -> void override {
+
+        std::cout << "Hello World!" << std::endl;
+
+    }
 
     auto Shutdown() -> void override {}
 };

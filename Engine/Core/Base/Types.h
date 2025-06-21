@@ -26,8 +26,8 @@ using RawPtr = void*;
 class TypeId {
   public:
     template <typename T>
-    constexpr static auto Get() -> const TypeId* {
-        static constexpr TypeId id;
+    static auto Get() -> const TypeId* {
+        static TypeId id;
         return &id;
     }
 };
