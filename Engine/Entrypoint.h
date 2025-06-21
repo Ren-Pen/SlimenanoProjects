@@ -26,7 +26,7 @@ namespace slimenano {
 class Entrypoint final {
   public:
     template <class IApplication>
-    static auto App(const int argc, const char** argv) -> int;
+    static auto App(int argc, const char** argv) -> int;
 };
 
 template <class App>
