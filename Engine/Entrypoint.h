@@ -18,6 +18,7 @@
 #pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_ENTRYPOINT_H
 #    define SLIMENANO_PROJECT_ENGINE_ENTRYPOINT_H
+#    include "Core/Base/Types.h"
 #    include "Core/Base/Engine.h"
 #    include "Core/Base/IApplication.h"
 #    include "Core/Provider/IProvider.h"
@@ -34,19 +35,27 @@ template <class App>
 class ApplicationProvider final : public IProvider<IApplication> {
 
   public:
-    auto provide() -> std::unique_ptr<IApplication> override;
+    auto Provide() -> std::unique_ptr<IApplication> override;
+
+  protected:
+    auto Release() -> void override;
 };
 
 template <class App>
-auto ApplicationProvider<App>::provide() -> std::unique_ptr<IApplication> {
+auto ApplicationProvider<App>::Provide() -> std::unique_ptr<IApplication> {
     return std::make_unique<App>();
 }
 
+template <class App>
+auto ApplicationProvider<App>::Release() -> void {
+    delete this;
+}
+
+
 template <class Application>
 auto Entrypoint::App(const int argc, const char** argv) -> int {
-
-    ProviderManager::GetInstance().RegisterProvider<ApplicationProvider<Application>>();
-    Engine::GetInstance().Initialize();
+    ProviderManager::RegisterProvider(new ApplicationProvider<Application>());
+    Engine::Initialize();
     // Engine::GetInstance().Start();
 
 

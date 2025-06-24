@@ -23,7 +23,6 @@ namespace slimenano {
 
 class Engine final {
 public:
-    static auto GetInstance() -> Engine&;
 
     ~Engine() = default;
     Engine(const Engine& other) = delete;
@@ -31,14 +30,15 @@ public:
     Engine& operator=(const Engine& other) = delete;
     Engine& operator=(Engine&& other) noexcept = delete;
 
-    auto Initialize() -> void;
-    // auto Start() -> void;
-    // auto Shutdown() -> void;
-    // auto IsRunning() -> bool;
-    // auto IsInitialized() -> bool;
+    static auto Initialize() -> void;
+    // static auto Start() -> void;
+    // static auto Shutdown() -> void;
+    // static auto IsRunning() -> bool;
+    // static auto IsInitialized() -> bool;
 
 private:
     Engine() = default;
+    static auto GetInstance() -> Engine&;
 };
 
 } // namespace slimenano

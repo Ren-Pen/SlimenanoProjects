@@ -36,6 +36,10 @@ target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Engine.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Engine.cpp)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/EngineContext.h)
 
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/Memory.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/Memory.cpp)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryManager.h)
+
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/IProvider.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/ProviderManager.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/ProviderManager.cpp)

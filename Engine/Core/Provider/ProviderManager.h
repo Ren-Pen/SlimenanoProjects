@@ -18,49 +18,51 @@
 #pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_MANAGER_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_PROVIDER_PROVIDER_MANAGER_H
+
+#    include <stdexcept>
 #    include <unordered_map>
-
 #    include "../Base/Types.h"
-
+#    include "../Memory/Memory.h"
 #    include "IProvider.h"
 
 namespace slimenano {
 
 class ProviderManager {
   public:
-    static auto GetInstance() -> ProviderManager&;
+    template <class T>
+    static auto RegisterProvider(IProvider<T>* provider) -> void;
 
-    ProviderManager() = default;
-    ~ProviderManager();
+    template <class T>
+    static auto GetProvider() -> IProvider<T>&;
 
     ProviderManager(const ProviderManager&) = delete;
     ProviderManager& operator=(const ProviderManager&) = delete;
     ProviderManager(ProviderManager&&) = delete;
     ProviderManager& operator=(ProviderManager&&) = delete;
 
-    template <class T>
-    auto RegisterProvider() -> void;
-
-    template <class T>
-    auto GetProvider() -> IProvider<T>&;
-
   private:
     std::unordered_map<const TypeId*, IBaseProvider*> m_Providers;
+    static auto GetInstance() -> ProviderManager&;
+    ProviderManager() = default;
+    ~ProviderManager();
 };
 
 template <class T>
-auto ProviderManager::RegisterProvider() -> void {
-    auto providerPtr = new T();
-    auto id = providerPtr->getTypeId();
-    m_Providers[id] = providerPtr;
+auto ProviderManager::RegisterProvider(IProvider<T>* provider) -> void {
+    auto& pm = GetInstance();
+    auto id = IProvider<T>::GetTypeId();
+    if (pm.m_Providers.contains(id)) {
+        throw std::runtime_error("Provider already registered!");
+    }
+    pm.m_Providers[id] = provider;
 }
 
 template <class T>
 auto ProviderManager::GetProvider() -> IProvider<T>& {
+    auto& pm = GetInstance();
     auto id = TypeId::Get<T>();
-    return *static_cast<IProvider<T>*>(m_Providers[id]->getRawPtr());
+    return *static_cast<IProvider<T>*>(pm.m_Providers[id]->GetRawPtr());
 }
-
 
 } // namespace slimenano
 

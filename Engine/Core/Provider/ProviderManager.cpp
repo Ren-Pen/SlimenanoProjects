@@ -24,7 +24,7 @@ ProviderManager::~ProviderManager() {
     auto begin = this->m_Providers.begin();
     const auto end = this->m_Providers.end();
     while (begin != end) {
-        delete begin->second;
+        begin->second->Release();
         begin->second = nullptr;
         ++begin;
     }

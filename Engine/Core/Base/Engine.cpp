@@ -1,3 +1,20 @@
+/*
+Slimenano Engine
+    Copyright (C) 2025  zyu.xiao
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 #include "Engine.h"
 
 #include "IApplication.h"
@@ -9,8 +26,8 @@ auto slimenano::Engine::GetInstance() -> Engine& {
 }
 
 auto slimenano::Engine::Initialize() -> void {
-    auto& pm = ProviderManager::GetInstance();
-    auto& p_App = pm.GetProvider<IApplication>();
-    const auto app = p_App.provide();
+    auto& engine = GetInstance();
+    auto& p_App = ProviderManager::GetProvider<IApplication>();
+    const auto app = p_App.Provide();
     app->Initialize();
 }

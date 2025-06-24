@@ -42,12 +42,9 @@ class IBaseProvider {
      * @brief Retrieves a raw pointer to the underlying provider object.
      * @return A void pointer to the actual provider.
      */
-    virtual auto getRawPtr() -> RawPtr = 0;
-    /**
-     * @brief Retrieves the unique type identifier (TypeId) of the provider.
-     * @return A pointer to the TypeId of the provider.
-     */
-    [[nodiscard]] virtual auto getTypeId() const -> const TypeId* = 0;
+    virtual auto GetRawPtr() -> RawPtr = 0;
+
+    virtual auto Release() -> void = 0;
 };
 
 /**
@@ -61,7 +58,7 @@ class IBaseProvider {
  * the corresponding service interface provided by it.
  */
 template <class T>
-class IProvider : private IBaseProvider {
+class IProvider : IBaseProvider {
     friend class ProviderManager;
 
   public:
@@ -72,7 +69,7 @@ class IProvider : private IBaseProvider {
      * @brief Provides a unique pointer to the specific service instance.
      * @return A unique pointer containing the service interface of type `T`.
      */
-    virtual auto provide() -> std::unique_ptr<T> = 0;
+    virtual auto Provide() -> std::unique_ptr<T> = 0;
 
   private:
     /**
@@ -80,23 +77,23 @@ class IProvider : private IBaseProvider {
      * Overrides the implementation in `IBaseProvider`.
      * @return A void pointer to the actual provider.
      */
-    auto getRawPtr() -> RawPtr final;
+    auto GetRawPtr() -> RawPtr final;
 
     /**
      * @brief Retrieves the unique type identifier (TypeId) of the provider.
      * Overrides the implementation in `IBaseProvider`.
      * @return A pointer to the TypeId of the provider.
      */
-    [[nodiscard]] auto getTypeId() const -> const TypeId* final;
+    static auto GetTypeId() -> const TypeId*;
 };
 
 template <class T>
-auto IProvider<T>::getRawPtr() -> RawPtr {
+auto IProvider<T>::GetRawPtr() -> RawPtr {
     return static_cast<RawPtr>(this);
 }
 
 template <class T>
-auto IProvider<T>::getTypeId() const -> const TypeId* {
+auto IProvider<T>::GetTypeId() -> const TypeId* {
     return TypeId::Get<T>();
 }
 

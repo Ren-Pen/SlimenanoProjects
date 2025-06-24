@@ -15,26 +15,24 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include <SlimenanoEngine.h>
-#include <iostream>
+#pragma once
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_MANAGER_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_MANAGER_H
 
-class Sandbox final : public slimenano::IApplication {
+#    include <cstddef>
+
+namespace slimenano {
+
+class IMemoryManager {
   public:
-    ~Sandbox() override = default;
-    auto Initialize() -> void override {
+    virtual ~IMemoryManager() = default;
+    virtual auto Malloc(size_t size, size_t alignment) -> void* = 0;
+    virtual auto Free(void* ptr) -> void = 0;
+    virtual auto Reset() -> void = 0;
 
-        std::cout << "Hello World!" << std::endl;
-
-        const auto ptr = slimenano::Memory::Malloc(1024);
-        std::cout << ptr << std::endl;
-        slimenano::Memory::Free(ptr);
-
-    }
-
-    auto Shutdown() -> void override {}
+    auto Malloc(const size_t size) -> void* { return Malloc(size, alignof(std::max_align_t)); }
 };
 
-auto main(const int argc, const char** argv) -> int {
-    slimenano::Entrypoint::App<Sandbox>(argc, argv);
-    return 0;
-}
+} // namespace slimenano
+
+#endif // !SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_MANAGER_H
