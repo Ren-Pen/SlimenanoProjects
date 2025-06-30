@@ -27,7 +27,8 @@ auto slimenano::Engine::GetInstance() -> Engine& {
 
 auto slimenano::Engine::Initialize() -> void {
     auto& engine = GetInstance();
-    auto& p_App = ProviderManager::GetProvider<IApplication>();
-    const auto app = p_App.Provide();
+    Memory::Initialize();
+    auto p_App = ProviderManager::GetProvider<IApplication>();
+    const auto app = p_App->Provide();
     app->Initialize();
 }

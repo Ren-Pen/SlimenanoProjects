@@ -7,7 +7,9 @@ namespace slimenano {
 std::unique_ptr<IMemoryManager> Memory::m_MemoryManager = nullptr;
 
 auto Memory::Initialize() -> void {
-    m_MemoryManager = ProviderManager::GetProvider<IMemoryManager>().Provide();
+    if (const auto providerPtr = ProviderManager::GetProvider<IMemoryManager>(); providerPtr != nullptr) {
+        m_MemoryManager = providerPtr->Provide();
+    }
 }
 
 auto Memory::Malloc(size_t size, size_t alignment) -> void* {

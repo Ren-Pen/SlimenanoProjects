@@ -33,7 +33,7 @@ class ProviderManager {
     static auto RegisterProvider(IProvider<T>* provider) -> void;
 
     template <class T>
-    static auto GetProvider() -> IProvider<T>&;
+    static auto GetProvider() -> IProvider<T>*;
 
     ProviderManager(const ProviderManager&) = delete;
     ProviderManager& operator=(const ProviderManager&) = delete;
@@ -58,10 +58,13 @@ auto ProviderManager::RegisterProvider(IProvider<T>* provider) -> void {
 }
 
 template <class T>
-auto ProviderManager::GetProvider() -> IProvider<T>& {
+auto ProviderManager::GetProvider() -> IProvider<T>* {
     auto& pm = GetInstance();
     auto id = TypeId::Get<T>();
-    return *static_cast<IProvider<T>*>(pm.m_Providers[id]->GetRawPtr());
+    if (!pm.m_Providers.contains(id)) {
+        return nullptr;
+    }
+    return static_cast<IProvider<T>*>(pm.m_Providers[id]->GetRawPtr());
 }
 
 } // namespace slimenano
