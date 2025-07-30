@@ -16,19 +16,25 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-namespace Slimenano::Core::Base {
-// TODO: Remove the type id
-class TypeId {
-  public:
-    template <typename T>
-    static auto Get() -> const TypeId* {
-        static TypeId id;
-        return &id;
-    }
-};
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_EXPORT_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_EXPORT_H
 
-} // namespace Slimenano::Core::Base
+#    ifdef _MSC_VER
+#        ifdef SLIMENANO_LIBRARY
+#            define SLIMENANO_API __declspec(dllexport)
+#        else
+#            define SLIMENANO_API __declspec(dllimport)
+#        endif //! SLIMENANO_LIBRARY
+#    elif __GNUC__
+#        ifdef SLIMENANO_LIBRARY
+#            define SLIMENANO_API __attribute__((visibility("default")))
+#        else
+#            define SLIMENANO_API
+#        endif //! SLIMENANO_LIBRARY
+#    else
+#        define SLIMENANO_API
+#        pragma warning Unknown dynamic link import / export semantics.
+#    endif
+
 
 #endif

@@ -16,8 +16,8 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_ENGINE_CORE_ENGINE_ENGINE_H
-#    define SLIMENANO_ENGINE_CORE_ENGINE_ENGINE_H
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
 
 #    include "../Base/Status.h"
 #    include "EngineContext.h"
@@ -33,7 +33,7 @@ class Engine {
      * @brief Construct the Engine with the given EngineContext.
      * @param context Reference to the engine context which holds global runtime dependencies.
      */
-    Engine(EngineContext& context);
+    Engine(EngineContext* context);
 
     /**
      * @brief Destructor that ensures the engine is properly stopped.
@@ -44,18 +44,20 @@ class Engine {
      * @brief Starts the engine and enters the main loop.
      * Initializes and starts all registered modules.
      */
-    Base::Status Start();
+    auto Start() -> Base::Status;
 
     /**
      * @brief Stops the engine and shuts down all running modules.
      */
-    Base::Status Stop();
+    auto Stop() -> Base::Status;
+
+    auto getEngineContext() -> EngineContext*;
 
   private:
     /**
      * @brief Reference to the engine context shared across all modules.
      */
-    EngineContext& m_context;
+    EngineContext* m_pContext;
 
     /**
      * @brief Whether the engine is currently running.
@@ -66,7 +68,7 @@ class Engine {
      * @brief The main engine loop that drives all active modules.
      * This runs until Stop() is called.
      */
-    Base::Status MainLoop();
+    auto MainLoop() -> Base::Status;
 };
 } // namespace Slimenano::Core::Engine
 

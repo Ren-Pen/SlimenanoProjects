@@ -24,5 +24,6 @@
 #include "Core/Engine/EngineContext.h"
 
 #include "Core/Module/IModule.h"
+#include "Core/Module/IBaseModule.h"
 
-#endif // SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
+#endif

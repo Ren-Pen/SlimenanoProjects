@@ -20,32 +20,33 @@ Slimenano Engine
 #include "Engine.h"
 #include "EngineContext.h"
 #include "../Module/IModule.h"
+#include "../Exception/IExceptionHandler.h"
 
 namespace Slimenano::Core::Engine {
 
 using namespace Base;
 using namespace Module;
 
-Engine::Engine(EngineContext& context) : m_context(context) {
+Engine::Engine(EngineContext* context) : m_pContext(context) {
 }
 
 Engine::~Engine() {
     Stop();
 }
 
-Status Engine::Start() {
+auto Engine::Start() -> Status {
     m_running = true;
 
     std::vector<IModule*> modules;
 
-    auto status = m_context.GetModules(modules);
+    auto status = m_pContext->GetModules(modules);
     if (IsFailure(status)) {
         return status;
     }
 
     for (IModule* pModule : modules) {
         if (pModule) {
-            auto status = pModule->OnInit(this);
+            auto status = pModule->OnInit();
             if (IsFailure(status)) {
                 return status;
             }
@@ -54,7 +55,7 @@ Status Engine::Start() {
     return MainLoop();
 }
 
-Status Engine::Stop() {
+auto Engine::Stop() -> Status {
     if (!m_running) {
         return State(StateCategory::Internal, StateCode::kSuccess);
     }
@@ -62,10 +63,10 @@ Status Engine::Stop() {
     return State(StateCategory::Internal, StateCode::kSuccess);
 }
 
-Status Engine::MainLoop() {
+auto Engine::MainLoop() -> Status {
 
     std::vector<IModule*> modules;
-    auto status = m_context.GetModules(modules);
+    auto status = m_pContext->GetModules(modules);
     if (IsFailure(status)) {
         return status;
     }
@@ -75,8 +76,10 @@ Status Engine::MainLoop() {
             if (pModule) {
                 auto status = pModule->OnUpdate();
                 if (IsFailure(status)) {
-                    //TODO: handle error
-                    // return status;
+                    auto pExceptionHandler = m_pContext->FindModule<Exception::IExceptionHandler>();
+                    if (pExceptionHandler != nullptr) {
+                        pExceptionHandler->Handle(status);
+                    }
                 }
             }
         }
@@ -87,12 +90,19 @@ Status Engine::MainLoop() {
         if (pModule) {
             auto status = pModule->OnShutdown();
             if (IsFailure(status)) {
-                // return status;
+                auto pExceptionHandler = m_pContext->FindModule<Exception::IExceptionHandler>();
+                if (pExceptionHandler != nullptr) {
+                    pExceptionHandler->Handle(status);
+                }
             }
         }
     }
 
     return State(StateCategory::Internal, StateCode::kSuccess);
+}
+
+auto Engine::getEngineContext() -> EngineContext* {
+    return m_pContext;
 }
 
 } // namespace Slimenano::Core::Engine

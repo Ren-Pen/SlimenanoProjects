@@ -39,4 +39,5 @@ target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/EngineContext
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/EngineContext.cpp)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Module/IModule.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Module/IBaseModule.h)
 

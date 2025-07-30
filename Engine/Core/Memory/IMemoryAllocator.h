@@ -1,5 +1,5 @@
 /*
-    Slimenano Engine
+Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
     This program is free software: you can redistribute it and/or modify
@@ -16,19 +16,26 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-namespace Slimenano::Core::Base {
-// TODO: Remove the type id
-class TypeId {
-  public:
-    template <typename T>
-    static auto Get() -> const TypeId* {
-        static TypeId id;
-        return &id;
-    }
-};
+#include "IMemoryManager.h"
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_ALLOCATOR_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_ALLOCATOR_H
+#    include <cstddef>
+#    include "../Base/Status.h"
+namespace Slimenano::Core::Memory {
 
-} // namespace Slimenano::Core::Base
+class IMemoryManager;
+
+class IMemoryAllocator {
+  public:
+    IMemoryAllocator(IMemoryManager* pMemoryManager) : m_pMemoryManager(pMemoryManager) {}
+    virtual ~IMemoryAllocator();
+    virtual auto Allocate(size_t size, size_t alignment) -> void* = 0;
+    virtual auto Deallocate(void* ptr) -> void = 0;
+    virtual auto OnUpdate() -> Base::Status = 0;
+
+  private:
+    IMemoryManager* m_pMemoryManager;
+};
+} // namespace Slimenano::Core::Memory
 
 #endif

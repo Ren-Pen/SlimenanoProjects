@@ -26,10 +26,46 @@ namespace Slimenano::Core::Engine {
 using namespace Base;
 using namespace Module;
 
-Status EngineContext::GetModules(std::vector<IModule*>& outModules) const {
+auto EngineContext::GetModules(std::vector<IModule*>& outModules) const -> Status {
     std::transform(m_modules.begin(), m_modules.end(), std::back_inserter(outModules), [](const auto& pair) {
         return pair.second;
     });
+    return State(StateCategory::Internal, StateCode::kSuccess);
+}
+
+auto EngineContext::RegisterModule(Module::IModule* pModule) -> Base::Status {
+    using Base::TypeId;
+    using Base::State;
+    using Base::StateCategory;
+    using Base::StateCode;
+    if (!pModule) {
+        return State(StateCategory::Internal, StateCode::kInvalidParameter);
+    }
+    const auto typeId = pModule->GetModuleId();
+    if (m_modules.find(typeId) != m_modules.end()) {
+        return State(StateCategory::Internal, StateCode::kAlreadyExists);
+    }
+    m_modules[typeId] = pModule;
+    return State(StateCategory::Internal, StateCode::kSuccess);
+}
+
+auto EngineContext::UnregisterModule(Module::IModule* pModule) -> Base::Status {
+    using Base::TypeId;
+    using Base::State;
+    using Base::StateCategory;
+    using Base::StateCode;
+    if (!pModule) {
+        return State(StateCategory::Internal, StateCode::kInvalidParameter);
+    }
+    const auto typeId = pModule->GetModuleId();
+    const auto it = m_modules.find(typeId);
+    if (it == m_modules.end()) {
+        return State(StateCategory::Internal, StateCode::kNotFound);
+    }
+    if (it->second != pModule) {
+        return State(StateCategory::Internal, StateCode::kNotPermitted);
+    }
+    m_modules.erase(typeId);
     return State(StateCategory::Internal, StateCode::kSuccess);
 }
 

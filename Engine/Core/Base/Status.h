@@ -25,7 +25,8 @@ using Status = unsigned long long;
 class StateCategory {
   public:
     constexpr static Status Internal = 0x0000;
-    constexpr static Status Application = 0x0000;
+    constexpr static Status Memory = 0x300F;
+    constexpr static Status Application = 0x8008;
 };
 
 class StateCode {
@@ -33,26 +34,27 @@ class StateCode {
     constexpr static Status kSuccess = 0x0000;
     constexpr static Status kInvalidParameter = 0x0001;
     constexpr static Status kAlreadyExists = 0x0002;
+    constexpr static Status kNotFound = 0x0003;
+    constexpr static Status kNotPermitted = 0x0003;
 };
 
-static inline Status State(Status category, Status code) {
+static inline auto State(Status category, Status code) -> Status {
     return category << 16 | code;
 }
 
-static inline Status Category(Status status) {
+static inline auto Category(Status status) -> Status {
     return (status >> 16) & 0xFFFF;
 }
 
-static inline Status Code(Status status) {
+static inline auto Code(Status status) -> Status {
     return status & 0xFFFF;
 }
 
-static inline bool IsSuccess(Status status) {
+static inline auto IsSuccess(Status status) -> bool {
     return Code(status) == StateCode::kSuccess;
 }
 
-
-static inline bool IsFailure(Status status) {
+static inline auto IsFailure(Status status) -> bool {
     return Code(status) != StateCode::kSuccess;
 }
 

@@ -24,16 +24,15 @@ using namespace Slimenano::Core::Base;
 using namespace Slimenano::Core::Engine;
 using namespace Slimenano::Core::Module;
 
-class Sandbox final : public IModule {
+class Sandbox final : public IBaseModule<Sandbox> {
   public:
     ~Sandbox() override = default;
     /**
      * @brief Called when the module is initialized during engine startup
      * @return true if initialized successfully
      */
-    virtual Status OnInit(Engine* engine) override {
+    virtual auto OnInit() -> Status override {
         std::cout << "Sandbox initialized" << std::endl;
-        m_engine = engine;
         startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         return State(StateCategory::Application, StateCode::kSuccess);
     }
@@ -41,20 +40,20 @@ class Sandbox final : public IModule {
     /**
      * @brief Called when the module is being shut down during engine shutdown
      */
-    virtual Status OnShutdown() override {
+    virtual auto OnShutdown() -> Status override {
         std::cout << "Sandbox shutdown" << std::endl;
         return State(StateCategory::Application, StateCode::kSuccess);
     }
     /**
      * @brief Called every frame after engine startup
      */
-    virtual Status OnUpdate() override {
+    virtual auto OnUpdate() -> Status override {
         auto now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         if (((now - startTime) % 1000) == 0) {
             std::cout << "Sandbox onUpdate " << (now - startTime) / 1000 << std::endl;
         }
         if ((now - startTime) > 10000) {
-            m_engine->Stop();
+            GetEngine()->Stop();
         }
         return State(StateCategory::Application, StateCode::kSuccess);
     }
@@ -62,21 +61,24 @@ class Sandbox final : public IModule {
      * @brief Returns the name of the module (for logging or debugging)
      * @return const char* representing the module name
      */
-    virtual const char* GetModuleName() const override { return "Sandbox"; }
+    virtual auto GetModuleName() const -> const char* override { return "Sandbox"; }
 
   private:
-    Engine* m_engine = nullptr;
     unsigned long long startTime = 0;
 };
 
 auto main(const int argc, const char** argv) -> int {
-    auto sandbox = Sandbox();
 
     auto engineContext = EngineContext();
-    engineContext.RegisterModule(&sandbox);
+    auto engine = Engine(&engineContext);
 
-    auto engine = Engine(engineContext);
+    {
+        auto sandbox = Sandbox();
+        std::cout << sandbox.Install(&engine) << std::endl;
+    }
 
+    auto sandbox = Sandbox();
+    std::cout << sandbox.Install(&engine) << std::endl;
     engine.Start();
 
     return 0;

@@ -16,10 +16,11 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_ENGINE_CORE_MODULE_I_MODULE_H
-#    define SLIMENANO_ENGINE_CORE_MODULE_I_MODULE_H
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_MODULE_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_MODULE_H
 
 #    include "../Base/Status.h"
+#    include "../Base/Types.h"
 
 namespace Slimenano::Core::Engine {
 class Engine;
@@ -32,30 +33,32 @@ namespace Slimenano::Core::Module {
  */
 class IModule {
   public:
+    virtual const Base::TypeId* GetModuleId() const = 0;
+
     virtual ~IModule() = default;
 
     /**
      * @brief Called when the module is initialized during engine startup
      * @return true if initialized successfully
      */
-    virtual Base::Status OnInit(Engine::Engine* engine) = 0;
+    virtual auto OnInit() -> Base::Status = 0;
 
     /**
      * @brief Called when the module is being shut down during engine shutdown
      */
-    virtual Base::Status OnShutdown() = 0;
+    virtual auto OnShutdown() -> Base::Status = 0;
 
     /**
      * @brief Called every frame after engine startup
      */
-    virtual Base::Status OnUpdate() = 0;
+    virtual auto OnUpdate() -> Base::Status = 0;
 
     /**
      * @brief Returns the name of the module (for logging or debugging)
      * @return const char* representing the module name
      */
-    virtual const char* GetModuleName() const = 0;
+    virtual auto GetModuleName() const -> const char* = 0;
 };
 } // namespace Slimenano::Core::Module
 
-#endif // SLIMENANO_ENGINE_CORE_MODULE_I_MODULE_H
+#endif

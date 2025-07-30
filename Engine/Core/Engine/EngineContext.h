@@ -16,8 +16,8 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_ENGINE_CORE_ENGINE_ENGINE_CONTEXT_H
-#    define SLIMENANO_ENGINE_CORE_ENGINE_ENGINE_CONTEXT_H
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_CONTEXT_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_CONTEXT_H
 #    include <vector>
 #    include <unordered_map>
 #    include "../Base/Types.h"
@@ -27,38 +27,21 @@ Slimenano Engine
 namespace Slimenano::Core::Engine {
 
 class EngineContext {
+
   public:
     template <class T>
-    Base::Status RegisterModule(T* pModule);
+    auto FindModule() -> T*;
 
-    template <class T>
-    T* FindModule();
-
-    Base::Status GetModules(std::vector<Module::IModule*>& outModules) const;
+    auto RegisterModule(Module::IModule* pModule) -> Base::Status;
+    auto UnregisterModule(Module::IModule* pModule) -> Base::Status;
+    auto GetModules(std::vector<Module::IModule*>& outModules) const -> Base::Status;
 
   private:
     std::unordered_map<const Base::TypeId*, Module::IModule*> m_modules = std::unordered_map<const Base::TypeId*, Module::IModule*>();
 };
 
 template <class T>
-Base::Status EngineContext::RegisterModule(T* pModule) {
-    using Base::TypeId;
-    using Base::State;
-    using Base::StateCategory;
-    using Base::StateCode;
-    if (!pModule) {
-        return State(StateCategory::Internal, StateCode::kInvalidParameter);
-    }
-    const auto typeId = TypeId::Get<T>();
-    if (m_modules.find(typeId) != m_modules.end()) {
-        return State(StateCategory::Internal, StateCode::kAlreadyExists);
-    }
-    m_modules[typeId] = pModule;
-    return State(StateCategory::Internal, StateCode::kSuccess);
-}
-
-template <class T>
-T* EngineContext::FindModule() {
+auto EngineContext::FindModule() -> T* {
     using Base::TypeId;
     const auto typeId = TypeId::Get<T>();
     if (m_modules.find(typeId) == m_modules.end()) {
