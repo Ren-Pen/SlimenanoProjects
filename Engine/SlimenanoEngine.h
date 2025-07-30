@@ -18,10 +18,11 @@
 #pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
 #    define SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
-#    include "Core/Base/Types.h"
-#    include "Core/Base/IApplication.h"
-#    include "Core/Provider/IProvider.h"
-#    include "Core/Provider/ProviderManager.h"
 
-#    include "Entrypoint.h"
+#include "Core/Base/Status.h"
+#include "Core/Engine/Engine.h"
+#include "Core/Engine/EngineContext.h"
+
+#include "Core/Module/IModule.h"
+
 #endif // SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H

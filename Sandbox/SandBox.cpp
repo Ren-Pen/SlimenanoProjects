@@ -15,22 +15,69 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "Core/Base/Status.h"
 #include <SlimenanoEngine.h>
+#include <chrono>
 #include <iostream>
 
-class Sandbox final : public slimenano::IApplication {
+using namespace Slimenano::Core::Base;
+using namespace Slimenano::Core::Engine;
+using namespace Slimenano::Core::Module;
+
+class Sandbox final : public IModule {
   public:
     ~Sandbox() override = default;
-    auto Initialize() -> void override {
-
-        std::cout << "Hello World!" << std::endl;
-
+    /**
+     * @brief Called when the module is initialized during engine startup
+     * @return true if initialized successfully
+     */
+    virtual Status OnInit(Engine* engine) override {
+        std::cout << "Sandbox initialized" << std::endl;
+        m_engine = engine;
+        startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        return State(StateCategory::Application, StateCode::kSuccess);
     }
 
-    auto Shutdown() -> void override {}
+    /**
+     * @brief Called when the module is being shut down during engine shutdown
+     */
+    virtual Status OnShutdown() override {
+        std::cout << "Sandbox shutdown" << std::endl;
+        return State(StateCategory::Application, StateCode::kSuccess);
+    }
+    /**
+     * @brief Called every frame after engine startup
+     */
+    virtual Status OnUpdate() override {
+        auto now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        if (((now - startTime) % 1000) == 0) {
+            std::cout << "Sandbox onUpdate " << (now - startTime) / 1000 << std::endl;
+        }
+        if ((now - startTime) > 10000) {
+            m_engine->Stop();
+        }
+        return State(StateCategory::Application, StateCode::kSuccess);
+    }
+    /**
+     * @brief Returns the name of the module (for logging or debugging)
+     * @return const char* representing the module name
+     */
+    virtual const char* GetModuleName() const override { return "Sandbox"; }
+
+  private:
+    Engine* m_engine = nullptr;
+    unsigned long long startTime = 0;
 };
 
 auto main(const int argc, const char** argv) -> int {
-    slimenano::Entrypoint::App<Sandbox>(argc, argv);
+    auto sandbox = Sandbox();
+
+    auto engineContext = EngineContext();
+    engineContext.RegisterModule(&sandbox);
+
+    auto engine = Engine(engineContext);
+
+    engine.Start();
+
     return 0;
 }

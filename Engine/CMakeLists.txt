@@ -41,7 +41,5 @@ add_library(Slimenano::Engine ALIAS ${TARGET_NAME})
 target_include_directories(${TARGET_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/SlimenanoEngine.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Entrypoint.cpp)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Entrypoint.h)
 
 target_link_libraries(${TARGET_NAME} Slimenano::Engine::Core)

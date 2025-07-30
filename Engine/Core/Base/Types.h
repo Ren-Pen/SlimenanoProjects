@@ -19,9 +19,7 @@
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
 
-namespace slimenano {
-
-using RawPtr = void*;
+namespace Slimenano::Core::Base {
 
 class TypeId {
   public:
@@ -32,6 +30,6 @@ class TypeId {
     }
 };
 
-} // namespace slimenano
+} // namespace Slimenano::Core::Base
 
 #endif // SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H

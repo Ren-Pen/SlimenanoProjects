@@ -15,7 +15,22 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_ENGINE_CONTEXT_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_ENGINE_CONTEXT_H
-#endif // SLIMENANO_PROJECT_ENGINE_CORE_BASE_ENGINE_CONTEXT_H
+#include <algorithm>
+#include <vector>
+
+#include "EngineContext.h"
+#include "../Module/IModule.h"
+
+namespace Slimenano::Core::Engine {
+
+using namespace Base;
+using namespace Module;
+
+Status EngineContext::GetModules(std::vector<IModule*>& outModules) const {
+    std::transform(m_modules.begin(), m_modules.end(), std::back_inserter(outModules), [](const auto& pair) {
+        return pair.second;
+    });
+    return State(StateCategory::Internal, StateCode::kSuccess);
+}
+
+} // namespace Slimenano::Core::Engine

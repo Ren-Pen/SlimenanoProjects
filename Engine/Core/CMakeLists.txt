@@ -31,11 +31,12 @@ add_library(${TARGET_NAME})
 add_library(Slimenano::Engine::Core ALIAS ${TARGET_NAME})
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Types.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/IApplication.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Engine.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Engine.cpp)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/EngineContext.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Status.h)
 
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/IProvider.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/ProviderManager.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Provider/ProviderManager.cpp)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/Engine.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/Engine.cpp)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/EngineContext.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/EngineContext.cpp)
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Module/IModule.h)
+
