@@ -1,5 +1,5 @@
 /*
-    Slimenano Engine
+Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
     This program is free software: you can redistribute it and/or modify
@@ -16,22 +16,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
-#    define SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
+#ifndef SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_MANAGER_H
+#    define SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_MANAGER_H
 
-#    include "Core/Base/Status.h"
+#    include "../Base/Export.h"
+#    include "../Module/IBaseModule.h"
+#    include "ILogger.h"
 
-#    include "Core/Application/IApplication.h"
+namespace Slimenano::Core::Log {
 
-#    include "Core/Engine/Engine.h"
-#    include "Core/Engine/EngineContext.h"
+class SLIMENANO_API ILoggerManager : public Module::IBaseModule<ILoggerManager> {
+  public:
+    virtual ~ILoggerManager() = default;
+    virtual auto GetLogger(const char* name) -> ILogger* = 0;
+    virtual auto FreeLogger(ILogger* logger) -> void = 0;
+};
 
-#    include "Core/Exception/IExceptionHandler.h"
-
-#    include "Core/Memory/IMemoryAllocator.h"
-#    include "Core/Memory/IMemoryManager.h"
-
-#    include "Core/Log/ILogger.h"
-#    include "Core/Log/ILoggerManager.h"
-
+} // namespace Slimenano::Core::Log
 #endif

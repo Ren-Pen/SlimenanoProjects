@@ -29,7 +29,7 @@ set(TARGET_NAME Slimenano-Engine-Core)
 
 # set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
-add_library(${TARGET_NAME} SHARED)
+add_library(${TARGET_NAME})
 add_library(Slimenano::Engine::Core ALIAS ${TARGET_NAME})
 
 target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_LIBRARY)
@@ -50,6 +50,10 @@ target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/EngineContext
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Exception/IExceptionHandler.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Exception/IExceptionHandler.cpp)
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/ILogger.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/ILoggerManager.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/ILoggerManager.cpp)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryAllocator.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryManager.h)

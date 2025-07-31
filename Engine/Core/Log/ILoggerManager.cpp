@@ -1,5 +1,5 @@
 /*
-    Slimenano Engine
+Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
     This program is free software: you can redistribute it and/or modify
@@ -15,23 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
-#    define SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
 
-#    include "Core/Base/Status.h"
+#include "../Base/Export.h"
+#include "../Base/TypesImpl.h"
+#include "ILoggerManager.h"
 
-#    include "Core/Application/IApplication.h"
-
-#    include "Core/Engine/Engine.h"
-#    include "Core/Engine/EngineContext.h"
-
-#    include "Core/Exception/IExceptionHandler.h"
-
-#    include "Core/Memory/IMemoryAllocator.h"
-#    include "Core/Memory/IMemoryManager.h"
-
-#    include "Core/Log/ILogger.h"
-#    include "Core/Log/ILoggerManager.h"
-
-#endif
+template SLIMENANO_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Log::ILoggerManager>() -> const Slimenano::Core::Base::TypeId*;

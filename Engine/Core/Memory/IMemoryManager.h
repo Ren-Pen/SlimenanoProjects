@@ -22,7 +22,6 @@ Slimenano Engine
 #    include <cstddef>
 #    include <utility>
 #    include <type_traits>
-#    include <unordered_set>
 #    include "../Base/Status.h"
 #    include "../Base/Export.h"
 #    include "../Module/IBaseModule.h"

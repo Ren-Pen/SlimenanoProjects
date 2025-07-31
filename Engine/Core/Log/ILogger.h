@@ -16,26 +16,34 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_ALLOCATOR_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_ALLOCATOR_H
-#    include <cstddef>
-#    include "../Base/Status.h"
+#ifndef SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_H
+#    define SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_H
+
 #    include "../Base/Export.h"
-namespace Slimenano::Core::Memory {
 
-class IMemoryManager;
+namespace Slimenano::Core::Log {
 
-class SLIMENANO_API IMemoryAllocator {
+class SLIMENANO_API ILogger {
   public:
-    IMemoryAllocator(IMemoryManager* pMemoryManager) : m_pMemoryManager(pMemoryManager) {}
-    virtual ~IMemoryAllocator() = default;
-    virtual auto Allocate(size_t size, size_t alignment) -> void* = 0;
-    virtual auto Deallocate(void* ptr) -> Base::Status = 0;
-    virtual auto OnUpdate() -> Base::Status = 0;
-
-  private:
-    IMemoryManager* m_pMemoryManager;
+    enum class Level;
+    virtual ~ILogger() = default;
+    virtual auto Log(Level level, const char* message) -> void = 0;
+    virtual auto Trace(const char* message) -> void = 0;
+    virtual auto Debug(const char* message) -> void = 0;
+    virtual auto Info(const char* message) -> void = 0;
+    virtual auto Warn(const char* message) -> void = 0;
+    virtual auto Error(const char* message) -> void = 0;
+    virtual auto Fatal(const char* message) -> void = 0;
 };
-} // namespace Slimenano::Core::Memory
 
+enum class ILogger::Level {
+    Trace = 0,
+    Debug,
+    Info,
+    Warn,
+    Error,
+    Fatal,
+};
+
+} // namespace Slimenano::Core::Log
 #endif

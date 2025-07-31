@@ -21,7 +21,13 @@ Slimenano Engine
 #    define SLIMENANO_PROJECT_ENGINE_CORE_APPLICATION_I_APPLICATION_H
 #    include "../Base/Export.h"
 #    include "../Module/IBaseModule.h"
+#    include "../Log/ILoggerManager.h"
+#    include "../Exception/IExceptionHandler.h"
 namespace Slimenano::Core::Application {
-class SLIMENANO_API IApplication : public Module::IBaseModule<IApplication> {};
+class SLIMENANO_API IApplication : public Module::IBaseModule<IApplication> {
+  protected:
+    auto GetLoggerManager() -> Log::ILoggerManager*;
+    auto GetExceptionHandler() -> Exception::IExceptionHandler*;
+};
 } // namespace Slimenano::Core::Application
 #endif

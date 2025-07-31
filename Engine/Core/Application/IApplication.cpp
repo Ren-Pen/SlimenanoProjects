@@ -20,3 +20,15 @@ Slimenano Engine
 #include "../Base/TypesImpl.h"
 #include "IApplication.h"
 template SLIMENANO_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Application::IApplication>() -> const Slimenano::Core::Base::TypeId*;
+
+namespace Slimenano::Core::Application {
+
+auto IApplication::GetLoggerManager() -> Log::ILoggerManager* {
+    return FindModule<Log::ILoggerManager>();
+}
+
+auto IApplication::GetExceptionHandler() -> Exception::IExceptionHandler* {
+    return FindModule<Exception::IExceptionHandler>();
+}
+
+} // namespace Slimenano::Core::Application

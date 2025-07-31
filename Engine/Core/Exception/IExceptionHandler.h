@@ -27,6 +27,7 @@ namespace Slimenano::Core::Exception {
 class SLIMENANO_API IExceptionHandler : public Module::IBaseModule<IExceptionHandler> {
   public:
     virtual void Handle(const Base::Status status) = 0;
+    virtual void Handle(const Base::Status status, const char* message) = 0;
 };
 } // namespace Slimenano::Core::Exception
 #endif

@@ -15,15 +15,67 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "Core/Log/ILogger.h"
 #include <SlimenanoEngine.h>
 #include <chrono>
 #include <iostream>
+#include <string>
 
 using namespace Slimenano::Core::Application;
 using namespace Slimenano::Core::Base;
 using namespace Slimenano::Core::Engine;
 using namespace Slimenano::Core::Module;
 using namespace Slimenano::Core::Exception;
+using namespace Slimenano::Core::Log;
+
+class SandboxLogger : public ILogger {
+  public:
+    virtual ~SandboxLogger() = default;
+    virtual auto Log(Level level, const char* message) -> void override {
+        switch (level) {
+        case Level::Trace:
+            std::cout << "[T] ";
+            break;
+        case Level::Debug:
+            std::cout << "[D] ";
+            break;
+        case Level::Info:
+            std::cout << "[I] ";
+            break;
+        case Level::Warn:
+            std::cout << "[W] ";
+            break;
+        case Level::Error:
+            std::cout << "[E] ";
+            break;
+        case Level::Fatal:
+            std::cout << "[F] ";
+        }
+        std::cout << message << std::endl;
+    }
+    virtual void Trace(const char* message) override { this->Log(ILogger::Level::Trace, message); };
+    virtual void Debug(const char* message) override { this->Log(ILogger::Level::Debug, message); };
+    virtual void Info(const char* message) override { this->Log(ILogger::Level::Info, message); };
+    virtual void Warn(const char* message) override { this->Log(ILogger::Level::Warn, message); };
+    virtual void Error(const char* message) override { this->Log(ILogger::Level::Error, message); };
+    virtual void Fatal(const char* message) override { this->Log(ILogger::Level::Fatal, message); };
+};
+
+class SandboxLoggerManager : public ILoggerManager {
+  public:
+    virtual ~SandboxLoggerManager() = default;
+    virtual auto GetLogger(const char* name) -> ILogger* override { return new SandboxLogger(); }
+
+    virtual auto FreeLogger(ILogger* logger) -> void override { delete logger; };
+
+    virtual auto OnInit() -> Status override { return State(StateCategory::Application, StateCode::kSuccess); };
+
+    virtual auto OnShutdown() -> Status override { return State(StateCategory::Application, StateCode::kSuccess); };
+
+    virtual auto OnUpdate() -> Status override { return State(StateCategory::Application, StateCode::kSuccess); };
+
+    virtual auto GetModuleName() const -> const char* override { return "SandboxLoggerManager"; };
+};
 
 class Sandbox final : public IApplication {
   public:
@@ -33,7 +85,9 @@ class Sandbox final : public IApplication {
      * @return true if initialized successfully
      */
     virtual auto OnInit() -> Status override {
-        std::cout << "Sandbox initialized" << std::endl;
+        auto pLoggerManager = GetLoggerManager();
+        pLogger = pLoggerManager->GetLogger("Sandbox");
+        pLogger->Warn("Sandbox initialized");
         startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         return State(StateCategory::Application, StateCode::kSuccess);
     }
@@ -42,7 +96,7 @@ class Sandbox final : public IApplication {
      * @brief Called when the module is being shut down during engine shutdown
      */
     virtual auto OnShutdown() -> Status override {
-        std::cout << "Sandbox shutdown" << std::endl;
+        pLogger->Warn("Sandbox shutdown");
         return State(StateCategory::Application, StateCode::kSuccess);
     }
     /**
@@ -51,7 +105,8 @@ class Sandbox final : public IApplication {
     virtual auto OnUpdate() -> Status override {
         auto now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         if (((now - startTime) % 1000) == 0) {
-            std::cout << "Sandbox onUpdate " << (now - startTime) / 1000 << std::endl;
+            // std::cout << "Sandbox onUpdate " << (now - startTime) / 1000 << std::endl;
+            pLogger->Info((std::string("Sandbox onUpdate ") + std::to_string((now - startTime) / 1000)).c_str());
         }
         if ((now - startTime) > 10000) {
             GetEngine()->Stop();
@@ -66,6 +121,7 @@ class Sandbox final : public IApplication {
 
   private:
     unsigned long long startTime = 0;
+    ILogger* pLogger = nullptr;
 };
 
 auto main(const int argc, const char** argv) -> int {
@@ -73,13 +129,12 @@ auto main(const int argc, const char** argv) -> int {
     auto engineContext = EngineContext();
     auto engine = Engine(&engineContext);
 
-    {
-        auto sandbox = Sandbox();
-        std::cout << sandbox.Install(&engine) << std::endl;
-    }
+    auto loggerManager = SandboxLoggerManager();
+    std::cout << loggerManager.Install(&engine) << std::endl;
 
     auto sandbox = Sandbox();
     std::cout << sandbox.Install(&engine) << std::endl;
+
     engine.Start();
 
     return 0;
