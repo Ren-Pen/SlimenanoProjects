@@ -20,6 +20,7 @@ Slimenano Engine
 #    define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_CONTEXT_H
 #    include <vector>
 #    include <unordered_map>
+#    include "../Base/Export.h"
 #    include "../Base/Types.h"
 #    include "../Base/Status.h"
 #    include "../Module/IModule.h"
@@ -29,12 +30,15 @@ namespace Slimenano::Core::Engine {
 class EngineContext {
 
   public:
+    EngineContext() = default;
+    ~EngineContext() = default;
+
     template <class T>
     auto FindModule() -> T*;
 
-    auto RegisterModule(Module::IModule* pModule) -> Base::Status;
-    auto UnregisterModule(Module::IModule* pModule) -> Base::Status;
-    auto GetModules(std::vector<Module::IModule*>& outModules) const -> Base::Status;
+    SLIMENANO_API auto RegisterModule(Module::IModule* pModule) -> Base::Status;
+    SLIMENANO_API auto UnregisterModule(Module::IModule* pModule) -> Base::Status;
+    SLIMENANO_API auto GetModules(std::vector<Module::IModule*>& outModules) const -> Base::Status;
 
   private:
     std::unordered_map<const Base::TypeId*, Module::IModule*> m_modules = std::unordered_map<const Base::TypeId*, Module::IModule*>();

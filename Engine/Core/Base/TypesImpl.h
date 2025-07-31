@@ -16,17 +16,17 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-#    include "Export.h"
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_IMPL_H
+#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_IMPL_H
+
+#    include "Types.h"
 
 namespace Slimenano::Core::Base {
-
-class SLIMENANO_API TypeId {
-  public:
-    template <typename T>
-    static auto Get() -> const TypeId*;
-};
+template <typename T>
+auto TypeId::Get() -> const TypeId* {
+    static TypeId id;
+    return &id;
+}
 
 } // namespace Slimenano::Core::Base
 

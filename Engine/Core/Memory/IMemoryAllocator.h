@@ -16,19 +16,19 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#include "IMemoryManager.h"
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_ALLOCATOR_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_ALLOCATOR_H
 #    include <cstddef>
 #    include "../Base/Status.h"
+#    include "../Base/Export.h"
 namespace Slimenano::Core::Memory {
 
 class IMemoryManager;
 
-class IMemoryAllocator {
+class SLIMENANO_API IMemoryAllocator {
   public:
     IMemoryAllocator(IMemoryManager* pMemoryManager) : m_pMemoryManager(pMemoryManager) {}
-    virtual ~IMemoryAllocator();
+    virtual ~IMemoryAllocator() = default;
     virtual auto Allocate(size_t size, size_t alignment) -> void* = 0;
     virtual auto Deallocate(void* ptr) -> void = 0;
     virtual auto OnUpdate() -> Base::Status = 0;

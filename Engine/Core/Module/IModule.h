@@ -31,7 +31,7 @@ namespace Slimenano::Core::Module {
 /**
  * @brief Base interface for all engine modules
  */
-class IModule {
+class SLIMENANO_API IModule {
   public:
     virtual const Base::TypeId* GetModuleId() const = 0;
 

@@ -27,16 +27,33 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 set(TARGET_NAME Slimenano-Engine-Core)
 
-add_library(${TARGET_NAME})
+# set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+
+add_library(${TARGET_NAME} SHARED)
 add_library(Slimenano::Engine::Core ALIAS ${TARGET_NAME})
 
+target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_LIBRARY)
+target_compile_options(${TARGET_NAME} PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Application/IApplication.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Application/IApplication.cpp)
+
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Types.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/TypesImpl.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Export.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Status.h)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/Engine.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/Engine.cpp)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/EngineContext.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/EngineContext.cpp)
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Exception/IExceptionHandler.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Exception/IExceptionHandler.cpp)
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryAllocator.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryManager.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryManager.cpp)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Module/IModule.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Module/IBaseModule.h)

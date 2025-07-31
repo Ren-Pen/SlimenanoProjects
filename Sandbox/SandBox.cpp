@@ -15,16 +15,17 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "Core/Base/Status.h"
 #include <SlimenanoEngine.h>
 #include <chrono>
 #include <iostream>
 
+using namespace Slimenano::Core::Application;
 using namespace Slimenano::Core::Base;
 using namespace Slimenano::Core::Engine;
 using namespace Slimenano::Core::Module;
+using namespace Slimenano::Core::Exception;
 
-class Sandbox final : public IBaseModule<Sandbox> {
+class Sandbox final : public IApplication {
   public:
     ~Sandbox() override = default;
     /**

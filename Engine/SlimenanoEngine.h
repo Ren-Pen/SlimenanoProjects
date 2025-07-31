@@ -19,11 +19,16 @@
 #ifndef SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
 #    define SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
 
-#include "Core/Base/Status.h"
-#include "Core/Engine/Engine.h"
-#include "Core/Engine/EngineContext.h"
+#    include "Core/Base/Status.h"
 
-#include "Core/Module/IModule.h"
-#include "Core/Module/IBaseModule.h"
+#    include "Core/Application/IApplication.h"
+
+#    include "Core/Engine/Engine.h"
+#    include "Core/Engine/EngineContext.h"
+
+#    include "Core/Exception/IExceptionHandler.h"
+
+#    include "Core/Memory/IMemoryAllocator.h"
+#    include "Core/Memory/IMemoryManager.h"
 
 #endif

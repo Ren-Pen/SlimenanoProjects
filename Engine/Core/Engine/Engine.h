@@ -19,6 +19,7 @@ Slimenano Engine
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
 
+#    include "../Base/Export.h"
 #    include "../Base/Status.h"
 #    include "EngineContext.h"
 
@@ -33,25 +34,25 @@ class Engine {
      * @brief Construct the Engine with the given EngineContext.
      * @param context Reference to the engine context which holds global runtime dependencies.
      */
-    Engine(EngineContext* context);
+    SLIMENANO_API Engine(EngineContext* context);
 
     /**
      * @brief Destructor that ensures the engine is properly stopped.
      */
-    ~Engine();
+    SLIMENANO_API ~Engine();
 
     /**
      * @brief Starts the engine and enters the main loop.
      * Initializes and starts all registered modules.
      */
-    auto Start() -> Base::Status;
+    SLIMENANO_API auto Start() -> Base::Status;
 
     /**
      * @brief Stops the engine and shuts down all running modules.
      */
-    auto Stop() -> Base::Status;
+    SLIMENANO_API auto Stop() -> Base::Status;
 
-    auto getEngineContext() -> EngineContext*;
+    SLIMENANO_API auto getEngineContext() -> EngineContext*;
 
   private:
     /**

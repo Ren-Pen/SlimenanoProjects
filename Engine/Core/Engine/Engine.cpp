@@ -65,10 +65,14 @@ auto Engine::Stop() -> Status {
 
 auto Engine::MainLoop() -> Status {
 
+    auto pExceptionHandler = m_pContext->FindModule<Exception::IExceptionHandler>();
+
     std::vector<IModule*> modules;
     auto status = m_pContext->GetModules(modules);
     if (IsFailure(status)) {
-        return status;
+        if (pExceptionHandler != nullptr) {
+            pExceptionHandler->Handle(status);
+        }
     }
 
     while (m_running) {
@@ -76,7 +80,6 @@ auto Engine::MainLoop() -> Status {
             if (pModule) {
                 auto status = pModule->OnUpdate();
                 if (IsFailure(status)) {
-                    auto pExceptionHandler = m_pContext->FindModule<Exception::IExceptionHandler>();
                     if (pExceptionHandler != nullptr) {
                         pExceptionHandler->Handle(status);
                     }
@@ -90,7 +93,6 @@ auto Engine::MainLoop() -> Status {
         if (pModule) {
             auto status = pModule->OnShutdown();
             if (IsFailure(status)) {
-                auto pExceptionHandler = m_pContext->FindModule<Exception::IExceptionHandler>();
                 if (pExceptionHandler != nullptr) {
                     pExceptionHandler->Handle(status);
                 }
