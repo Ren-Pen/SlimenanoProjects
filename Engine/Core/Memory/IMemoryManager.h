@@ -83,7 +83,7 @@ auto IMemoryManager::Delete(T* ptr) -> Base::Status {
         ptr->~T();
         return Free(ptr);
     }
-    return Base::State(Base::StateCategory::Memory, Base::StateCode::kSuccess);
+    return Base::Status::Success(Base::Status::Category::Memory);
 }
 
 } // namespace Slimenano::Core::Memory

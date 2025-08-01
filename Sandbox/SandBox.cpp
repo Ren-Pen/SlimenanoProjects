@@ -31,7 +31,7 @@ using namespace Slimenano::Core::Log;
 class SandboxLogger : public ILogger {
   public:
     virtual ~SandboxLogger() = default;
-    virtual auto Log(Level level, const char* message) -> void override {
+    virtual auto Log(Level level, const char* message) const -> void override {
         switch (level) {
         case Level::Trace:
             std::cout << "[T] ";
@@ -53,12 +53,12 @@ class SandboxLogger : public ILogger {
         }
         std::cout << message << std::endl;
     }
-    virtual void Trace(const char* message) override { this->Log(ILogger::Level::Trace, message); };
-    virtual void Debug(const char* message) override { this->Log(ILogger::Level::Debug, message); };
-    virtual void Info(const char* message) override { this->Log(ILogger::Level::Info, message); };
-    virtual void Warn(const char* message) override { this->Log(ILogger::Level::Warn, message); };
-    virtual void Error(const char* message) override { this->Log(ILogger::Level::Error, message); };
-    virtual void Fatal(const char* message) override { this->Log(ILogger::Level::Fatal, message); };
+    virtual void Trace(const char* message) const override { this->Log(ILogger::Level::Trace, message); };
+    virtual void Debug(const char* message) const override { this->Log(ILogger::Level::Debug, message); };
+    virtual void Info(const char* message) const override { this->Log(ILogger::Level::Info, message); };
+    virtual void Warn(const char* message) const override { this->Log(ILogger::Level::Warn, message); };
+    virtual void Error(const char* message) const override { this->Log(ILogger::Level::Error, message); };
+    virtual void Fatal(const char* message) const override { this->Log(ILogger::Level::Fatal, message); };
 };
 
 class SandboxLoggerManager : public ILoggerManager {
@@ -68,11 +68,11 @@ class SandboxLoggerManager : public ILoggerManager {
 
     virtual auto FreeLogger(ILogger* logger) -> void override { delete logger; };
 
-    virtual auto OnInit() -> Status override { return State(StateCategory::Application, StateCode::kSuccess); };
+    virtual auto OnInit() -> Status override { return Status::Success(Status::Category::Application); };
 
-    virtual auto OnShutdown() -> Status override { return State(StateCategory::Application, StateCode::kSuccess); };
+    virtual auto OnShutdown() -> Status override { return Status::Success(Status::Category::Application); };
 
-    virtual auto OnUpdate() -> Status override { return State(StateCategory::Application, StateCode::kSuccess); };
+    virtual auto OnUpdate() -> Status override { return Status::Success(Status::Category::Application); };
 
     virtual auto GetModuleName() const -> const char* override { return "SandboxLoggerManager"; };
 };
@@ -89,7 +89,7 @@ class Sandbox final : public IApplication {
         pLogger = pLoggerManager->GetLogger("Sandbox");
         pLogger->Warn("Sandbox initialized");
         startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        return State(StateCategory::Application, StateCode::kSuccess);
+        return Status::Success(Status::Category::Application);
     }
 
     /**
@@ -97,7 +97,7 @@ class Sandbox final : public IApplication {
      */
     virtual auto OnShutdown() -> Status override {
         pLogger->Warn("Sandbox shutdown");
-        return State(StateCategory::Application, StateCode::kSuccess);
+        return Status::Success(Status::Category::Application);
     }
     /**
      * @brief Called every frame after engine startup
@@ -111,7 +111,7 @@ class Sandbox final : public IApplication {
         if ((now - startTime) > 10000) {
             GetEngine()->Stop();
         }
-        return State(StateCategory::Application, StateCode::kSuccess);
+        return Status::Success(Status::Category::Application);
     }
     /**
      * @brief Returns the name of the module (for logging or debugging)
@@ -130,10 +130,10 @@ auto main(const int argc, const char** argv) -> int {
     auto engine = Engine(&engineContext);
 
     auto loggerManager = SandboxLoggerManager();
-    std::cout << loggerManager.Install(&engine) << std::endl;
+    std::cout << loggerManager.Install(&engine).GetState() << std::endl;
 
     auto sandbox = Sandbox();
-    std::cout << sandbox.Install(&engine) << std::endl;
+    std::cout << sandbox.Install(&engine).GetState() << std::endl;
 
     engine.Start();
 

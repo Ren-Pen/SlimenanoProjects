@@ -19,22 +19,25 @@
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_EXPORT_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_EXPORT_H
 
-#    ifdef _MSC_VER
-#        ifdef SLIMENANO_LIBRARY
-#            define SLIMENANO_API __declspec(dllexport)
-#        else
-#            define SLIMENANO_API __declspec(dllimport)
-#        endif //! SLIMENANO_LIBRARY
-#    elif __GNUC__
-#        ifdef SLIMENANO_LIBRARY
-#            define SLIMENANO_API __attribute__((visibility("default")))
+#    ifdef SLIMENANO_SHARED
+#        ifdef _MSC_VER
+#            ifdef SLIMENANO_LIBRARY
+#                define SLIMENANO_API __declspec(dllexport)
+#            else
+#                define SLIMENANO_API __declspec(dllimport)
+#            endif //! SLIMENANO_LIBRARY
+#        elif __GNUC__
+#            ifdef SLIMENANO_LIBRARY
+#                define SLIMENANO_API __attribute__((visibility("default")))
+#            else
+#                define SLIMENANO_API
+#            endif //! SLIMENANO_LIBRARY
 #        else
 #            define SLIMENANO_API
-#        endif //! SLIMENANO_LIBRARY
+#            pragma warning Unknown dynamic link import / export semantics.
+#        endif
 #    else
 #        define SLIMENANO_API
-#        pragma warning Unknown dynamic link import / export semantics.
 #    endif
-
 
 #endif

@@ -35,6 +35,10 @@ add_subdirectory(Scripting)
 
 set(TARGET_NAME Slimenano-Engine)
 
+if(BUILD_SHARED_LIBS)
+    add_compile_definitions(SLIMENANO_SHARED)
+endif()
+
 add_library(${TARGET_NAME} INTERFACE)
 add_library(Slimenano::Engine ALIAS ${TARGET_NAME})
 

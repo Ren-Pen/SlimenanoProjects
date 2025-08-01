@@ -36,6 +36,11 @@ class IBaseModule : public IModule {
 
     virtual auto GetModuleId() const -> const Base::TypeId* override final;
 
+    virtual auto GetModuleDependencies() const -> const ModuleDependenciesTree& override final;
+
+    template <class MODULE>
+    auto AddDependency() -> void;
+
     auto Install(Engine::Engine* engine) -> Base::Status;
 
     auto Uninstall() -> Base::Status;
@@ -48,6 +53,7 @@ class IBaseModule : public IModule {
 
   private:
     Engine::Engine* m_pEngine = nullptr;
+    ModuleDependenciesTree m_dependenciesTree = ModuleDependenciesTree();
 };
 
 template <class T>
@@ -56,17 +62,22 @@ auto IBaseModule<T>::GetModuleId() const -> const Base::TypeId* {
 }
 
 template <class T>
+auto IBaseModule<T>::GetModuleDependencies() const -> const ModuleDependenciesTree& {
+    return this->m_dependenciesTree;
+}
+
+template <class T>
 auto IBaseModule<T>::Install(Engine::Engine* engine) -> Base::Status {
     auto pEngineContext = engine->getEngineContext();
     if (pEngineContext) {
         auto status = pEngineContext->RegisterModule(this);
-        if (Base::IsSuccess(status)) {
+        if (status.IsSuccess()) {
             this->m_pEngine = engine;
         }
         return status;
     }
 
-    return Base::State(Base::StateCategory::Internal, Base::StateCode::kSuccess);
+    return Base::Status::Success(Base::Status::Category::Internal);
 }
 
 template <class T>
@@ -76,13 +87,13 @@ auto IBaseModule<T>::Uninstall() -> Base::Status {
         auto pEngineContext = pEngine->getEngineContext();
         if (pEngineContext) {
             auto status = pEngineContext->UnregisterModule(this);
-            if (Base::IsSuccess(status)) {
+            if (status.IsSuccess()) {
                 this->m_pEngine = nullptr;
             }
             return status;
         }
     }
-    return Base::State(Base::StateCategory::Internal, Base::StateCode::kSuccess);
+    return Base::Status::Success(Base::Status::Category::Internal);
 }
 
 template <class T>
@@ -106,6 +117,12 @@ auto IBaseModule<T>::FindModule() -> MODULE* {
         }
     }
     return nullptr;
+}
+
+template <class T>
+template <class MODULE>
+auto IBaseModule<T>::AddDependency() -> void {
+    this->m_dependenciesTree.AddModule<T>();
 }
 
 } // namespace Slimenano::Core::Module

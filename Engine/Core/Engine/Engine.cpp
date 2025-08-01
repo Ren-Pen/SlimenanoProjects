@@ -40,14 +40,14 @@ auto Engine::Start() -> Status {
     std::vector<IModule*> modules;
 
     auto status = m_pContext->GetModules(modules);
-    if (IsFailure(status)) {
+    if (status.IsFailure()) {
         return status;
     }
 
     for (IModule* pModule : modules) {
         if (pModule) {
             auto status = pModule->OnInit();
-            if (IsFailure(status)) {
+            if (status.IsFailure()) {
                 return status;
             }
         }
@@ -57,10 +57,10 @@ auto Engine::Start() -> Status {
 
 auto Engine::Stop() -> Status {
     if (!m_running) {
-        return State(StateCategory::Internal, StateCode::kSuccess);
+        return Status::Success(Status::Category::Internal);
     }
     m_running = false;
-    return State(StateCategory::Internal, StateCode::kSuccess);
+    return Status::Success(Status::Category::Internal);
 }
 
 auto Engine::MainLoop() -> Status {
@@ -69,7 +69,7 @@ auto Engine::MainLoop() -> Status {
 
     std::vector<IModule*> modules;
     auto status = m_pContext->GetModules(modules);
-    if (IsFailure(status)) {
+    if (status.IsFailure()) {
         if (pExceptionHandler != nullptr) {
             pExceptionHandler->Handle(status);
         }
@@ -79,7 +79,7 @@ auto Engine::MainLoop() -> Status {
         for (Module::IModule* pModule : modules) {
             if (pModule) {
                 auto status = pModule->OnUpdate();
-                if (IsFailure(status)) {
+                if (status.IsFailure()) {
                     if (pExceptionHandler != nullptr) {
                         pExceptionHandler->Handle(status);
                     }
@@ -92,7 +92,7 @@ auto Engine::MainLoop() -> Status {
     for (Module::IModule* pModule : modules) {
         if (pModule) {
             auto status = pModule->OnShutdown();
-            if (IsFailure(status)) {
+            if (status.IsFailure()) {
                 if (pExceptionHandler != nullptr) {
                     pExceptionHandler->Handle(status);
                 }
@@ -100,7 +100,7 @@ auto Engine::MainLoop() -> Status {
         }
     }
 
-    return State(StateCategory::Internal, StateCode::kSuccess);
+    return Status::Success(Status::Category::Internal);
 }
 
 auto Engine::getEngineContext() -> EngineContext* {

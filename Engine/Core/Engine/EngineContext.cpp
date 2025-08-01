@@ -31,43 +31,39 @@ auto EngineContext::GetModules(std::vector<IModule*>& outModules) const -> Statu
     std::transform(m_modules.begin(), m_modules.end(), std::back_inserter(outModules), [](const auto& pair) {
         return pair.second;
     });
-    return State(StateCategory::Internal, StateCode::kSuccess);
+    return Status::Success(Status::Category::Internal);
 }
 
 auto EngineContext::RegisterModule(Module::IModule* pModule) -> Base::Status {
     using Base::TypeId;
-    using Base::State;
-    using Base::StateCategory;
-    using Base::StateCode;
+    using Base::Status;
     if (!pModule) {
-        return State(StateCategory::Internal, StateCode::kInvalidParameter);
+        return Status::NullPointerException(Status::Category::Internal);
     }
     const auto typeId = pModule->GetModuleId();
     if (m_modules.find(typeId) != m_modules.end()) {
-        return State(StateCategory::Internal, StateCode::kAlreadyExists);
+        return Status(Status::Category::Internal, Status::Code::AlreadyExists, "Module already be register.");
     }
     m_modules[typeId] = pModule;
-    return State(StateCategory::Internal, StateCode::kSuccess);
+    return Status::Success(Status::Category::Internal);
 }
 
 auto EngineContext::UnregisterModule(Module::IModule* pModule) -> Base::Status {
     using Base::TypeId;
-    using Base::State;
-    using Base::StateCategory;
-    using Base::StateCode;
+    using Base::Status;
     if (!pModule) {
-        return State(StateCategory::Internal, StateCode::kInvalidParameter);
+        return Status::NullPointerException(Status::Category::Internal);
     }
     const auto typeId = pModule->GetModuleId();
     const auto it = m_modules.find(typeId);
     if (it == m_modules.end()) {
-        return State(StateCategory::Internal, StateCode::kNotFound);
+        return Status(Status::Category::Internal, Status::Code::NotFound, "Module not found.");
     }
     if (it->second != pModule) {
-        return State(StateCategory::Internal, StateCode::kNotPermitted);
+        return Status(Status::Category::Internal, Status::Code::NotPermitted, "Module is not owner.");
     }
     m_modules.erase(typeId);
-    return State(StateCategory::Internal, StateCode::kSuccess);
+    return Status::Success(Status::Category::Internal);
 }
 
 } // namespace Slimenano::Core::Engine

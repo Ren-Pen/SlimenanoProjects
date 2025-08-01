@@ -27,13 +27,13 @@ class SLIMENANO_API ILogger {
   public:
     enum class Level;
     virtual ~ILogger() = default;
-    virtual auto Log(Level level, const char* message) -> void = 0;
-    virtual auto Trace(const char* message) -> void = 0;
-    virtual auto Debug(const char* message) -> void = 0;
-    virtual auto Info(const char* message) -> void = 0;
-    virtual auto Warn(const char* message) -> void = 0;
-    virtual auto Error(const char* message) -> void = 0;
-    virtual auto Fatal(const char* message) -> void = 0;
+    virtual auto Log(Level level, const char* message) const -> void = 0;
+    virtual auto Trace(const char* message) const -> void = 0;
+    virtual auto Debug(const char* message) const -> void = 0;
+    virtual auto Info(const char* message) const -> void = 0;
+    virtual auto Warn(const char* message) const -> void = 0;
+    virtual auto Error(const char* message) const -> void = 0;
+    virtual auto Fatal(const char* message) const -> void = 0;
 };
 
 enum class ILogger::Level {

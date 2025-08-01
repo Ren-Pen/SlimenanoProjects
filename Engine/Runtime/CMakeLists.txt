@@ -25,11 +25,17 @@ project(SlimenanoEngineRuntime
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
+if(BUILD_SHARED_LIBS)
+    add_compile_definitions(SLIMENANO_SHARED)
+endif()
+
 set(LIB_NAME Runtime)
 set(TARGET_NAME ${NAMESPACE}-${LIB_NAME})
 
 add_library(${TARGET_NAME})
 add_library(${NAMESPACE}::${LIB_NAME} ALIAS ${TARGET_NAME})
+
+target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_LIBRARY)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/LibMain.cpp)
 target_include_directories(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR})

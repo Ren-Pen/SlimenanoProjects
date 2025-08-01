@@ -27,3 +27,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 set(NAMESPACE Slimenano)
+
+if(NOT TARGET spdlog)
+    find_package(spdlog REQUIRED)
+endif()

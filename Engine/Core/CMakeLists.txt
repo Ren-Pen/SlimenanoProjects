@@ -27,12 +27,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 set(TARGET_NAME Slimenano-Engine-Core)
 
-# set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+if(BUILD_SHARED_LIBS)
+    add_compile_definitions(SLIMENANO_SHARED)
+endif()
 
 add_library(${TARGET_NAME})
 add_library(Slimenano::Engine::Core ALIAS ${TARGET_NAME})
 
 target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_LIBRARY)
+
 target_compile_options(${TARGET_NAME} PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Application/IApplication.h)
