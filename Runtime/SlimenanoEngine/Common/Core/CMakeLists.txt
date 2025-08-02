@@ -51,6 +51,9 @@ target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_LIBRARY)
 
 target_compile_options(${TARGET_NAME} PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/SPDLogger.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/SPDLogger.cpp)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/SPDLoggerManager.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/SPDLoggerManager.cpp)
 

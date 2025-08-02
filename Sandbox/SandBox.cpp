@@ -16,6 +16,7 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include <SlimenanoEngine/Core/Log/ILogger.h>
+#include <SlimenanoEngine/Common/Core/Log/SPDLoggerManager.h>
 #include <SlimenanoEngine/SlimenanoEngine.h>
 #include <chrono>
 #include <iostream>
@@ -85,7 +86,7 @@ class Sandbox final : public IApplication {
      * @return true if initialized successfully
      */
     auto OnInit() -> Status override {
-        auto pLoggerManager = GetLoggerManager();
+        const auto pLoggerManager = GetLoggerManager();
         pLogger = pLoggerManager->GetLogger("Sandbox");
         pLogger->Warn("Sandbox initialized");
         startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -97,6 +98,9 @@ class Sandbox final : public IApplication {
      */
     auto OnShutdown() -> Status override {
         pLogger->Warn("Sandbox shutdown");
+        const auto pLoggerManager = GetLoggerManager();
+        pLoggerManager->FreeLogger(pLogger);
+        pLogger = nullptr;
         return Status::Success(Status::Category::Application);
     }
     /**
@@ -128,8 +132,11 @@ auto main(const int argc, const char** argv) -> int {
     auto engineContext = EngineContext();
     auto engine = Engine(&engineContext);
 
-    auto loggerManager = SandboxLoggerManager();
-    std::cout << loggerManager.Install(&engine).GetState() << std::endl;
+    auto loggerManager = SPDLoggerManager();
+    std::cout << loggerManager.GetModuleName() << " " << loggerManager.Install(&engine).GetState() << std::endl;
+
+    auto sandboxLoggerManager = SandboxLoggerManager();
+    std::cout << sandboxLoggerManager.GetModuleName() << " " << sandboxLoggerManager.Install(&engine).GetState() << std::endl;
 
     auto sandbox = Sandbox();
     std::cout << sandbox.Install(&engine).GetState() << std::endl;

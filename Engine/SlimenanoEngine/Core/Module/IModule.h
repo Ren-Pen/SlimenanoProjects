@@ -61,6 +61,8 @@ class SLIMENANO_API IModule {
     [[nodiscard]] virtual auto GetModuleId() const -> const Base::TypeId* = 0;
 
     [[nodiscard]] virtual auto GetModuleDependencies() const -> const ModuleDependenciesTree& = 0;
+
+    [[nodiscard]] virtual auto GetModuleStatusCategory() const -> Base::State = 0;
 };
 } // namespace Slimenano::Core::Module
 

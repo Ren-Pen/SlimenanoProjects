@@ -1,0 +1,45 @@
+/*
+Slimenano Engine
+    Copyright (C) 2025  zyu.xiao
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+#pragma once
+#ifndef SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_H
+#    define SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_H
+
+#    include <spdlog/spdlog.h>
+#    include <SlimenanoEngine/Core/Log/ILogger.h>
+
+namespace Slimenano::Core::Log {
+class SPDLogger : public ILogger {
+  public:
+    explicit SPDLogger(const char* name);
+    ~SPDLogger() override = default;
+
+    auto Log(Level level, const char* message) const -> void override;
+    auto Trace(const char* message) const -> void override;
+    auto Debug(const char* message) const -> void override;
+    auto Info(const char* message) const -> void override;
+    auto Warn(const char* message) const -> void override;
+    auto Error(const char* message) const -> void override;
+    auto Fatal(const char* message) const -> void override;
+
+  private:
+    const char* m_Name;
+    std::shared_ptr<spdlog::logger> m_pLogger;
+};
+} // namespace Slimenano::Core::Log
+
+#endif

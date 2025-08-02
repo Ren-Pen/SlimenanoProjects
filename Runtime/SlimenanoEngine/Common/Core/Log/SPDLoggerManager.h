@@ -19,16 +19,25 @@ Slimenano Engine
 #ifndef SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_MANAGER_H
 #    define SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_MANAGER_H
 
-# include <SlimenanoEngine/Core/Log/ILoggerManager.h>
+#    include <SlimenanoEngine/Core/Base/Export.h>
+#    include <SlimenanoEngine/Core/Log/ILoggerManager.h>
 
 namespace Slimenano::Core::Log {
 
-class SPDLoggerManager : public ILoggerManager {
+class SLIMENANO_API SPDLoggerManager : public ILoggerManager {
   public:
-    SPDLoggerManager();
+    SPDLoggerManager() = default;
     ~SPDLoggerManager() override = default;
+
+    auto GetLogger(const char* name) -> ILogger* override;
+    auto FreeLogger(ILogger* logger) -> void override;
+
+    auto OnInit() -> Base::Status override;
+    auto OnShutdown() -> Base::Status override;
+    auto OnUpdate() -> Base::Status override;
+    [[nodiscard]] auto GetModuleName() const -> const char* override;
 };
 
-}
+} // namespace Slimenano::Core::Log
 
 #endif

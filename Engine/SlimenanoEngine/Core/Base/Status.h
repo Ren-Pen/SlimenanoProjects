@@ -44,7 +44,8 @@ class SLIMENANO_API Status {
       public:
         constexpr static inline State Internal = 0x0000;
         constexpr static inline State Memory = 0x0001;
-        constexpr static inline State Application = 0x0002;
+        constexpr static inline State Logger = 0x0002;
+        constexpr static inline State Application = 0x0003;
     };
 
     class Code {

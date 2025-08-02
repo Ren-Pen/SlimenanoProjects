@@ -38,6 +38,8 @@ class IBaseModule : public IModule {
 
     [[nodiscard]] auto GetModuleDependencies() const -> const ModuleDependenciesTree& final;
 
+    [[nodiscard]] auto GetModuleStatusCategory() const -> Base::State override;
+
     template <class MODULE>
     auto AddDependency() -> void;
 
@@ -64,6 +66,11 @@ auto IBaseModule<T>::GetModuleId() const -> const Base::TypeId* {
 template <class T>
 auto IBaseModule<T>::GetModuleDependencies() const -> const ModuleDependenciesTree& {
     return this->m_dependenciesTree;
+}
+
+template <class T>
+auto IBaseModule<T>::GetModuleStatusCategory() const -> Base::State {
+    return Base::Status::Category::Internal;
 }
 
 template <class T>

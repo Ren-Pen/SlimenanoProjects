@@ -21,3 +21,10 @@ Slimenano Engine
 #include "ILoggerManager.h"
 
 template SLIMENANO_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Log::ILoggerManager>() -> const TypeId*;
+
+namespace Slimenano::Core::Log {
+using namespace Base;
+State ILoggerManager::GetModuleStatusCategory() const {
+    return Status::Category::Logger;
+}
+} // namespace Slimenano::Core::Log

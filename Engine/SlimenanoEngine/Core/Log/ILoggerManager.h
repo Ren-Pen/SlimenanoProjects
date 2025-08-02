@@ -30,6 +30,7 @@ class SLIMENANO_API ILoggerManager : public Module::IBaseModule<ILoggerManager> 
     ~ILoggerManager() override = default;
     virtual auto GetLogger(const char* name) -> ILogger* = 0;
     virtual auto FreeLogger(ILogger* logger) -> void = 0;
+    [[nodiscard]] auto GetModuleStatusCategory() const -> Base::State override;
 };
 
 } // namespace Slimenano::Core::Log
