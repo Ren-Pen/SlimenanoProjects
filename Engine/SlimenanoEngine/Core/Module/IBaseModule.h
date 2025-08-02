@@ -32,11 +32,11 @@ namespace Slimenano::Core::Module {
 template <class T>
 class IBaseModule : public IModule {
   public:
-    virtual ~IBaseModule();
+    ~IBaseModule() override;
 
-    virtual auto GetModuleId() const -> const Base::TypeId* override final;
+    [[nodiscard]] auto GetModuleId() const -> const Base::TypeId* final;
 
-    virtual auto GetModuleDependencies() const -> const ModuleDependenciesTree& override final;
+    [[nodiscard]] auto GetModuleDependencies() const -> const ModuleDependenciesTree& final;
 
     template <class MODULE>
     auto AddDependency() -> void;
@@ -45,7 +45,7 @@ class IBaseModule : public IModule {
 
     auto Uninstall() -> Base::Status;
 
-    auto GetEngine() -> Engine::Engine*;
+    [[nodiscard]] auto GetEngine() const -> Engine::Engine*;
 
   protected:
     template <class MODULE>
@@ -68,13 +68,12 @@ auto IBaseModule<T>::GetModuleDependencies() const -> const ModuleDependenciesTr
 
 template <class T>
 auto IBaseModule<T>::Install(Engine::Engine* engine) -> Base::Status {
-    auto pEngineContext = engine->getEngineContext();
-    if (pEngineContext) {
-        auto status = pEngineContext->RegisterModule(this);
-        if (status.IsSuccess()) {
+    if (const auto pEngineContext = engine->getEngineContext()) {
+        auto registerModuleStatus = pEngineContext->RegisterModule(this);
+        if (registerModuleStatus.IsSuccess()) {
             this->m_pEngine = engine;
         }
-        return status;
+        return registerModuleStatus;
     }
 
     return Base::Status::Success(Base::Status::Category::Internal);
@@ -82,15 +81,13 @@ auto IBaseModule<T>::Install(Engine::Engine* engine) -> Base::Status {
 
 template <class T>
 auto IBaseModule<T>::Uninstall() -> Base::Status {
-    auto pEngine = GetEngine();
-    if (pEngine) {
-        auto pEngineContext = pEngine->getEngineContext();
-        if (pEngineContext) {
-            auto status = pEngineContext->UnregisterModule(this);
-            if (status.IsSuccess()) {
+    if (const auto pEngine = GetEngine()) {
+        if (const auto pEngineContext = pEngine->getEngineContext()) {
+            auto unregisterModuleStatus = pEngineContext->UnregisterModule(this);
+            if (unregisterModuleStatus.IsSuccess()) {
                 this->m_pEngine = nullptr;
             }
-            return status;
+            return unregisterModuleStatus;
         }
     }
     return Base::Status::Success(Base::Status::Category::Internal);
@@ -102,17 +99,15 @@ IBaseModule<T>::~IBaseModule() {
 }
 
 template <class T>
-auto IBaseModule<T>::GetEngine() -> Engine::Engine* {
+auto IBaseModule<T>::GetEngine() const -> Engine::Engine* {
     return this->m_pEngine;
 }
 
 template <class T>
 template <class MODULE>
 auto IBaseModule<T>::FindModule() -> MODULE* {
-    auto pEngine = GetEngine();
-    if (pEngine) {
-        auto pEngineContext = pEngine->getEngineContext();
-        if (pEngineContext) {
+    if (const auto pEngine = GetEngine()) {
+        if (const auto pEngineContext = pEngine->getEngineContext()) {
             return pEngineContext->template FindModule<MODULE>();
         }
     }
@@ -122,7 +117,7 @@ auto IBaseModule<T>::FindModule() -> MODULE* {
 template <class T>
 template <class MODULE>
 auto IBaseModule<T>::AddDependency() -> void {
-    this->m_dependenciesTree.AddModule<T>();
+    this->m_dependenciesTree.AddModule<MODULE>();
 }
 
 } // namespace Slimenano::Core::Module

@@ -16,26 +16,21 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_ALLOCATOR_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_ALLOCATOR_H
-#    include <cstddef>
-#    include "../Base/Status.h"
+#ifndef SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_MANAGER_H
+#    define SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_MANAGER_H
+
 #    include "../Base/Export.h"
-namespace Slimenano::Core::Memory {
+#    include "../Module/IBaseModule.h"
+#    include "ILogger.h"
 
-class IMemoryManager;
+namespace Slimenano::Core::Log {
 
-class SLIMENANO_API IMemoryAllocator {
+class SLIMENANO_API ILoggerManager : public Module::IBaseModule<ILoggerManager> {
   public:
-    IMemoryAllocator(IMemoryManager* pMemoryManager) : m_pMemoryManager(pMemoryManager) {}
-    virtual ~IMemoryAllocator() = default;
-    virtual auto Allocate(size_t size, size_t alignment) -> void* = 0;
-    virtual auto Deallocate(void* ptr) -> Base::Status = 0;
-    virtual auto OnUpdate() -> Base::Status = 0;
-
-  private:
-    IMemoryManager* m_pMemoryManager;
+    ~ILoggerManager() override = default;
+    virtual auto GetLogger(const char* name) -> ILogger* = 0;
+    virtual auto FreeLogger(ILogger* logger) -> void = 0;
 };
-} // namespace Slimenano::Core::Memory
 
+} // namespace Slimenano::Core::Log
 #endif

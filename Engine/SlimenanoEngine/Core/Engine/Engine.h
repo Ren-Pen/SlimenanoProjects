@@ -19,6 +19,8 @@ Slimenano Engine
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
 
+#include <atomic>
+
 #    include "../Base/Export.h"
 #    include "../Base/Status.h"
 #    include "EngineContext.h"
@@ -34,7 +36,7 @@ class Engine {
      * @brief Construct the Engine with the given EngineContext.
      * @param context Reference to the engine context which holds global runtime dependencies.
      */
-    SLIMENANO_API Engine(EngineContext* context);
+    SLIMENANO_API explicit Engine(EngineContext* context);
 
     /**
      * @brief Destructor that ensures the engine is properly stopped.
@@ -52,7 +54,7 @@ class Engine {
      */
     SLIMENANO_API auto Stop() -> Base::Status;
 
-    SLIMENANO_API auto getEngineContext() -> EngineContext*;
+    SLIMENANO_API [[nodiscard]] auto getEngineContext() const -> EngineContext*;
 
   private:
     /**
@@ -63,13 +65,13 @@ class Engine {
     /**
      * @brief Whether the engine is currently running.
      */
-    bool m_running = false;
+    std::atomic<bool> m_running = false;
 
     /**
      * @brief The main engine loop that drives all active modules.
      * This runs until Stop() is called.
      */
-    auto MainLoop() -> Base::Status;
+    [[nodiscard]] auto MainLoop() const -> Base::Status;
 };
 } // namespace Slimenano::Core::Engine
 

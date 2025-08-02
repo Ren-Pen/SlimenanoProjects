@@ -26,12 +26,12 @@ project(SlimenanoEngine
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
-add_subdirectory(Asset)
-add_subdirectory(Audio)
-add_subdirectory(Core)
-add_subdirectory(Renderer)
-add_subdirectory(Runtime)
-add_subdirectory(Scripting)
+add_subdirectory(SlimenanoEngine/Asset)
+add_subdirectory(SlimenanoEngine/Audio)
+add_subdirectory(SlimenanoEngine/Core)
+add_subdirectory(SlimenanoEngine/Renderer)
+add_subdirectory(SlimenanoEngine/Gameplay)
+add_subdirectory(SlimenanoEngine/Scripting)
 
 set(TARGET_NAME Slimenano-Engine)
 
@@ -40,10 +40,8 @@ if(BUILD_SHARED_LIBS)
 endif()
 
 add_library(${TARGET_NAME} INTERFACE)
-add_library(Slimenano::Engine ALIAS ${TARGET_NAME})
+add_library(Slimenano::Engine::API ALIAS ${TARGET_NAME})
 
 target_include_directories(${TARGET_NAME} INTERFACE ${PROJECT_SOURCE_DIR})
-
-target_sources(${TARGET_NAME} INTERFACE ${PROJECT_SOURCE_DIR}/SlimenanoEngine.h)
 
 target_link_libraries(${TARGET_NAME} INTERFACE Slimenano::Engine::Core)

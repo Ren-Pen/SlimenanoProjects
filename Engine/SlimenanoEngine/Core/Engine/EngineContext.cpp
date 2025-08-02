@@ -28,27 +28,27 @@ using namespace Base;
 using namespace Module;
 
 auto EngineContext::GetModules(std::vector<IModule*>& outModules) const -> Status {
-    std::transform(m_modules.begin(), m_modules.end(), std::back_inserter(outModules), [](const auto& pair) {
+    std::ranges::transform(m_modules, std::back_inserter(outModules), [](const auto& pair) {
         return pair.second;
     });
     return Status::Success(Status::Category::Internal);
 }
 
-auto EngineContext::RegisterModule(Module::IModule* pModule) -> Base::Status {
+auto EngineContext::RegisterModule(IModule* pModule) -> Status {
     using Base::TypeId;
     using Base::Status;
     if (!pModule) {
         return Status::NullPointerException(Status::Category::Internal);
     }
     const auto typeId = pModule->GetModuleId();
-    if (m_modules.find(typeId) != m_modules.end()) {
-        return Status(Status::Category::Internal, Status::Code::AlreadyExists, "Module already be register.");
+    if (m_modules.contains(typeId)) {
+        return {Status::Category::Internal, Status::Code::AlreadyExists, "Module already be register."};
     }
     m_modules[typeId] = pModule;
     return Status::Success(Status::Category::Internal);
 }
 
-auto EngineContext::UnregisterModule(Module::IModule* pModule) -> Base::Status {
+auto EngineContext::UnregisterModule(const IModule* pModule) -> Status {
     using Base::TypeId;
     using Base::Status;
     if (!pModule) {
@@ -57,10 +57,10 @@ auto EngineContext::UnregisterModule(Module::IModule* pModule) -> Base::Status {
     const auto typeId = pModule->GetModuleId();
     const auto it = m_modules.find(typeId);
     if (it == m_modules.end()) {
-        return Status(Status::Category::Internal, Status::Code::NotFound, "Module not found.");
+        return {Status::Category::Internal, Status::Code::NotFound, "Module not found."};
     }
     if (it->second != pModule) {
-        return Status(Status::Category::Internal, Status::Code::NotPermitted, "Module is not owner.");
+        return {Status::Category::Internal, Status::Code::NotPermitted, "Module is not owner."};
     }
     m_modules.erase(typeId);
     return Status::Success(Status::Category::Internal);

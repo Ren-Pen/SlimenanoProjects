@@ -15,9 +15,29 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include <vector>
+#include "../Base/Types.h"
+#include "ModuleDependenciesTree.h"
 
-#include "../Base/Export.h"
-#include "../Base/TypesImpl.h"
-#include "ILoggerManager.h"
+namespace Slimenano::Core::Module {
 
-template SLIMENANO_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Log::ILoggerManager>() -> const Slimenano::Core::Base::TypeId*;
+ModuleDependenciesTree::ModuleDependenciesTree() {
+    m_pTail = &m_root;
+}
+
+auto ModuleDependenciesTree::GetModules(std::vector<Base::TypeId*> out) const -> void {
+    const Node* pNode = m_root.m_pNext;
+    while (pNode != nullptr) {
+        if (pNode->m_pModuleId != nullptr) {
+            out.push_back(pNode->m_pModuleId);
+        }
+        pNode = pNode->m_pNext;
+    }
+}
+ModuleDependenciesTree::Node::Node(Base::TypeId* pModuleId) : m_pModuleId(pModuleId) {
+}
+ModuleDependenciesTree::Node::~Node() {
+    delete m_pNext;
+}
+
+} // namespace Slimenano::Core::Module

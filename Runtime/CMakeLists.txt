@@ -18,7 +18,7 @@
 
 cmake_minimum_required(VERSION 3.10.0)
 
-project(SlimenanoEnginePlatformImplement
+project(SlimenanoEngineRuntimeImplement
     VERSION 1.0.0
     LANGUAGES CXX
 )
@@ -26,4 +26,25 @@ project(SlimenanoEnginePlatformImplement
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
-set(NAMESPACE Slimenano)
+add_subdirectory(SlimenanoEngine/Common/Core)
+
+set(TARGET_NAME Slimenano-Engine-Runtime)
+
+if (BUILD_SHARED_LIBS)
+    add_compile_definitions(SLIMENANO_SHARED)
+endif ()
+
+add_library(${TARGET_NAME} INTERFACE)
+add_library(Slimenano::Engine::Runtime ALIAS ${TARGET_NAME})
+
+target_include_directories(${TARGET_NAME} INTERFACE ${PROJECT_SOURCE_DIR})
+
+target_sources(${TARGET_NAME} INTERFACE ${PROJECT_SOURCE_DIR}/SlimenanoEngine/SlimenanoEngine.h)
+
+if (NOT TARGET Slimenano::Engine::API)
+    find_package(Slimenano::Engine REQUIRED)
+endif ()
+
+target_link_libraries(${TARGET_NAME} INTERFACE Slimenano::Engine::API)
+target_link_libraries(${TARGET_NAME} INTERFACE Slimenano::Engine::Runtime::Core)
+

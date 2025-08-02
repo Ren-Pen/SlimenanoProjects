@@ -15,8 +15,8 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "Core/Log/ILogger.h"
-#include <SlimenanoEngine.h>
+#include <SlimenanoEngine/Core/Log/ILogger.h>
+#include <SlimenanoEngine/SlimenanoEngine.h>
 #include <chrono>
 #include <iostream>
 #include <string>
@@ -28,10 +28,10 @@ using namespace Slimenano::Core::Module;
 using namespace Slimenano::Core::Exception;
 using namespace Slimenano::Core::Log;
 
-class SandboxLogger : public ILogger {
+class SandboxLogger final : public ILogger {
   public:
-    virtual ~SandboxLogger() = default;
-    virtual auto Log(Level level, const char* message) const -> void override {
+    ~SandboxLogger() override = default;
+    auto Log(const Level level, const char* message) const -> void override {
         switch (level) {
         case Level::Trace:
             std::cout << "[T] ";
@@ -53,28 +53,28 @@ class SandboxLogger : public ILogger {
         }
         std::cout << message << std::endl;
     }
-    virtual void Trace(const char* message) const override { this->Log(ILogger::Level::Trace, message); };
-    virtual void Debug(const char* message) const override { this->Log(ILogger::Level::Debug, message); };
-    virtual void Info(const char* message) const override { this->Log(ILogger::Level::Info, message); };
-    virtual void Warn(const char* message) const override { this->Log(ILogger::Level::Warn, message); };
-    virtual void Error(const char* message) const override { this->Log(ILogger::Level::Error, message); };
-    virtual void Fatal(const char* message) const override { this->Log(ILogger::Level::Fatal, message); };
+    void Trace(const char* message) const override { this->Log(Level::Trace, message); }
+    void Debug(const char* message) const override { this->Log(Level::Debug, message); }
+    void Info(const char* message) const override { this->Log(Level::Info, message); }
+    void Warn(const char* message) const override { this->Log(Level::Warn, message); }
+    void Error(const char* message) const override { this->Log(Level::Error, message); }
+    void Fatal(const char* message) const override { this->Log(Level::Fatal, message); }
 };
 
-class SandboxLoggerManager : public ILoggerManager {
+class SandboxLoggerManager final : public ILoggerManager {
   public:
-    virtual ~SandboxLoggerManager() = default;
-    virtual auto GetLogger(const char* name) -> ILogger* override { return new SandboxLogger(); }
+    ~SandboxLoggerManager() override = default;
+    auto GetLogger(const char* name) -> ILogger* override { return new SandboxLogger(); }
 
-    virtual auto FreeLogger(ILogger* logger) -> void override { delete logger; };
+    auto FreeLogger(ILogger* logger) -> void override { delete logger; }
 
-    virtual auto OnInit() -> Status override { return Status::Success(Status::Category::Application); };
+    auto OnInit() -> Status override { return Status::Success(Status::Category::Application); }
 
-    virtual auto OnShutdown() -> Status override { return Status::Success(Status::Category::Application); };
+    auto OnShutdown() -> Status override { return Status::Success(Status::Category::Application); }
 
-    virtual auto OnUpdate() -> Status override { return Status::Success(Status::Category::Application); };
+    auto OnUpdate() -> Status override { return Status::Success(Status::Category::Application); }
 
-    virtual auto GetModuleName() const -> const char* override { return "SandboxLoggerManager"; };
+    [[nodiscard]] auto GetModuleName() const -> const char* override { return "SandboxLoggerManager"; }
 };
 
 class Sandbox final : public IApplication {
@@ -84,7 +84,7 @@ class Sandbox final : public IApplication {
      * @brief Called when the module is initialized during engine startup
      * @return true if initialized successfully
      */
-    virtual auto OnInit() -> Status override {
+    auto OnInit() -> Status override {
         auto pLoggerManager = GetLoggerManager();
         pLogger = pLoggerManager->GetLogger("Sandbox");
         pLogger->Warn("Sandbox initialized");
@@ -95,17 +95,16 @@ class Sandbox final : public IApplication {
     /**
      * @brief Called when the module is being shut down during engine shutdown
      */
-    virtual auto OnShutdown() -> Status override {
+    auto OnShutdown() -> Status override {
         pLogger->Warn("Sandbox shutdown");
         return Status::Success(Status::Category::Application);
     }
     /**
      * @brief Called every frame after engine startup
      */
-    virtual auto OnUpdate() -> Status override {
+    auto OnUpdate() -> Status override {
         auto now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         if (((now - startTime) % 1000) == 0) {
-            // std::cout << "Sandbox onUpdate " << (now - startTime) / 1000 << std::endl;
             pLogger->Info((std::string("Sandbox onUpdate ") + std::to_string((now - startTime) / 1000)).c_str());
         }
         if ((now - startTime) > 10000) {
@@ -117,7 +116,7 @@ class Sandbox final : public IApplication {
      * @brief Returns the name of the module (for logging or debugging)
      * @return const char* representing the module name
      */
-    virtual auto GetModuleName() const -> const char* override { return "Sandbox"; }
+    [[nodiscard]] auto GetModuleName() const -> const char* override { return "Sandbox"; }
 
   private:
     unsigned long long startTime = 0;

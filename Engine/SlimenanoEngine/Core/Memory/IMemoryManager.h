@@ -33,12 +33,11 @@ class IMemoryAllocator;
 
 class SLIMENANO_API IMemoryManager : public Module::IBaseModule<IMemoryManager> {
   public:
-    virtual ~IMemoryManager() = default;
+    ~IMemoryManager() override = default;
     [[nodiscard]] virtual auto Malloc(size_t size, size_t alignment) -> void* = 0;
     [[nodiscard]] virtual auto Malloc(size_t size) -> void*;
     virtual auto Free(void* ptr) -> Base::Status = 0;
     virtual auto Reset() -> Base::Status = 0;
-    virtual auto OnUpdate() -> Base::Status = 0;
 
     template <class T, typename... Args>
     [[nodiscard]] auto New(Args&&... args) -> T*;

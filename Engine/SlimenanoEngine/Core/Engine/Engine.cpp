@@ -35,20 +35,18 @@ Engine::~Engine() {
 }
 
 auto Engine::Start() -> Status {
-    m_running = true;
+    m_running.store(true, std::memory_order_relaxed);
 
     std::vector<IModule*> modules;
 
-    auto status = m_pContext->GetModules(modules);
-    if (status.IsFailure()) {
-        return status;
+    if (const auto getModuleStatus = m_pContext->GetModules(modules); getModuleStatus.IsFailure()) {
+        return getModuleStatus;
     }
 
     for (IModule* pModule : modules) {
         if (pModule) {
-            auto status = pModule->OnInit();
-            if (status.IsFailure()) {
-                return status;
+            if (const auto initModuleStatus = pModule->OnInit(); initModuleStatus.IsFailure()) {
+                return initModuleStatus;
             }
         }
     }
@@ -56,32 +54,30 @@ auto Engine::Start() -> Status {
 }
 
 auto Engine::Stop() -> Status {
-    if (!m_running) {
+    if (!m_running.load(std::memory_order_relaxed)) {
         return Status::Success(Status::Category::Internal);
     }
-    m_running = false;
+    m_running.store(false, std::memory_order_relaxed);
     return Status::Success(Status::Category::Internal);
 }
 
-auto Engine::MainLoop() -> Status {
+auto Engine::MainLoop() const -> Status {
 
-    auto pExceptionHandler = m_pContext->FindModule<Exception::IExceptionHandler>();
+    const auto pExceptionHandler = m_pContext->FindModule<Exception::IExceptionHandler>();
 
     std::vector<IModule*> modules;
-    auto status = m_pContext->GetModules(modules);
-    if (status.IsFailure()) {
+    if (const auto getModuleStatus = m_pContext->GetModules(modules); getModuleStatus.IsFailure()) {
         if (pExceptionHandler != nullptr) {
-            pExceptionHandler->Handle(status);
+            pExceptionHandler->Handle(getModuleStatus);
         }
     }
 
-    while (m_running) {
-        for (Module::IModule* pModule : modules) {
+    while (m_running.load(std::memory_order_relaxed)) {
+        for (IModule* pModule : modules) {
             if (pModule) {
-                auto status = pModule->OnUpdate();
-                if (status.IsFailure()) {
+                if (auto updateModuleStatus = pModule->OnUpdate(); updateModuleStatus.IsFailure()) {
                     if (pExceptionHandler != nullptr) {
-                        pExceptionHandler->Handle(status);
+                        pExceptionHandler->Handle(updateModuleStatus);
                     }
                 }
             }
@@ -89,12 +85,11 @@ auto Engine::MainLoop() -> Status {
     }
 
     // cleanup
-    for (Module::IModule* pModule : modules) {
+    for (IModule* pModule : modules) {
         if (pModule) {
-            auto status = pModule->OnShutdown();
-            if (status.IsFailure()) {
+            if (auto shutdownModuleStatus = pModule->OnShutdown(); shutdownModuleStatus.IsFailure()) {
                 if (pExceptionHandler != nullptr) {
-                    pExceptionHandler->Handle(status);
+                    pExceptionHandler->Handle(shutdownModuleStatus);
                 }
             }
         }
@@ -103,7 +98,7 @@ auto Engine::MainLoop() -> Status {
     return Status::Success(Status::Category::Internal);
 }
 
-auto Engine::getEngineContext() -> EngineContext* {
+auto Engine::getEngineContext() const -> EngineContext* {
     return m_pContext;
 }
 

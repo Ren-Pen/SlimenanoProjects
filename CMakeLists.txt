@@ -19,4 +19,6 @@ cmake_minimum_required(VERSION 3.10.0)
 project(SlimenanoProject)
 
 add_subdirectory(Engine)
+add_subdirectory(Libraries)
+add_subdirectory(Runtime)
 add_subdirectory(Sandbox)

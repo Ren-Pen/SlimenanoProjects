@@ -37,7 +37,7 @@ class EngineContext {
     auto FindModule() -> T*;
 
     SLIMENANO_API auto RegisterModule(Module::IModule* pModule) -> Base::Status;
-    SLIMENANO_API auto UnregisterModule(Module::IModule* pModule) -> Base::Status;
+    SLIMENANO_API auto UnregisterModule(const Module::IModule* pModule) -> Base::Status;
     SLIMENANO_API auto GetModules(std::vector<Module::IModule*>& outModules) const -> Base::Status;
 
   private:
@@ -48,7 +48,7 @@ template <class T>
 auto EngineContext::FindModule() -> T* {
     using Base::TypeId;
     const auto typeId = TypeId::Get<T>();
-    if (m_modules.find(typeId) == m_modules.end()) {
+    if (!m_modules.contains(typeId)) {
         return nullptr;
     }
     return static_cast<T*>(m_modules[typeId]);

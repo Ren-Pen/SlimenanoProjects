@@ -19,54 +19,15 @@ Slimenano Engine
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_MODULE_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_MODULE_H
 
-#    include <vector>
 #    include "../Base/Status.h"
 #    include "../Base/Types.h"
+#    include "ModuleDependenciesTree.h"
 
 namespace Slimenano::Core::Engine {
 class Engine;
 }
 
 namespace Slimenano::Core::Module {
-
-class SLIMENANO_API ModuleDependenciesTree {
-
-  public:
-    ModuleDependenciesTree() { m_pTail = &m_root; }
-
-    template <class T>
-    auto AddModule() -> void {
-        auto pModuleId = Base::TypeId::Get<T>();
-        m_pTail->m_pNext = new Node(pModuleId);
-        m_pTail = m_pTail->m_pNext;
-    }
-
-    inline auto GetModules(std::vector<Base::TypeId*> out) const -> void {
-        Node* pNode = m_root.m_pNext;
-        while (pNode != nullptr) {
-            if (pNode->m_pModuleId != nullptr) {
-                out.push_back(pNode->m_pModuleId);
-            }
-            pNode = pNode->m_pNext;
-        }
-    }
-
-  private:
-    class SLIMENANO_API Node {
-      public:
-        inline Node(Base::TypeId* pModuleId) : m_pModuleId(pModuleId) {}
-        inline ~Node() {
-            if (m_pNext) {
-                delete m_pNext;
-            }
-        }
-        Node* m_pNext = nullptr;
-        Base::TypeId* m_pModuleId = nullptr;
-    };
-
-    Node m_root = Node(nullptr);
-    Node* m_pTail = nullptr;
-};
 
 /**
  * @brief Base interface for all engine modules
@@ -95,11 +56,11 @@ class SLIMENANO_API IModule {
      * @brief Returns the name of the module (for logging or debugging)
      * @return const char* representing the module name
      */
-    virtual auto GetModuleName() const -> const char* = 0;
+    [[nodiscard]] virtual auto GetModuleName() const -> const char* = 0;
 
-    virtual auto GetModuleId() const -> const Base::TypeId* = 0;
+    [[nodiscard]] virtual auto GetModuleId() const -> const Base::TypeId* = 0;
 
-    virtual auto GetModuleDependencies() const -> const ModuleDependenciesTree& = 0;
+    [[nodiscard]] virtual auto GetModuleDependencies() const -> const ModuleDependenciesTree& = 0;
 };
 } // namespace Slimenano::Core::Module
 

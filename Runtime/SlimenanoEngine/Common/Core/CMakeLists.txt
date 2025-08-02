@@ -14,24 +14,44 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-]]#
-
+]]
+#
 cmake_minimum_required(VERSION 3.10.0)
 
-project(SlimenanoEngineSandbox
-    VERSION 1.0.0
-    LANGUAGES CXX
+project(SlimenanoEngineCoreImplement
+        VERSION 1.0.0
+        LANGUAGES CXX
 )
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
-set(NAMESPACE Slimenano)
+set(TARGET_NAME Slimenano-Engine-Runtime-Core)
 
-add_executable(SandBox ${PROJECT_SOURCE_DIR}/SandBox.cpp)
+if (BUILD_SHARED_LIBS)
+    add_compile_definitions(SLIMENANO_SHARED)
+endif ()
 
-if (NOT TARGET Slimenano::Engine::Runtime)
+add_library(${TARGET_NAME})
+add_library(Slimenano::Engine::Runtime::Core ALIAS ${TARGET_NAME})
+
+if (NOT TARGET spdlog)
+    find_package(spdlog REQUIRED)
+endif ()
+
+if (NOT TARGET Slimenano::Engine::API)
     find_package(Slimenano::Engine REQUIRED)
 endif ()
 
-target_link_libraries(SandBox Slimenano::Engine::Runtime)
+target_link_libraries(${TARGET_NAME} PUBLIC Slimenano::Engine::API)
+
+target_link_libraries(${TARGET_NAME} PRIVATE spdlog::spdlog)
+
+target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_LIBRARY)
+
+target_compile_options(${TARGET_NAME} PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/SPDLoggerManager.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/SPDLoggerManager.cpp)
+
+

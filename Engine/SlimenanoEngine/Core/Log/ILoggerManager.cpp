@@ -1,5 +1,5 @@
-#[[
-    Slimenano Engine
+/*
+Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
     This program is free software: you can redistribute it and/or modify
@@ -14,18 +14,10 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-]]#
+*/
 
-cmake_minimum_required(VERSION 3.10.0)
+#include "../Base/Export.h"
+#include "../Base/TypesImpl.h"
+#include "ILoggerManager.h"
 
-project(SlimenanoEngineExternalLibraries
-    VERSION 1.0.0
-    LANGUAGES CXX
-)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED 20)
-
-set(NAMESPACE Slimenano)
-
-add_subdirectory(spdlog)
+template SLIMENANO_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Log::ILoggerManager>() -> const TypeId*;
