@@ -25,7 +25,7 @@ namespace Slimenano::Core::Base {
 
 using State = unsigned long long;
 
-class SLIMENANO_API Status {
+class SLIMENANO_CORE_API Status {
   public:
     constexpr inline Status(State category, State code);
     constexpr inline Status(State category, State code, const char* message);

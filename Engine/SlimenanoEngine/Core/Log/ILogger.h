@@ -23,7 +23,7 @@ Slimenano Engine
 
 namespace Slimenano::Core::Log {
 
-class SLIMENANO_API ILogger {
+class SLIMENANO_CORE_API ILogger {
   public:
     enum class Level;
     virtual ~ILogger() = default;

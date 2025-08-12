@@ -25,7 +25,7 @@ namespace Slimenano::Core::Memory {
 
 class IMemoryManager;
 
-class SLIMENANO_API IMemoryAllocator {
+class SLIMENANO_CORE_API IMemoryAllocator {
   public:
     explicit IMemoryAllocator(IMemoryManager* pMemoryManager) : m_pMemoryManager(pMemoryManager) {}
     virtual ~IMemoryAllocator() = default;

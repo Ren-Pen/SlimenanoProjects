@@ -36,25 +36,25 @@ class Engine {
      * @brief Construct the Engine with the given EngineContext.
      * @param context Reference to the engine context which holds global runtime dependencies.
      */
-    SLIMENANO_API explicit Engine(EngineContext* context);
+    SLIMENANO_CORE_API explicit Engine(EngineContext* context);
 
     /**
      * @brief Destructor that ensures the engine is properly stopped.
      */
-    SLIMENANO_API ~Engine();
+    SLIMENANO_CORE_API ~Engine();
 
     /**
      * @brief Starts the engine and enters the main loop.
      * Initializes and starts all registered modules.
      */
-    SLIMENANO_API auto Start() -> Base::Status;
+    SLIMENANO_CORE_API auto Start() -> Base::Status;
 
     /**
      * @brief Stops the engine and shuts down all running modules.
      */
-    SLIMENANO_API auto Stop() -> Base::Status;
+    SLIMENANO_CORE_API auto Stop() -> Base::Status;
 
-    SLIMENANO_API [[nodiscard]] auto getEngineContext() const -> EngineContext*;
+    SLIMENANO_CORE_API [[nodiscard]] auto getEngineContext() const -> EngineContext*;
 
   private:
     /**

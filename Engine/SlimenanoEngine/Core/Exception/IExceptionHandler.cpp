@@ -20,5 +20,5 @@ Slimenano Engine
 #include "../Base/TypesImpl.h"
 #include "IExceptionHandler.h"
 
-template SLIMENANO_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Exception::IExceptionHandler>() -> const TypeId*;
+template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Exception::IExceptionHandler>() -> const TypeId*;
 

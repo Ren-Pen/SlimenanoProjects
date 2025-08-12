@@ -24,7 +24,7 @@ Slimenano Engine
 #    include "../Module/IBaseModule.h"
 
 namespace Slimenano::Core::Exception {
-class SLIMENANO_API IExceptionHandler : public Module::IBaseModule<IExceptionHandler> {
+class SLIMENANO_CORE_API IExceptionHandler : public Module::IBaseModule<IExceptionHandler> {
   public:
     virtual void Handle(Base::Status status) = 0;
     virtual void Handle(Base::Status status, const char* message) = 0;

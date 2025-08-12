@@ -47,7 +47,7 @@ target_link_libraries(${TARGET_NAME} PUBLIC Slimenano::Engine::API)
 
 target_link_libraries(${TARGET_NAME} PRIVATE spdlog::spdlog)
 
-target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_LIBRARY)
+target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_RUNTIME_LIBRARY)
 
 target_compile_options(${TARGET_NAME} PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 

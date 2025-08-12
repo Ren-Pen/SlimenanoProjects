@@ -24,7 +24,7 @@ Slimenano Engine
 
 namespace Slimenano::Core::Log {
 
-class SLIMENANO_API SPDLoggerManager : public ILoggerManager {
+class SLIMENANO_RUNTIME_API SPDLoggerManager final : public ILoggerManager {
   public:
     SPDLoggerManager() = default;
     ~SPDLoggerManager() override = default;

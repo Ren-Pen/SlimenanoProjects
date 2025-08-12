@@ -32,7 +32,7 @@ namespace Slimenano::Core::Module {
 /**
  * @brief Base interface for all engine modules
  */
-class SLIMENANO_API IModule {
+class SLIMENANO_CORE_API IModule {
   public:
     virtual ~IModule() = default;
 

@@ -20,7 +20,7 @@ Slimenano Engine
 #include "IMemoryManager.h"
 #include "IMemoryAllocator.h"
 
-template SLIMENANO_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Memory::IMemoryManager>() -> const TypeId*;
+template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Memory::IMemoryManager>() -> const TypeId*;
 
 namespace Slimenano::Core::Memory {
 

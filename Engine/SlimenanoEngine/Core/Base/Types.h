@@ -22,7 +22,7 @@
 
 namespace Slimenano::Core::Base {
 
-class SLIMENANO_API TypeId {
+class SLIMENANO_CORE_API TypeId {
   public:
     template <typename T>
     static auto Get() -> const TypeId*;

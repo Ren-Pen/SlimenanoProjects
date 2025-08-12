@@ -31,7 +31,7 @@ namespace Slimenano::Core::Memory {
 
 class IMemoryAllocator;
 
-class SLIMENANO_API IMemoryManager : public Module::IBaseModule<IMemoryManager> {
+class SLIMENANO_CORE_API IMemoryManager : public Module::IBaseModule<IMemoryManager> {
   public:
     ~IMemoryManager() override = default;
     [[nodiscard]] virtual auto Malloc(size_t size, size_t alignment) -> void* = 0;

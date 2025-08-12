@@ -34,7 +34,7 @@ endif()
 add_library(${TARGET_NAME})
 add_library(Slimenano::Engine::Core ALIAS ${TARGET_NAME})
 
-target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_LIBRARY)
+target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_CORE_LIBRARY)
 
 target_compile_options(${TARGET_NAME} PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 

@@ -21,7 +21,7 @@ Slimenano Engine
 #    include <vector>
 #    include "../Base/Types.h"
 namespace Slimenano::Core::Module {
-class SLIMENANO_API ModuleDependenciesTree {
+class SLIMENANO_CORE_API ModuleDependenciesTree {
 
   public:
     ModuleDependenciesTree();
@@ -36,7 +36,7 @@ class SLIMENANO_API ModuleDependenciesTree {
     auto GetModules(std::vector<Base::TypeId*> out) const -> void;
 
   private:
-    class SLIMENANO_API Node {
+    class SLIMENANO_CORE_API Node {
       public:
         explicit Node(Base::TypeId* pModuleId);
         ~Node();

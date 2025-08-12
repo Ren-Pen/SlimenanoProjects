@@ -20,7 +20,7 @@ Slimenano Engine
 #include "../Base/TypesImpl.h"
 #include "ILoggerManager.h"
 
-template SLIMENANO_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Log::ILoggerManager>() -> const TypeId*;
+template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Log::ILoggerManager>() -> const TypeId*;
 
 namespace Slimenano::Core::Log {
 using namespace Base;

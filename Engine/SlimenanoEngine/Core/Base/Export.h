@@ -20,24 +20,49 @@
 #    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_EXPORT_H
 
 #    ifdef SLIMENANO_SHARED
+
 #        ifdef _MSC_VER
-#            ifdef SLIMENANO_LIBRARY
-#                define SLIMENANO_API __declspec(dllexport)
+
+#            ifdef SLIMENANO_CORE_LIBRARY
+#                define SLIMENANO_CORE_API __declspec(dllexport)
 #            else
-#                define SLIMENANO_API __declspec(dllimport)
-#            endif //! SLIMENANO_LIBRARY
+#                define SLIMENANO_CORE_API __declspec(dllimport)
+#            endif //! SLIMENANO_CORE_LIBRARY
+
+#            ifdef SLIMENANO_RUNTIME_LIBRARY
+#                define SLIMENANO_RUNTIME_API __declspec(dllexport)
+#            else
+#                define SLIMENANO_RUNTIME_API __declspec(dllimport)
+#            endif //! SLIMENANO_RUNTIME_LIBRARY
+
 #        elif __GNUC__
-#            ifdef SLIMENANO_LIBRARY
-#                define SLIMENANO_API __attribute__((visibility("default")))
+
+#            ifdef SLIMENANO_CORE_LIBRARY
+#                define SLIMENANO_CORE_API __attribute__((visibility("default")))
 #            else
-#                define SLIMENANO_API
-#            endif //! SLIMENANO_LIBRARY
+#                define SLIMENANO_CORE_API
+#            endif //! SLIMENANO_CORE_LIBRARY
+
+#            ifdef SLIMENANO_RUNTIME_LIBRARY
+#                define SLIMENANO_RUNTIME_API __attribute__((visibility("default")))
+#            else
+#                define SLIMENANO_RUNTIME_API
+#            endif //! SLIMENANO_RUNTIME_LIBRARY
+
 #        else
-#            define SLIMENANO_API
+
+#            define SLIMENANO_CORE_API
 #            pragma warning Unknown dynamic link import / export semantics.
+#            define SLIMENANO_RUNTIME_API
+#            pragma warning Unknown dynamic link import / export semantics.
+
 #        endif
+
 #    else
-#        define SLIMENANO_API
+
+#        define SLIMENANO_CORE_API
+#        define SLIMENANO_RUNTIME_API
+
 #    endif
 
 #endif

@@ -25,7 +25,7 @@ Slimenano Engine
 
 namespace Slimenano::Core::Log {
 
-class SLIMENANO_API ILoggerManager : public Module::IBaseModule<ILoggerManager> {
+class SLIMENANO_CORE_API ILoggerManager : public Module::IBaseModule<ILoggerManager> {
   public:
     ~ILoggerManager() override = default;
     virtual auto GetLogger(const char* name) -> ILogger* = 0;

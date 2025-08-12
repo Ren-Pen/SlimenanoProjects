@@ -36,9 +36,9 @@ class EngineContext {
     template <class T>
     auto FindModule() -> T*;
 
-    SLIMENANO_API auto RegisterModule(Module::IModule* pModule) -> Base::Status;
-    SLIMENANO_API auto UnregisterModule(const Module::IModule* pModule) -> Base::Status;
-    SLIMENANO_API auto GetModules(std::vector<Module::IModule*>& outModules) const -> Base::Status;
+    SLIMENANO_CORE_API auto RegisterModule(Module::IModule* pModule) -> Base::Status;
+    SLIMENANO_CORE_API auto UnregisterModule(const Module::IModule* pModule) -> Base::Status;
+    SLIMENANO_CORE_API auto GetModules(std::vector<Module::IModule*>& outModules) const -> Base::Status;
 
   private:
     std::unordered_map<const Base::TypeId*, Module::IModule*> m_modules = std::unordered_map<const Base::TypeId*, Module::IModule*>();

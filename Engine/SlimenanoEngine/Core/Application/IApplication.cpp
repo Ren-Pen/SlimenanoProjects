@@ -20,7 +20,7 @@ Slimenano Engine
 #include "../Base/TypesImpl.h"
 #include "IApplication.h"
 
-template SLIMENANO_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Application::IApplication>() -> const TypeId*;
+template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Application::IApplication>() -> const TypeId*;
 
 namespace Slimenano::Core::Application {
 

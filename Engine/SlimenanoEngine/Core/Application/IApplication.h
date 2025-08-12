@@ -24,7 +24,7 @@ Slimenano Engine
 #    include "../Log/ILoggerManager.h"
 #    include "../Exception/IExceptionHandler.h"
 namespace Slimenano::Core::Application {
-class SLIMENANO_API IApplication : public Module::IBaseModule<IApplication> {
+class SLIMENANO_CORE_API IApplication : public Module::IBaseModule<IApplication> {
   protected:
     auto GetLoggerManager() -> Log::ILoggerManager*;
     auto GetExceptionHandler() -> Exception::IExceptionHandler*;
