@@ -26,8 +26,7 @@ namespace Slimenano::Core::Log {
 class SPDLogger::Impl {
     friend SPDLogger;
 
-    explicit Impl(const char* name) : m_Name(name), m_pLogger(spdlog::stdout_color_mt(name)) {
-    }
+    explicit Impl(const char* name) : m_Name(name), m_pLogger(spdlog::stdout_color_mt(name)) {}
     ~Impl() = default;
 
     const char* m_Name;
@@ -109,6 +108,5 @@ auto SPDLogger::Fatal(const char* message) const -> void {
 auto SPDLogger::GetName() const -> const char* {
     return m_pImpl->m_Name;
 }
-
 
 } // namespace Slimenano::Core::Log
