@@ -27,7 +27,9 @@ class SLIMENANO_CORE_API ILogger {
   public:
     enum class Level;
     virtual ~ILogger() = default;
-    virtual auto Log(Level level, const char* message) const -> void = 0;
+    [[nodiscard]] virtual auto GetName() const -> const char* = 0;
+    virtual auto SetLevel(const Level& level) const -> void = 0;
+    virtual auto Log(const Level& level, const char* message) const -> void = 0;
     virtual auto Trace(const char* message) const -> void = 0;
     virtual auto Debug(const char* message) const -> void = 0;
     virtual auto Info(const char* message) const -> void = 0;
@@ -43,6 +45,7 @@ enum class ILogger::Level {
     Warn,
     Error,
     Fatal,
+    Off,
 };
 
 } // namespace Slimenano::Core::Log

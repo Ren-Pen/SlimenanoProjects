@@ -23,10 +23,49 @@ Slimenano Engine
 
 namespace Slimenano::Core::Log {
 
-SPDLogger::SPDLogger(const char* name) : m_Name(name), m_pLogger(spdlog::stdout_color_mt(name)) {
+class SPDLogger::Impl {
+    friend SPDLogger;
+
+    explicit Impl(const char* name) : m_Name(name), m_pLogger(spdlog::stdout_color_mt(name)) {
+    }
+    ~Impl() = default;
+
+    const char* m_Name;
+    std::shared_ptr<spdlog::logger> m_pLogger;
+    SPDLogger* m_pInterface{};
+};
+
+auto Level2SpdLevel(const ILogger::Level& level) -> spdlog::level::level_enum {
+    switch (level) {
+    case ILogger::Level::Trace:
+        return spdlog::level::trace;
+    case ILogger::Level::Debug:
+        return spdlog::level::debug;
+    case ILogger::Level::Info:
+        return spdlog::level::info;
+    case ILogger::Level::Warn:
+        return spdlog::level::warn;
+    case ILogger::Level::Error:
+        return spdlog::level::err;
+    case ILogger::Level::Fatal:
+        return spdlog::level::critical;
+    default:;
+    }
+    return spdlog::level::off;
 }
 
-auto SPDLogger::Log(const Level level, const char* message) const -> void {
+SPDLogger::SPDLogger(const char* name) : m_pImpl(new Impl(name)) {
+}
+
+SPDLogger::~SPDLogger() {
+    delete m_pImpl;
+}
+
+auto SPDLogger::SetLevel(const Level& level) const -> void {
+    m_pImpl->m_pLogger->set_level(Level2SpdLevel(level));
+}
+
+auto SPDLogger::Log(const Level& level, const char* message) const -> void {
     switch (level) {
     case Level::Trace:
         this->Trace(message);
@@ -46,25 +85,30 @@ auto SPDLogger::Log(const Level level, const char* message) const -> void {
     case Level::Fatal:
         this->Fatal(message);
         break;
+    default:;
     }
 }
 auto SPDLogger::Trace(const char* message) const -> void {
-    spdlog::get(m_Name)->trace(message);
+    m_pImpl->m_pLogger->trace(message);
 }
 auto SPDLogger::Debug(const char* message) const -> void {
-    spdlog::get(m_Name)->debug(message);
+    m_pImpl->m_pLogger->debug(message);
 }
 auto SPDLogger::Info(const char* message) const -> void {
-    spdlog::get(m_Name)->info(message);
+    m_pImpl->m_pLogger->info(message);
 }
 auto SPDLogger::Warn(const char* message) const -> void {
-    spdlog::get(m_Name)->warn(message);
+    m_pImpl->m_pLogger->warn(message);
 }
 auto SPDLogger::Error(const char* message) const -> void {
-    spdlog::get(m_Name)->error(message);
+    m_pImpl->m_pLogger->error(message);
 }
 auto SPDLogger::Fatal(const char* message) const -> void {
-    spdlog::get(m_Name)->critical(message);
+    m_pImpl->m_pLogger->critical(message);
 }
+auto SPDLogger::GetName() const -> const char* {
+    return m_pImpl->m_Name;
+}
+
 
 } // namespace Slimenano::Core::Log

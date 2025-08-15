@@ -21,7 +21,6 @@ Slimenano Engine
 
 #    include "../Base/Status.h"
 #    include "../Base/Types.h"
-#    include "ModuleDependenciesTree.h"
 
 namespace Slimenano::Core::Engine {
 class Engine;
@@ -59,8 +58,6 @@ class SLIMENANO_CORE_API IModule {
     [[nodiscard]] virtual auto GetModuleName() const -> const char* = 0;
 
     [[nodiscard]] virtual auto GetModuleId() const -> const Base::TypeId* = 0;
-
-    [[nodiscard]] virtual auto GetModuleDependencies() const -> const ModuleDependenciesTree& = 0;
 
     [[nodiscard]] virtual auto GetModuleStatusCategory() const -> Base::State = 0;
 };

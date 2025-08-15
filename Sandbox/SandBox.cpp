@@ -32,7 +32,9 @@ using namespace Slimenano::Core::Log;
 class SandboxLogger final : public ILogger {
   public:
     ~SandboxLogger() override = default;
-    auto Log(const Level level, const char* message) const -> void override {
+    [[nodiscard]] auto GetName() const -> const char* override { return "SandboxLogger"; }
+    auto SetLevel(const Level& level) const -> void override {}
+    auto Log(const Level& level, const char* message) const -> void override {
         switch (level) {
         case Level::Trace:
             std::cout << "[T] ";
@@ -51,6 +53,7 @@ class SandboxLogger final : public ILogger {
             break;
         case Level::Fatal:
             std::cout << "[F] ";
+        default:;
         }
         std::cout << message << std::endl;
     }
@@ -67,15 +70,20 @@ class SandboxLoggerManager final : public ILoggerManager {
     ~SandboxLoggerManager() override = default;
     auto GetLogger(const char* name) -> ILogger* override { return new SandboxLogger(); }
 
-    auto FreeLogger(ILogger* logger) -> void override { delete logger; }
+    auto FreeLogger(ILogger* logger) -> Status override {
+        delete logger;
+        return Status::Success(GetModuleStatusCategory());
+    }
 
-    auto OnInit() -> Status override { return Status::Success(Status::Category::Application); }
+    auto OnInit() -> Status override { return Status::Success(GetModuleStatusCategory()); }
 
-    auto OnShutdown() -> Status override { return Status::Success(Status::Category::Application); }
+    auto OnShutdown() -> Status override { return Status::Success(GetModuleStatusCategory()); }
 
-    auto OnUpdate() -> Status override { return Status::Success(Status::Category::Application); }
+    auto OnUpdate() -> Status override { return Status::Success(GetModuleStatusCategory()); }
 
     [[nodiscard]] auto GetModuleName() const -> const char* override { return "SandboxLoggerManager"; }
+
+    auto SetDefaultLevel(const ILogger::Level& level) -> void override {}
 };
 
 class Sandbox final : public IApplication {

@@ -36,12 +36,7 @@ class IBaseModule : public IModule {
 
     [[nodiscard]] auto GetModuleId() const -> const Base::TypeId* final;
 
-    [[nodiscard]] auto GetModuleDependencies() const -> const ModuleDependenciesTree& final;
-
     [[nodiscard]] auto GetModuleStatusCategory() const -> Base::State override;
-
-    template <class MODULE>
-    auto AddDependency() -> void;
 
     auto Install(Engine::Engine* engine) -> Base::Status;
 
@@ -55,17 +50,11 @@ class IBaseModule : public IModule {
 
   private:
     Engine::Engine* m_pEngine = nullptr;
-    ModuleDependenciesTree m_dependenciesTree = ModuleDependenciesTree();
 };
 
 template <class T>
 auto IBaseModule<T>::GetModuleId() const -> const Base::TypeId* {
     return Base::TypeId::Get<T>();
-}
-
-template <class T>
-auto IBaseModule<T>::GetModuleDependencies() const -> const ModuleDependenciesTree& {
-    return this->m_dependenciesTree;
 }
 
 template <class T>
@@ -119,12 +108,6 @@ auto IBaseModule<T>::FindModule() -> MODULE* {
         }
     }
     return nullptr;
-}
-
-template <class T>
-template <class MODULE>
-auto IBaseModule<T>::AddDependency() -> void {
-    this->m_dependenciesTree.AddModule<MODULE>();
 }
 
 } // namespace Slimenano::Core::Module

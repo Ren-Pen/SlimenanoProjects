@@ -23,12 +23,14 @@ Slimenano Engine
 #    include <SlimenanoEngine/Core/Log/ILogger.h>
 
 namespace Slimenano::Core::Log {
-class SPDLogger : public ILogger {
+class SPDLogger final : public ILogger {
   public:
     explicit SPDLogger(const char* name);
-    ~SPDLogger() override = default;
+    ~SPDLogger() override;
 
-    auto Log(Level level, const char* message) const -> void override;
+    [[nodiscard]] auto GetName() const -> const char* override;
+    auto SetLevel(const Level& level) const -> void override;
+    auto Log(const Level& level, const char* message) const -> void override;
     auto Trace(const char* message) const -> void override;
     auto Debug(const char* message) const -> void override;
     auto Info(const char* message) const -> void override;
@@ -36,9 +38,10 @@ class SPDLogger : public ILogger {
     auto Error(const char* message) const -> void override;
     auto Fatal(const char* message) const -> void override;
 
+
   private:
-    const char* m_Name;
-    std::shared_ptr<spdlog::logger> m_pLogger;
+    class Impl;
+    Impl* m_pImpl;
 };
 } // namespace Slimenano::Core::Log
 

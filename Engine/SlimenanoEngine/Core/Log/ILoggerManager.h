@@ -29,7 +29,8 @@ class SLIMENANO_CORE_API ILoggerManager : public Module::IBaseModule<ILoggerMana
   public:
     ~ILoggerManager() override = default;
     virtual auto GetLogger(const char* name) -> ILogger* = 0;
-    virtual auto FreeLogger(ILogger* logger) -> void = 0;
+    virtual auto FreeLogger(ILogger* logger) -> Base::Status = 0;
+    virtual auto SetDefaultLevel(const ILogger::Level& level) -> void = 0;
     [[nodiscard]] auto GetModuleStatusCategory() const -> Base::State override;
 };
 

@@ -26,16 +26,21 @@ namespace Slimenano::Core::Log {
 
 class SLIMENANO_RUNTIME_API SPDLoggerManager final : public ILoggerManager {
   public:
-    SPDLoggerManager() = default;
-    ~SPDLoggerManager() override = default;
+    SPDLoggerManager();
+    ~SPDLoggerManager() override;
 
     auto GetLogger(const char* name) -> ILogger* override;
-    auto FreeLogger(ILogger* logger) -> void override;
+    auto FreeLogger(ILogger* logger) -> Base::Status override;
 
     auto OnInit() -> Base::Status override;
     auto OnShutdown() -> Base::Status override;
     auto OnUpdate() -> Base::Status override;
+    auto SetDefaultLevel(const ILogger::Level& level) -> void override;
     [[nodiscard]] auto GetModuleName() const -> const char* override;
+
+  private:
+    class Impl;
+    Impl* m_pImpl;
 };
 
 } // namespace Slimenano::Core::Log

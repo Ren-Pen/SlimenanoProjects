@@ -25,7 +25,6 @@ Slimenano Engine
 #    include "../Base/Status.h"
 #    include "../Base/Export.h"
 #    include "../Module/IBaseModule.h"
-#    include "IMemoryAllocator.h"
 
 namespace Slimenano::Core::Memory {
 
@@ -45,29 +44,7 @@ class SLIMENANO_CORE_API IMemoryManager : public Module::IBaseModule<IMemoryMana
     template <class T>
     auto Delete(T* ptr) -> Base::Status;
 
-    template <class T>
-    auto GetAllocator() -> T*;
-
-    template <class T>
-    auto ReleaseAllocator(T*) -> void;
-
-  protected:
-    virtual auto AddAllocator(IMemoryAllocator* pAllocator) -> void = 0;
-    virtual auto RemoveAllocator(IMemoryAllocator* pAllocator) -> void = 0;
 };
-
-template <class T>
-auto IMemoryManager::GetAllocator() -> T* {
-    auto pAllocator = this->New<T>(this);
-    AddAllocator(pAllocator);
-    return pAllocator;
-}
-
-template <class T>
-auto IMemoryManager::ReleaseAllocator(T* pAllocator) -> void {
-    RemoveAllocator(pAllocator);
-    this->Delete(pAllocator);
-}
 
 template <class T, typename... Args>
 auto IMemoryManager::New(Args&&... args) -> T* {
