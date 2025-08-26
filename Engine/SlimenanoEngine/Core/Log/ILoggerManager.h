@@ -21,6 +21,7 @@ Slimenano Engine
 
 #    include "../Base/Export.h"
 #    include "../Module/IBaseModule.h"
+
 #    include "ILogger.h"
 
 namespace Slimenano::Core::Log {

@@ -15,7 +15,6 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include <SlimenanoEngine/Core/Log/ILogger.h>
 #include <SlimenanoEngine/Common/Core/Log/SPDLoggerManager.h>
 #include <SlimenanoEngine/SlimenanoEngine.h>
 #include <chrono>

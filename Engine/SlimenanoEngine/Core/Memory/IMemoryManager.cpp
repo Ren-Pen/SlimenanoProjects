@@ -17,8 +17,8 @@ Slimenano Engine
 */
 #include "../Base/Export.h"
 #include "../Base/TypesImpl.h"
+
 #include "IMemoryManager.h"
-#include "IMemoryAllocator.h"
 
 template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Memory::IMemoryManager>() -> const TypeId*;
 

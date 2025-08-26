@@ -19,10 +19,11 @@ Slimenano Engine
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
 #    define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
 
-#include <atomic>
+#    include <atomic>
 
 #    include "../Base/Export.h"
 #    include "../Base/Status.h"
+
 #    include "EngineContext.h"
 
 namespace Slimenano::Core::Engine {

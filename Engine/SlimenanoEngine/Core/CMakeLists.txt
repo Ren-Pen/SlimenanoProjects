@@ -58,7 +58,6 @@ target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/ILogger.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/ILoggerManager.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Log/ILoggerManager.cpp)
 
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryAllocator.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryManager.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryManager.cpp)
 

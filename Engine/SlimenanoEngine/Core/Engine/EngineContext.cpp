@@ -19,8 +19,9 @@ Slimenano Engine
 #include <iterator>
 #include <vector>
 
-#include "EngineContext.h"
 #include "../Module/IModule.h"
+
+#include "EngineContext.h"
 
 namespace Slimenano::Core::Engine {
 

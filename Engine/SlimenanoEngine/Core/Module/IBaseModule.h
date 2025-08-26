@@ -22,6 +22,7 @@ Slimenano Engine
 #    include "../Engine/Engine.h"
 #    include "../Engine/EngineContext.h"
 #    include "../Base/Types.h"
+
 #    include "IModule.h"
 
 namespace Slimenano::Core::Module {

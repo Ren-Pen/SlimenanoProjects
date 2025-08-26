@@ -28,12 +28,9 @@
 
 #    include <SlimenanoEngine/Core/Exception/IExceptionHandler.h>
 
-#    include <SlimenanoEngine/Core/Memory/IMemoryAllocator.h>
 #    include <SlimenanoEngine/Core/Memory/IMemoryManager.h>
 
 #    include <SlimenanoEngine/Core/Log/ILogger.h>
 #    include <SlimenanoEngine/Core/Log/ILoggerManager.h>
-
-#    include <SlimenanoEngine/Common/Core/Log/SPDLoggerManager.h>
 
 #endif

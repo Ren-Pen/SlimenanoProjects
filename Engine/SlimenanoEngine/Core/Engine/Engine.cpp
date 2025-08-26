@@ -17,10 +17,12 @@ Slimenano Engine
 */
 
 #include <vector>
-#include "Engine.h"
-#include "EngineContext.h"
+
 #include "../Module/IModule.h"
 #include "../Exception/IExceptionHandler.h"
+
+#include "Engine.h"
+#include "EngineContext.h"
 
 namespace Slimenano::Core::Engine {
 
