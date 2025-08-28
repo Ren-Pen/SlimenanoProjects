@@ -19,7 +19,6 @@ Slimenano Engine
 #ifndef SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_H
 #    define SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_H
 
-#    include <spdlog/spdlog.h>
 #    include <SlimenanoEngine/Core/Log/ILogger.h>
 
 namespace Slimenano::Core::Log {

@@ -15,8 +15,13 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include <ranges>
+#include <memory>
+#include <mutex>
+#include <shared_mutex>
+#include <unordered_map>
+#include <string>
 
+#include "SlimenanoEngine/Core/Log/ILogger.h"
 #include "SPDLogger.h"
 #include "SPDLoggerManager.h"
 
@@ -28,27 +33,41 @@ class SPDLoggerManager::Impl {
     friend SPDLoggerManager;
     explicit Impl(SPDLoggerManager* pLoggerManager) : m_pInterface(pLoggerManager) {}
     ~Impl() {
-        for (const auto& logger : m_loggers | std::views::values) {
-            delete logger;
-        }
+        std::unique_lock lock(m_mutex);
         m_loggers.clear();
     };
 
     auto GetLogger(const char* name) -> ILogger* {
-        if (name == nullptr) {
+        if (name == nullptr || *name == '\0') {
             return nullptr;
         }
+
         const auto sName = std::string(name);
-        if (m_loggers.contains(sName)) {
-            return m_loggers[sName];
+
+        {
+            std::shared_lock readLock(m_mutex);
+            if (auto it = m_loggers.find(sName); it != m_loggers.end()){
+                return it->second.get();
+            }
         }
-        const auto pLogger = new SPDLogger(name);
-        m_loggers[sName] = pLogger;
-        pLogger->SetLevel(m_defaultLevel);
-        return pLogger;
+
+        auto pLogger = std::make_unique<SPDLogger>(sName.c_str());
+
+        {
+            std::unique_lock lock(m_mutex);
+            if (auto it = m_loggers.find(sName); it != m_loggers.end()){
+                return it->second.get();
+            }
+
+            pLogger->SetLevel(m_defaultLevel);
+            auto [it, inserted] = m_loggers.emplace(sName, std::move(pLogger));
+
+            return it->second.get();
+        }
+
     }
 
-    auto FreeLogger(const ILogger* logger) -> Status {
+    auto FreeLogger(ILogger* logger) -> Status {
 
         if (logger == nullptr) {
             return Status::NullPointerException(m_pInterface->GetModuleStatusCategory());
@@ -58,22 +77,31 @@ class SPDLoggerManager::Impl {
             return Status::NullPointerException(m_pInterface->GetModuleStatusCategory());
         }
 
-        if (const auto sName = std::string(logger->GetName()); m_loggers.contains(sName)) {
-            if (m_loggers[sName] == logger) {
-                m_loggers.erase(sName);
-                delete logger;
-                return Status::Success(m_pInterface->GetModuleStatusCategory());
-            } else {
-                return {m_pInterface->GetModuleStatusCategory(), Status::Code::NotPermitted, "Logger is not owner."};
-            }
+        const auto sName = std::string(logger->GetName());
+        std::unique_lock lock(m_mutex);
+        
+        auto it = m_loggers.find(sName);
+        if (it == m_loggers.end()){
+            return {m_pInterface->GetModuleStatusCategory(), Status::Code::NotFound, "Logger not found."};
         }
 
-        return {m_pInterface->GetModuleStatusCategory(), Status::Code::NotFound, "Logger not found."};
+        if (it->second.get() != logger){
+            return {m_pInterface->GetModuleStatusCategory(), Status::Code::NotPermitted, "Logger is not owner."};
+        }
+
+        m_loggers.erase(it);
+        return Status::Success(m_pInterface->GetModuleStatusCategory());
     }
 
-    std::unordered_map<std::string, ILogger*> m_loggers = std::unordered_map<std::string, ILogger*>();
+    auto SetDefaultLevel(ILogger::Level level) -> void {
+        std::unique_lock<std::shared_mutex> lock(m_mutex);
+        m_defaultLevel = level;
+    }
+
+    std::unordered_map<std::string, std::unique_ptr<SPDLogger>> m_loggers = std::unordered_map<std::string, std::unique_ptr<SPDLogger>>();
     SPDLoggerManager* m_pInterface = nullptr;
     ILogger::Level m_defaultLevel = ILogger::Level::Info;
+    mutable std::shared_mutex m_mutex;
 };
 
 SPDLoggerManager::SPDLoggerManager() : m_pImpl(new Impl(this)) {
@@ -99,7 +127,7 @@ auto SPDLoggerManager::OnUpdate() -> Status {
     return Status::Success(Status::Category::Logger);
 }
 void SPDLoggerManager::SetDefaultLevel(const ILogger::Level& level) {
-    m_pImpl->m_defaultLevel = level;
+    m_pImpl->SetDefaultLevel(level);
 }
 auto SPDLoggerManager::GetModuleName() const -> const char* {
     return "SPDLoggerManager";

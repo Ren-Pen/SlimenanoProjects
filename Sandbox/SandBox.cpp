@@ -15,6 +15,7 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "SlimenanoEngine/Core/Log/ILogger.h"
 #include <SlimenanoEngine/Common/Core/Log/SPDLoggerManager.h>
 #include <SlimenanoEngine/SlimenanoEngine.h>
 #include <chrono>
@@ -116,7 +117,7 @@ class Sandbox final : public IApplication {
     auto OnUpdate() -> Status override {
         auto now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         if (((now - startTime) % 1000) == 0) {
-            pLogger->Info((std::string("Sandbox onUpdate ") + std::to_string((now - startTime) / 1000)).c_str());
+            pLogger->Error((std::string("Sandbox onUpdate ") + std::to_string((now - startTime) / 1000)).c_str());
         }
         if ((now - startTime) > 10000) {
             GetEngine()->Stop();
