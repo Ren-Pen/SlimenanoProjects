@@ -32,9 +32,7 @@ class SLIMENANO_CORE_API IResourceManager : public Module::IBaseModule<IResource
     ~IResourceManager() override = default;
     virtual auto Open(const char* location, ResourceHandle* handle) -> Base::Status = 0;
     virtual auto Close(const ResourceHandle* handle) -> Base::Status = 0;
-
-
 };
-}
+} // namespace Slimenano::Core::Resource
 
 #endif
