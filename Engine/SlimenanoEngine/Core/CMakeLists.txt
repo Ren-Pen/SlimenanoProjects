@@ -64,3 +64,6 @@ target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryManage
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Module/IModule.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Module/IBaseModule.h)
 
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Resource/IResourceManager.h)
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Resource/IResourceManager.cpp)
+
