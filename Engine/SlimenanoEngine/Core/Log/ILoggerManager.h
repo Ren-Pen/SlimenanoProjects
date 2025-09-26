@@ -15,24 +15,23 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_MANAGER_H
-#    define SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_MANAGER_H
+#define SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_MANAGER_H
 
-#    include "../Base/Export.h"
-#    include "../Module/IBaseModule.h"
+#include "../Export.h"
+#include "../Module/IBaseModule.h"
 
-#    include "ILogger.h"
+#include "ILogger.h"
 
 namespace Slimenano::Core::Log {
 
-class SLIMENANO_CORE_API ILoggerManager : public Module::IBaseModule<ILoggerManager> {
-  public:
+class SLIMENANO_CORE_API ILoggerManager : public Slimenano::Core::Module::IBaseModule<ILoggerManager> {
+public:
     ~ILoggerManager() override = default;
     virtual auto GetLogger(const char* name) -> ILogger* = 0;
-    virtual auto FreeLogger(ILogger* logger) -> Base::Status = 0;
+    virtual auto FreeLogger(ILogger* logger) -> Slimenano::Core::Base::Status = 0;
     virtual auto SetDefaultLevel(const ILogger::Level& level) -> void = 0;
-    [[nodiscard]] auto GetModuleStatusCategory() const -> Base::State override;
+    [[nodiscard]] auto GetModuleStatusCategory() const -> Slimenano::Core::Base::State override;
 };
 
 } // namespace Slimenano::Core::Log

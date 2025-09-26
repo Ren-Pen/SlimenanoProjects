@@ -15,36 +15,31 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_MANAGER_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_MANAGER_H
+#define SLIMENANO_PROJECT_ENGINE_CORE_MEMORY_I_MEMORY_MANAGER_H
+#include <cstddef>
+#include <utility>
+#include <type_traits>
 
-#    include <cstddef>
-#    include <utility>
-#    include <type_traits>
-
-#    include "../Base/Status.h"
-#    include "../Base/Export.h"
-#    include "../Module/IBaseModule.h"
+#include "../Base/Status.h"
+#include "../Export.h"
+#include "../Module/IBaseModule.h"
 
 namespace Slimenano::Core::Memory {
 
-class IMemoryAllocator;
-
-class SLIMENANO_CORE_API IMemoryManager : public Module::IBaseModule<IMemoryManager> {
-  public:
+class SLIMENANO_CORE_API IMemoryManager : public Slimenano::Core::Module::IBaseModule<IMemoryManager> {
+public:
     ~IMemoryManager() override = default;
     [[nodiscard]] virtual auto Malloc(size_t size, size_t alignment) -> void* = 0;
     [[nodiscard]] virtual auto Malloc(size_t size) -> void*;
-    virtual auto Free(void* ptr) -> Base::Status = 0;
-    virtual auto Reset() -> Base::Status = 0;
+    virtual auto Free(void* ptr) -> Slimenano::Core::Base::Status = 0;
+    virtual auto Reset() -> Slimenano::Core::Base::Status = 0;
 
     template <class T, typename... Args>
     [[nodiscard]] auto New(Args&&... args) -> T*;
 
     template <class T>
-    auto Delete(T* ptr) -> Base::Status;
-
+    auto Delete(T* ptr) -> Slimenano::Core::Base::Status;
 };
 
 template <class T, typename... Args>
@@ -54,13 +49,13 @@ auto IMemoryManager::New(Args&&... args) -> T* {
 }
 
 template <class T>
-auto IMemoryManager::Delete(T* ptr) -> Base::Status {
+auto IMemoryManager::Delete(T* ptr) -> Slimenano::Core::Base::Status {
     static_assert(std::is_constructible_v<T>, "T must be constructible with given arguments");
     if (ptr != nullptr) [[likely]] {
         ptr->~T();
         return Free(ptr);
     }
-    return Base::Status::Success(Base::Status::Category::Memory);
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Memory);
 }
 
 } // namespace Slimenano::Core::Memory

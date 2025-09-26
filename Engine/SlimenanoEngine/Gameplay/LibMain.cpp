@@ -15,3 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include "Export.h"
+
+#include "../Core/Base/Status.h"
+
+SLIMENANO_GAME_PLAY_API auto test() -> Slimenano::Core::Base::Status {
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
+}

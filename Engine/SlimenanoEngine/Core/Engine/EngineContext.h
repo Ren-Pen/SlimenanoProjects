@@ -15,40 +15,40 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_CONTEXT_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_CONTEXT_H
-#    include <vector>
-#    include <unordered_map>
+#define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_CONTEXT_H
+#include <vector>
+#include <unordered_map>
 
-#    include "../Base/Export.h"
-#    include "../Base/Types.h"
-#    include "../Base/Status.h"
-#    include "../Module/IModule.h"
+#include "../Export.h"
+#include "../Base/Types.h"
+#include "../Base/Status.h"
+#include "../Module/IModule.h"
 
 namespace Slimenano::Core::Engine {
 
 class EngineContext {
 
-  public:
-    EngineContext() = default;
+    friend class Slimenano::Core::Engine::Engine;
+
+public:
     ~EngineContext() = default;
 
     template <class T>
     auto FindModule() -> T*;
 
-    SLIMENANO_CORE_API auto RegisterModule(Module::IModule* pModule) -> Base::Status;
-    SLIMENANO_CORE_API auto UnregisterModule(const Module::IModule* pModule) -> Base::Status;
-    SLIMENANO_CORE_API auto GetModules(std::vector<Module::IModule*>& outModules) const -> Base::Status;
+    SLIMENANO_CORE_API auto RegisterModule(Slimenano::Core::Module::IModule* pModule) -> Base::Status;
+    SLIMENANO_CORE_API auto UnregisterModule(const Slimenano::Core::Module::IModule* pModule) -> Base::Status;
+    SLIMENANO_CORE_API auto GetModules(std::vector<Slimenano::Core::Module::IModule*>& outModules) const -> Base::Status;
 
-  private:
-    std::unordered_map<const Base::TypeId*, Module::IModule*> m_modules = std::unordered_map<const Base::TypeId*, Module::IModule*>();
+private:
+    EngineContext() = default;
+    std::unordered_map<const Slimenano::Core::Base::TypeId*, Slimenano::Core::Module::IModule*> m_modules = std::unordered_map<const Slimenano::Core::Base::TypeId*, Slimenano::Core::Module::IModule*>();
 };
 
 template <class T>
 auto EngineContext::FindModule() -> T* {
-    using Base::TypeId;
-    const auto typeId = TypeId::Get<T>();
+    const auto typeId = Slimenano::Core::Base::TypeId::Get<T>();
     if (!m_modules.contains(typeId)) {
         return nullptr;
     }

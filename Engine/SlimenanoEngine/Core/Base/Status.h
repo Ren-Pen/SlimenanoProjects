@@ -15,18 +15,16 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_STATUS_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_STATUS_H
-
-#    include "Export.h"
+#define SLIMENANO_PROJECT_ENGINE_CORE_BASE_STATUS_H
+#include "../Export.h"
 
 namespace Slimenano::Core::Base {
 
 using State = unsigned long long;
 
 class SLIMENANO_CORE_API Status {
-  public:
+public:
     constexpr Status(State category, State code);
     constexpr Status(State category, State code, const char* message);
 
@@ -38,10 +36,10 @@ class SLIMENANO_CORE_API Status {
     [[nodiscard]] constexpr auto IsFailure() const -> bool;
 
     constexpr static auto Success(State category) -> Status;
-    constexpr static auto NullPointerException(State category) -> Status;
+    constexpr static auto Success(State category, const char* message) -> Status;
 
     class Category {
-      public:
+    public:
         constexpr static State Internal = 0x0000;
         constexpr static State Memory = 0x0001;
         constexpr static State Logger = 0x0002;
@@ -49,7 +47,7 @@ class SLIMENANO_CORE_API Status {
     };
 
     class Code {
-      public:
+    public:
         constexpr static State Success = 0x0000;
         constexpr static State InvalidParameter = 0x0001;
         constexpr static State AlreadyExists = 0x0002;
@@ -57,24 +55,26 @@ class SLIMENANO_CORE_API Status {
         constexpr static State NotPermitted = 0x0003;
     };
 
-  private:
+private:
     const State m_category;
     const State m_code;
     const char* m_message;
 };
 
-constexpr Status::Status(const State category, const State code) : m_category(category & 0xFFFF), m_code(code & 0xFFFF), m_message("") {
+constexpr Status::Status(const State category, const State code) :
+    m_category(category & 0xFFFF), m_code(code & 0xFFFF), m_message("") {
 }
 
-constexpr Status::Status(const State category, const State code, const char* message) : m_category(category & 0xFFFF), m_code(code & 0xFFFF), m_message(message) {
+constexpr Status::Status(const State category, const State code, const char* message) :
+    m_category(category & 0xFFFF), m_code(code & 0xFFFF), m_message(message) {
 }
 
 constexpr auto Status::Success(State category) -> Status {
     return {category, Code::Success};
 }
 
-constexpr auto Status::NullPointerException(State category) -> Status {
-    return {category, Code::InvalidParameter, "NullPointerException"};
+constexpr auto Status::Success(State category, const char* message) -> Status {
+    return {category, Code::Success, message};
 }
 
 constexpr auto Status::GetState() const -> State {

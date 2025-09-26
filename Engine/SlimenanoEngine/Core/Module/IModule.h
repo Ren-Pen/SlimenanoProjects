@@ -15,12 +15,10 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_MODULE_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_MODULE_H
-
-#    include "../Base/Status.h"
-#    include "../Base/Types.h"
+#define SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_MODULE_H
+#include "../Base/Status.h"
+#include "../Base/Types.h"
 
 namespace Slimenano::Core::Engine {
 class Engine;
@@ -32,24 +30,24 @@ namespace Slimenano::Core::Module {
  * @brief Base interface for all engine modules
  */
 class SLIMENANO_CORE_API IModule {
-  public:
+public:
     virtual ~IModule() = default;
 
     /**
      * @brief Called when the module is initialized during engine startup
      * @return true if initialized successfully
      */
-    virtual auto OnInit() -> Base::Status = 0;
+    virtual auto OnInit() -> Slimenano::Core::Base::Status = 0;
 
     /**
      * @brief Called when the module is being shut down during engine shutdown
      */
-    virtual auto OnShutdown() -> Base::Status = 0;
+    virtual auto OnShutdown() -> Slimenano::Core::Base::Status = 0;
 
     /**
      * @brief Called every frame after engine startup
      */
-    virtual auto OnUpdate() -> Base::Status = 0;
+    virtual auto OnUpdate() -> Slimenano::Core::Base::Status = 0;
 
     /**
      * @brief Returns the name of the module (for logging or debugging)
@@ -57,9 +55,9 @@ class SLIMENANO_CORE_API IModule {
      */
     [[nodiscard]] virtual auto GetModuleName() const -> const char* = 0;
 
-    [[nodiscard]] virtual auto GetModuleId() const -> const Base::TypeId* = 0;
+    [[nodiscard]] virtual auto GetModuleId() const -> const Slimenano::Core::Base::TypeId* = 0;
 
-    [[nodiscard]] virtual auto GetModuleStatusCategory() const -> Base::State = 0;
+    [[nodiscard]] virtual auto GetModuleStatusCategory() const -> Slimenano::Core::Base::State = 0;
 };
 } // namespace Slimenano::Core::Module
 

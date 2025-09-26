@@ -15,12 +15,12 @@ Slimenano Engine
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "../Base/Export.h"
+#include "../Export.h"
 #include "../Base/TypesImpl.h"
 
 #include "IMemoryManager.h"
 
-template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Memory::IMemoryManager>() -> const TypeId*;
+template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Memory::IMemoryManager>() -> const Slimenano::Core::Base::TypeId*;
 
 namespace Slimenano::Core::Memory {
 

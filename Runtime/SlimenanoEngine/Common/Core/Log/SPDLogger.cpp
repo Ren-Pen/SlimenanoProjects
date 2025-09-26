@@ -16,8 +16,8 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks-inl.h>
+#include <spdlog/spdlog.h>
 
 #include "SPDLogger.h"
 
@@ -26,7 +26,8 @@ namespace Slimenano::Core::Log {
 class SPDLogger::Impl {
     friend SPDLogger;
 
-    explicit Impl(const char* name) : m_Name(name), m_pLogger(spdlog::stdout_color_mt(name)) {}
+    explicit Impl(const char* name) :
+        m_Name(name), m_pLogger(spdlog::stdout_color_mt(name)) {}
     ~Impl() = default;
 
     const char* m_Name;
@@ -53,7 +54,8 @@ auto Level2SpdLevel(const ILogger::Level& level) -> spdlog::level::level_enum {
     return spdlog::level::off;
 }
 
-SPDLogger::SPDLogger(const char* name) : m_pImpl(new Impl(name)) {
+SPDLogger::SPDLogger(const char* name) :
+    m_pImpl(new Impl(name)) {
 }
 
 SPDLogger::~SPDLogger() {

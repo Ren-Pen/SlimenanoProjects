@@ -16,9 +16,9 @@ Slimenano Engine
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "../Base/Export.h"
+#include "../Export.h"
 #include "../Base/TypesImpl.h"
 
 #include "IResourceManager.h"
 
-template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Resource::IResourceManager>() -> const TypeId*;
+template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Resource::IResourceManager>() -> const Slimenano::Core::Base::TypeId*;

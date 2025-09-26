@@ -15,24 +15,38 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#ifndef SLIMENANO_PROJECT_ENGINE_ASSET_EXPORT_H
+#define SLIMENANO_PROJECT_ENGINE_ASSET_EXPORT_H
 
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_APPLICATION_I_APPLICATION_H
-#define SLIMENANO_PROJECT_ENGINE_CORE_APPLICATION_I_APPLICATION_H
-#include "../Export.h"
-#include "../Exception/IExceptionHandler.h"
-#include "../Log/ILoggerManager.h"
-#include "../Module/IBaseModule.h"
+#ifdef SLIMENANO_SHARED
 
-namespace Slimenano::Core::Application {
+#ifdef _MSC_VER
 
-/**
- * @brief 
- * 
- */
-class SLIMENANO_CORE_API IApplication : public Slimenano::Core::Module::IBaseModule<IApplication> {
-protected:
-    auto GetLoggerManager() -> Slimenano::Core::Log::ILoggerManager*;
-    auto GetExceptionHandler() -> Slimenano::Core::Exception::IExceptionHandler*;
-};
-} // namespace Slimenano::Core::Application
+#ifdef SLIMENANO_ASSET_LIBRARY
+#define SLIMENANO_ASSET_API __declspec(dllexport)
+#else
+#define SLIMENANO_ASSET_API __declspec(dllimport)
+#endif //! SLIMENANO_ASSET_LIBRARY
+
+#elif __GNUC__
+
+#ifdef SLIMENANO_ASSET_LIBRARY
+#define SLIMENANO_ASSET_API __attribute__((visibility("default")))
+#else
+#define SLIMENANO_ASSET_API
+#endif //! SLIMENANO_ASSET_LIBRARY
+
+#else
+
+#define SLIMENANO_ASSET_API
+#pragma warning Unknown dynamic link import / export semantics.
+
+#endif
+
+#else
+
+#define SLIMENANO_ASSET_API
+
+#endif
+
 #endif

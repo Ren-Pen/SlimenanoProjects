@@ -15,19 +15,17 @@ Slimenano Engine
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_EXCEPTION_I_EXCEPTION_HANDLER_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_EXCEPTION_I_EXCEPTION_HANDLER_H
-
-#    include "../Base/Status.h"
-#    include "../Base/Export.h"
-#    include "../Module/IBaseModule.h"
+#define SLIMENANO_PROJECT_ENGINE_CORE_EXCEPTION_I_EXCEPTION_HANDLER_H
+#include "../Base/Status.h"
+#include "../Export.h"
+#include "../Module/IBaseModule.h"
 
 namespace Slimenano::Core::Exception {
-class SLIMENANO_CORE_API IExceptionHandler : public Module::IBaseModule<IExceptionHandler> {
-  public:
-    virtual void Handle(Base::Status status) = 0;
-    virtual void Handle(Base::Status status, const char* message) = 0;
+class SLIMENANO_CORE_API IExceptionHandler : public Slimenano::Core::Module::IBaseModule<IExceptionHandler> {
+public:
+    virtual void Handle(Slimenano::Core::Base::Status status) = 0;
+    virtual void Handle(Slimenano::Core::Base::Status status, const char* message) = 0;
 };
 } // namespace Slimenano::Core::Exception
 #endif

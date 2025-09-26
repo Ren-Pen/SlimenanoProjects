@@ -15,16 +15,14 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_H
-#    define SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_H
-
-#    include "../Base/Export.h"
+#define SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_H
+#include "../Export.h"
 
 namespace Slimenano::Core::Log {
 
 class SLIMENANO_CORE_API ILogger {
-  public:
+public:
     enum class Level;
     virtual ~ILogger() = default;
     [[nodiscard]] virtual auto GetName() const -> const char* = 0;

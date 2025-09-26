@@ -22,15 +22,8 @@ Slimenano Engine
 #include <iostream>
 #include <string>
 
-using namespace Slimenano::Core::Application;
-using namespace Slimenano::Core::Base;
-using namespace Slimenano::Core::Engine;
-using namespace Slimenano::Core::Module;
-using namespace Slimenano::Core::Exception;
-using namespace Slimenano::Core::Log;
-
-class SandboxLogger final : public ILogger {
-  public:
+class SandboxLogger final : public Slimenano::Core::Log::ILogger {
+public:
     ~SandboxLogger() override = default;
     [[nodiscard]] auto GetName() const -> const char* override { return "SandboxLogger"; }
     auto SetLevel(const Level& level) const -> void override {}
@@ -65,56 +58,62 @@ class SandboxLogger final : public ILogger {
     void Fatal(const char* message) const override { this->Log(Level::Fatal, message); }
 };
 
-class SandboxLoggerManager final : public ILoggerManager {
-  public:
+class SandboxLoggerManager final : public Slimenano::Core::Log::ILoggerManager {
+public:
     ~SandboxLoggerManager() override = default;
-    auto GetLogger(const char* name) -> ILogger* override { return new SandboxLogger(); }
+    auto GetLogger(const char* name) -> Slimenano::Core::Log::ILogger* override { return new SandboxLogger(); }
 
-    auto FreeLogger(ILogger* logger) -> Status override {
+    auto FreeLogger(Slimenano::Core::Log::ILogger* logger) -> Slimenano::Core::Base::Status override {
         delete logger;
-        return Status::Success(GetModuleStatusCategory());
+        return Slimenano::Core::Base::Status::Success(GetModuleStatusCategory());
     }
 
-    auto OnInit() -> Status override { return Status::Success(GetModuleStatusCategory()); }
+    auto OnInit() -> Slimenano::Core::Base::Status override {
+        return Slimenano::Core::Base::Status::Success(GetModuleStatusCategory());
+    }
 
-    auto OnShutdown() -> Status override { return Status::Success(GetModuleStatusCategory()); }
+    auto OnShutdown() -> Slimenano::Core::Base::Status override {
+        return Slimenano::Core::Base::Status::Success(GetModuleStatusCategory());
+    }
 
-    auto OnUpdate() -> Status override { return Status::Success(GetModuleStatusCategory()); }
+    auto OnUpdate() -> Slimenano::Core::Base::Status override {
+        return Slimenano::Core::Base::Status::Success(GetModuleStatusCategory());
+    }
 
     [[nodiscard]] auto GetModuleName() const -> const char* override { return "SandboxLoggerManager"; }
 
-    auto SetDefaultLevel(const ILogger::Level& level) -> void override {}
+    auto SetDefaultLevel(const Slimenano::Core::Log::ILogger::Level& level) -> void override {}
 };
 
-class Sandbox final : public IApplication {
-  public:
+class Sandbox final : public Slimenano::Core::Application::IApplication {
+public:
     ~Sandbox() override = default;
     /**
      * @brief Called when the module is initialized during engine startup
      * @return true if initialized successfully
      */
-    auto OnInit() -> Status override {
+    auto OnInit() -> Slimenano::Core::Base::Status override {
         const auto pLoggerManager = GetLoggerManager();
         pLogger = pLoggerManager->GetLogger("Sandbox");
         pLogger->Warn("Sandbox initialized");
         startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        return Status::Success(Status::Category::Application);
+        return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Application);
     }
 
     /**
      * @brief Called when the module is being shut down during engine shutdown
      */
-    auto OnShutdown() -> Status override {
+    auto OnShutdown() -> Slimenano::Core::Base::Status override {
         pLogger->Warn("Sandbox shutdown");
         const auto pLoggerManager = GetLoggerManager();
         pLoggerManager->FreeLogger(pLogger);
         pLogger = nullptr;
-        return Status::Success(Status::Category::Application);
+        return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Application);
     }
     /**
      * @brief Called every frame after engine startup
      */
-    auto OnUpdate() -> Status override {
+    auto OnUpdate() -> Slimenano::Core::Base::Status override {
         auto now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         if (((now - startTime) % 1000) == 0) {
             pLogger->Error((std::string("Sandbox onUpdate ") + std::to_string((now - startTime) / 1000)).c_str());
@@ -122,7 +121,7 @@ class Sandbox final : public IApplication {
         if ((now - startTime) > 10000) {
             GetEngine()->Stop();
         }
-        return Status::Success(Status::Category::Application);
+        return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Application);
     }
     /**
      * @brief Returns the name of the module (for logging or debugging)
@@ -130,17 +129,16 @@ class Sandbox final : public IApplication {
      */
     [[nodiscard]] auto GetModuleName() const -> const char* override { return "Sandbox"; }
 
-  private:
+private:
     unsigned long long startTime = 0;
-    ILogger* pLogger = nullptr;
+    Slimenano::Core::Log::ILogger* pLogger = nullptr;
 };
 
 auto main(const int argc, const char** argv) -> int {
 
-    auto engineContext = EngineContext();
-    auto engine = Engine(&engineContext);
+    auto engine = Slimenano::Core::Engine::Engine();
 
-    auto loggerManager = SPDLoggerManager();
+    auto loggerManager = Slimenano::Core::Log::SPDLoggerManager();
     std::cout << loggerManager.GetModuleName() << " " << loggerManager.Install(&engine).GetState() << std::endl;
 
     auto sandboxLoggerManager = SandboxLoggerManager();

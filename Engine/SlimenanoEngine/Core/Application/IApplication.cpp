@@ -16,20 +16,20 @@ Slimenano Engine
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "../Base/Export.h"
+#include "../Export.h"
 #include "../Base/TypesImpl.h"
 #include "IApplication.h"
 
-template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Application::IApplication>() -> const TypeId*;
+template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Application::IApplication>() -> const Slimenano::Core::Base::TypeId*;
 
 namespace Slimenano::Core::Application {
 
-auto IApplication::GetLoggerManager() -> Log::ILoggerManager* {
-    return FindModule<Log::ILoggerManager>();
+auto IApplication::GetLoggerManager() -> Slimenano::Core::Log::ILoggerManager* {
+    return FindModule<Slimenano::Core::Log::ILoggerManager>();
 }
 
-auto IApplication::GetExceptionHandler() -> Exception::IExceptionHandler* {
-    return FindModule<Exception::IExceptionHandler>();
+auto IApplication::GetExceptionHandler() -> Slimenano::Core::Exception::IExceptionHandler* {
+    return FindModule<Slimenano::Core::Exception::IExceptionHandler>();
 }
 
 } // namespace Slimenano::Core::Application

@@ -15,23 +15,21 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_RESOURCE_I_RESOURCE_MANAGER_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_RESOURCE_I_RESOURCE_MANAGER_H
-
-#    include "../Base/Status.h"
-#    include "../Base/Export.h"
-#    include "../Module/IBaseModule.h"
+#define SLIMENANO_PROJECT_ENGINE_CORE_RESOURCE_I_RESOURCE_MANAGER_H
+#include "../Base/Status.h"
+#include "../Export.h"
+#include "../Module/IBaseModule.h"
 
 namespace Slimenano::Core::Resource {
 
 using ResourceHandle = unsigned long long;
 
-class SLIMENANO_CORE_API IResourceManager : public Module::IBaseModule<IResourceManager> {
-  public:
+class SLIMENANO_CORE_API IResourceManager : public Slimenano::Core::Module::IBaseModule<IResourceManager> {
+public:
     ~IResourceManager() override = default;
-    virtual auto Open(const char* location, ResourceHandle* handle) -> Base::Status = 0;
-    virtual auto Close(const ResourceHandle* handle) -> Base::Status = 0;
+    virtual auto Open(const char* location, ResourceHandle* handle) -> Slimenano::Core::Base::Status = 0;
+    virtual auto Close(const ResourceHandle* handle) -> Slimenano::Core::Base::Status = 0;
 };
 } // namespace Slimenano::Core::Resource
 

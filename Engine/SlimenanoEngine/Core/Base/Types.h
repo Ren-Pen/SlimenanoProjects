@@ -15,15 +15,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
-#    include "Export.h"
+#define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_H
+#include "../Export.h"
 
 namespace Slimenano::Core::Base {
 
 class SLIMENANO_CORE_API TypeId {
-  public:
+public:
     template <typename T>
     static auto Get() -> const TypeId*;
 };

@@ -17,7 +17,7 @@
 ]]#
 cmake_minimum_required(VERSION 3.10.0)
 
-project(SlimenanoEngineScripting
+project(SlimenanoEngineScript
     VERSION 1.0.0
     LANGUAGES CXX
 )
@@ -25,18 +25,20 @@ project(SlimenanoEngineScripting
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
+set(TARGET_NAME Slimenano-Script)
+
 if(BUILD_SHARED_LIBS)
     add_compile_definitions(SLIMENANO_SHARED)
 endif()
 
-set(LIB_NAME Scripting)
-set(TARGET_NAME ${NAMESPACE}-${LIB_NAME})
-
 add_library(${TARGET_NAME})
-add_library(${NAMESPACE}::${LIB_NAME} ALIAS ${TARGET_NAME})
+add_library(Slimenano::Script ALIAS ${TARGET_NAME})
 
-target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_CORE_LIBRARY)
+target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_SCRIPT_LIBRARY)
 
+target_compile_options(${TARGET_NAME} PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Export.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/LibMain.cpp)
-target_include_directories(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 
+target_link_libraries(${TARGET_NAME} PRIVATE Slimenano::Engine::Core)

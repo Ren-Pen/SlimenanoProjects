@@ -15,15 +15,13 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_BASE_MODULE_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_BASE_MODULE_H
+#define SLIMENANO_PROJECT_ENGINE_CORE_MODULE_I_BASE_MODULE_H
+#include "../Engine/Engine.h"
+#include "../Engine/EngineContext.h"
+#include "../Base/Types.h"
 
-#    include "../Engine/Engine.h"
-#    include "../Engine/EngineContext.h"
-#    include "../Base/Types.h"
-
-#    include "IModule.h"
+#include "IModule.h"
 
 namespace Slimenano::Core::Module {
 
@@ -32,39 +30,39 @@ namespace Slimenano::Core::Module {
  */
 template <class T>
 class IBaseModule : public IModule {
-  public:
+public:
     ~IBaseModule() override;
 
-    [[nodiscard]] auto GetModuleId() const -> const Base::TypeId* final;
+    [[nodiscard]] auto GetModuleId() const -> const Slimenano::Core::Base::TypeId* final;
 
-    [[nodiscard]] auto GetModuleStatusCategory() const -> Base::State override;
+    [[nodiscard]] auto GetModuleStatusCategory() const -> Slimenano::Core::Base::State override;
 
-    auto Install(Engine::Engine* engine) -> Base::Status;
+    auto Install(Slimenano::Core::Engine::Engine* engine) -> Slimenano::Core::Base::Status;
 
-    auto Uninstall() -> Base::Status;
+    auto Uninstall() -> Slimenano::Core::Base::Status;
 
-    [[nodiscard]] auto GetEngine() const -> Engine::Engine*;
+    [[nodiscard]] auto GetEngine() const -> Slimenano::Core::Engine::Engine*;
 
-  protected:
+protected:
     template <class MODULE>
     auto FindModule() -> MODULE*;
 
-  private:
-    Engine::Engine* m_pEngine = nullptr;
+private:
+    Slimenano::Core::Engine::Engine* m_pEngine = nullptr;
 };
 
 template <class T>
-auto IBaseModule<T>::GetModuleId() const -> const Base::TypeId* {
-    return Base::TypeId::Get<T>();
+auto IBaseModule<T>::GetModuleId() const -> const Slimenano::Core::Base::TypeId* {
+    return Slimenano::Core::Base::TypeId::Get<T>();
 }
 
 template <class T>
-auto IBaseModule<T>::GetModuleStatusCategory() const -> Base::State {
-    return Base::Status::Category::Internal;
+auto IBaseModule<T>::GetModuleStatusCategory() const -> Slimenano::Core::Base::State {
+    return Slimenano::Core::Base::Status::Category::Internal;
 }
 
 template <class T>
-auto IBaseModule<T>::Install(Engine::Engine* engine) -> Base::Status {
+auto IBaseModule<T>::Install(Slimenano::Core::Engine::Engine* engine) -> Slimenano::Core::Base::Status {
     if (const auto pEngineContext = engine->getEngineContext()) {
         auto registerModuleStatus = pEngineContext->RegisterModule(this);
         if (registerModuleStatus.IsSuccess()) {
@@ -73,11 +71,11 @@ auto IBaseModule<T>::Install(Engine::Engine* engine) -> Base::Status {
         return registerModuleStatus;
     }
 
-    return Base::Status::Success(Base::Status::Category::Internal);
+    return Slimenano::Core::Base::Status::Success(Base::Status::Category::Internal);
 }
 
 template <class T>
-auto IBaseModule<T>::Uninstall() -> Base::Status {
+auto IBaseModule<T>::Uninstall() -> Slimenano::Core::Base::Status {
     if (const auto pEngine = GetEngine()) {
         if (const auto pEngineContext = pEngine->getEngineContext()) {
             auto unregisterModuleStatus = pEngineContext->UnregisterModule(this);
@@ -87,7 +85,7 @@ auto IBaseModule<T>::Uninstall() -> Base::Status {
             return unregisterModuleStatus;
         }
     }
-    return Base::Status::Success(Base::Status::Category::Internal);
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
 }
 
 template <class T>
@@ -96,7 +94,7 @@ IBaseModule<T>::~IBaseModule() {
 }
 
 template <class T>
-auto IBaseModule<T>::GetEngine() const -> Engine::Engine* {
+auto IBaseModule<T>::GetEngine() const -> Slimenano::Core::Engine::Engine* {
     return this->m_pEngine;
 }
 

@@ -26,26 +26,28 @@ Slimenano Engine
 
 namespace Slimenano::Core::Engine {
 
-using namespace Base;
-using namespace Module;
-
-Engine::Engine(EngineContext* context) : m_pContext(context) {
+Engine::Engine() :
+    m_pContext(new EngineContext()) {
 }
 
 Engine::~Engine() {
     Stop();
+    if (this->m_pContext != nullptr) {
+        delete this->m_pContext;
+        this->m_pContext = nullptr;
+    }
 }
 
-auto Engine::Start() -> Status {
+auto Engine::Start() -> Slimenano::Core::Base::Status {
     m_running.store(true, std::memory_order_relaxed);
 
-    std::vector<IModule*> modules;
+    std::vector<Slimenano::Core::Module::IModule*> modules;
 
     if (const auto getModuleStatus = m_pContext->GetModules(modules); getModuleStatus.IsFailure()) {
         return getModuleStatus;
     }
 
-    for (IModule* pModule : modules) {
+    for (Slimenano::Core::Module::IModule* pModule : modules) {
         if (pModule) {
             if (const auto initModuleStatus = pModule->OnInit(); initModuleStatus.IsFailure()) {
                 return initModuleStatus;
@@ -55,19 +57,19 @@ auto Engine::Start() -> Status {
     return MainLoop();
 }
 
-auto Engine::Stop() -> Status {
+auto Engine::Stop() -> Slimenano::Core::Base::Status {
     if (!m_running.load(std::memory_order_relaxed)) {
-        return Status::Success(Status::Category::Internal);
+        return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
     }
     m_running.store(false, std::memory_order_relaxed);
-    return Status::Success(Status::Category::Internal);
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
 }
 
-auto Engine::MainLoop() const -> Status {
+auto Engine::MainLoop() const -> Slimenano::Core::Base::Status {
 
     const auto pExceptionHandler = m_pContext->FindModule<Exception::IExceptionHandler>();
 
-    std::vector<IModule*> modules;
+    std::vector<Slimenano::Core::Module::IModule*> modules;
     if (const auto getModuleStatus = m_pContext->GetModules(modules); getModuleStatus.IsFailure()) {
         if (pExceptionHandler != nullptr) {
             pExceptionHandler->Handle(getModuleStatus);
@@ -75,7 +77,7 @@ auto Engine::MainLoop() const -> Status {
     }
 
     while (m_running.load(std::memory_order_relaxed)) {
-        for (IModule* pModule : modules) {
+        for (Slimenano::Core::Module::IModule* pModule : modules) {
             if (pModule) {
                 if (auto updateModuleStatus = pModule->OnUpdate(); updateModuleStatus.IsFailure()) {
                     if (pExceptionHandler != nullptr) {
@@ -87,7 +89,7 @@ auto Engine::MainLoop() const -> Status {
     }
 
     // cleanup
-    for (IModule* pModule : modules) {
+    for (Slimenano::Core::Module::IModule* pModule : modules) {
         if (pModule) {
             if (auto shutdownModuleStatus = pModule->OnShutdown(); shutdownModuleStatus.IsFailure()) {
                 if (pExceptionHandler != nullptr) {
@@ -97,7 +99,7 @@ auto Engine::MainLoop() const -> Status {
         }
     }
 
-    return Status::Success(Status::Category::Internal);
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
 }
 
 auto Engine::getEngineContext() const -> EngineContext* {

@@ -15,30 +15,28 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_MANAGER_H
-#    define SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_MANAGER_H
-
-#    include <SlimenanoEngine/Core/Base/Export.h>
-#    include <SlimenanoEngine/Core/Log/ILoggerManager.h>
+#define SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_MANAGER_H
+#include <SlimenanoEngine/Core/Log/ILoggerManager.h>
+#include "../Export.h"
 
 namespace Slimenano::Core::Log {
 
-class SLIMENANO_RUNTIME_API SPDLoggerManager final : public ILoggerManager {
-  public:
+class SLIMENANO_RUNTIME_CORE_API SPDLoggerManager final : public ILoggerManager {
+public:
     SPDLoggerManager();
     ~SPDLoggerManager() override;
 
     auto GetLogger(const char* name) -> ILogger* override;
-    auto FreeLogger(ILogger* logger) -> Base::Status override;
+    auto FreeLogger(ILogger* logger) -> Slimenano::Core::Base::Status override;
 
-    auto OnInit() -> Base::Status override;
-    auto OnShutdown() -> Base::Status override;
-    auto OnUpdate() -> Base::Status override;
+    auto OnInit() -> Slimenano::Core::Base::Status override;
+    auto OnShutdown() -> Slimenano::Core::Base::Status override;
+    auto OnUpdate() -> Slimenano::Core::Base::Status override;
     auto SetDefaultLevel(const ILogger::Level& level) -> void override;
     [[nodiscard]] auto GetModuleName() const -> const char* override;
 
-  private:
+private:
     class Impl;
     Impl* m_pImpl;
 };

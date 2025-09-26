@@ -15,11 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_IMPL_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_IMPL_H
-
-#    include "Types.h"
+#define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_IMPL_H
+#include "Types.h"
 
 namespace Slimenano::Core::Base {
 template <typename T>

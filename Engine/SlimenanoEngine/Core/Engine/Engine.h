@@ -15,16 +15,14 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
-#    define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
+#define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
+#include <atomic>
 
-#    include <atomic>
+#include "../Export.h"
+#include "../Base/Status.h"
 
-#    include "../Base/Export.h"
-#    include "../Base/Status.h"
-
-#    include "EngineContext.h"
+#include "EngineContext.h"
 
 namespace Slimenano::Core::Engine {
 
@@ -32,12 +30,12 @@ namespace Slimenano::Core::Engine {
  * @brief Main engine driver responsible for initializing modules and managing the main loop.
  */
 class Engine {
-  public:
+public:
     /**
      * @brief Construct the Engine with the given EngineContext.
      * @param context Reference to the engine context which holds global runtime dependencies.
      */
-    SLIMENANO_CORE_API explicit Engine(EngineContext* context);
+    SLIMENANO_CORE_API explicit Engine();
 
     /**
      * @brief Destructor that ensures the engine is properly stopped.
@@ -48,16 +46,16 @@ class Engine {
      * @brief Starts the engine and enters the main loop.
      * Initializes and starts all registered modules.
      */
-    SLIMENANO_CORE_API auto Start() -> Base::Status;
+    SLIMENANO_CORE_API auto Start() -> Slimenano::Core::Base::Status;
 
     /**
      * @brief Stops the engine and shuts down all running modules.
      */
-    SLIMENANO_CORE_API auto Stop() -> Base::Status;
+    SLIMENANO_CORE_API auto Stop() -> Slimenano::Core::Base::Status;
 
     SLIMENANO_CORE_API [[nodiscard]] auto getEngineContext() const -> EngineContext*;
 
-  private:
+private:
     /**
      * @brief Reference to the engine context shared across all modules.
      */
@@ -72,7 +70,7 @@ class Engine {
      * @brief The main engine loop that drives all active modules.
      * This runs until Stop() is called.
      */
-    [[nodiscard]] auto MainLoop() const -> Base::Status;
+    [[nodiscard]] auto MainLoop() const -> Slimenano::Core::Base::Status;
 };
 } // namespace Slimenano::Core::Engine
 

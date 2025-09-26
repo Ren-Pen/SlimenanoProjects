@@ -18,20 +18,19 @@ Slimenano Engine
 #include <memory>
 #include <mutex>
 #include <shared_mutex>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
-#include "SlimenanoEngine/Core/Log/ILogger.h"
 #include "SPDLogger.h"
 #include "SPDLoggerManager.h"
+#include "SlimenanoEngine/Core/Log/ILogger.h"
 
 namespace Slimenano::Core::Log {
 
-using Base::Status;
-
 class SPDLoggerManager::Impl {
     friend SPDLoggerManager;
-    explicit Impl(SPDLoggerManager* pLoggerManager) : m_pInterface(pLoggerManager) {}
+    explicit Impl(SPDLoggerManager* pLoggerManager) :
+        m_pInterface(pLoggerManager) {}
     ~Impl() {
         std::unique_lock lock(m_mutex);
         m_loggers.clear();
@@ -46,7 +45,7 @@ class SPDLoggerManager::Impl {
 
         {
             std::shared_lock readLock(m_mutex);
-            if (auto it = m_loggers.find(sName); it != m_loggers.end()){
+            if (auto it = m_loggers.find(sName); it != m_loggers.end()) {
                 return it->second.get();
             }
         }
@@ -55,7 +54,7 @@ class SPDLoggerManager::Impl {
 
         {
             std::unique_lock lock(m_mutex);
-            if (auto it = m_loggers.find(sName); it != m_loggers.end()){
+            if (auto it = m_loggers.find(sName); it != m_loggers.end()) {
                 return it->second.get();
             }
 
@@ -64,33 +63,48 @@ class SPDLoggerManager::Impl {
 
             return it->second.get();
         }
-
     }
 
-    auto FreeLogger(ILogger* logger) -> Status {
+    auto FreeLogger(ILogger* logger) -> Slimenano::Core::Base::Status {
 
         if (logger == nullptr) {
-            return Status::NullPointerException(m_pInterface->GetModuleStatusCategory());
+            return {
+                m_pInterface->GetModuleStatusCategory(),
+                Slimenano::Core::Base::Status::Code::InvalidParameter,
+                "Cannot free a nullptr logger pointer"
+            };
         }
 
         if (logger->GetName() == nullptr) {
-            return Status::NullPointerException(m_pInterface->GetModuleStatusCategory());
+            return {
+                m_pInterface->GetModuleStatusCategory(),
+                Slimenano::Core::Base::Status::Code::InvalidParameter,
+                "Cannot free logger with nullptr name"
+            };
         }
 
         const auto sName = std::string(logger->GetName());
         std::unique_lock lock(m_mutex);
-        
+
         auto it = m_loggers.find(sName);
-        if (it == m_loggers.end()){
-            return {m_pInterface->GetModuleStatusCategory(), Status::Code::NotFound, "Logger not found."};
+        if (it == m_loggers.end()) {
+            return {
+                m_pInterface->GetModuleStatusCategory(),
+                Slimenano::Core::Base::Status::Code::NotFound,
+                "Logger not found."
+            };
         }
 
-        if (it->second.get() != logger){
-            return {m_pInterface->GetModuleStatusCategory(), Status::Code::NotPermitted, "Logger is not owner."};
+        if (it->second.get() != logger) {
+            return {
+                m_pInterface->GetModuleStatusCategory(),
+                Slimenano::Core::Base::Status::Code::NotPermitted,
+                "Logger is not owner."
+            };
         }
 
         m_loggers.erase(it);
-        return Status::Success(m_pInterface->GetModuleStatusCategory());
+        return Slimenano::Core::Base::Status::Success(m_pInterface->GetModuleStatusCategory());
     }
 
     auto SetDefaultLevel(ILogger::Level level) -> void {
@@ -98,13 +112,15 @@ class SPDLoggerManager::Impl {
         m_defaultLevel = level;
     }
 
-    std::unordered_map<std::string, std::unique_ptr<SPDLogger>> m_loggers = std::unordered_map<std::string, std::unique_ptr<SPDLogger>>();
+    std::unordered_map<std::string, std::unique_ptr<SPDLogger>> m_loggers =
+        std::unordered_map<std::string, std::unique_ptr<SPDLogger>>();
     SPDLoggerManager* m_pInterface = nullptr;
     ILogger::Level m_defaultLevel = ILogger::Level::Info;
     mutable std::shared_mutex m_mutex;
 };
 
-SPDLoggerManager::SPDLoggerManager() : m_pImpl(new Impl(this)) {
+SPDLoggerManager::SPDLoggerManager() :
+    m_pImpl(new Impl(this)) {
 }
 
 SPDLoggerManager::~SPDLoggerManager() {
@@ -114,17 +130,17 @@ SPDLoggerManager::~SPDLoggerManager() {
 auto SPDLoggerManager::GetLogger(const char* name) -> ILogger* {
     return m_pImpl->GetLogger(name);
 }
-auto SPDLoggerManager::FreeLogger(ILogger* logger) -> Status {
+auto SPDLoggerManager::FreeLogger(ILogger* logger) -> Slimenano::Core::Base::Status {
     return m_pImpl->FreeLogger(logger);
 }
-auto SPDLoggerManager::OnInit() -> Status {
-    return Status::Success(Status::Category::Logger);
+auto SPDLoggerManager::OnInit() -> Slimenano::Core::Base::Status {
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Logger);
 }
-auto SPDLoggerManager::OnShutdown() -> Status {
-    return Status::Success(Status::Category::Logger);
+auto SPDLoggerManager::OnShutdown() -> Slimenano::Core::Base::Status {
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Logger);
 }
-auto SPDLoggerManager::OnUpdate() -> Status {
-    return Status::Success(Status::Category::Logger);
+auto SPDLoggerManager::OnUpdate() -> Slimenano::Core::Base::Status {
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Logger);
 }
 void SPDLoggerManager::SetDefaultLevel(const ILogger::Level& level) {
     m_pImpl->SetDefaultLevel(level);

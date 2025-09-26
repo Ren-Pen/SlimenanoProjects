@@ -25,46 +25,59 @@ Slimenano Engine
 
 namespace Slimenano::Core::Engine {
 
-using namespace Base;
-using namespace Module;
-
-auto EngineContext::GetModules(std::vector<IModule*>& outModules) const -> Status {
+auto EngineContext::GetModules(std::vector<Slimenano::Core::Module::IModule*>& outModules) const -> Slimenano::Core::Base::Status {
     std::ranges::transform(m_modules, std::back_inserter(outModules), [](const auto& pair) {
         return pair.second;
     });
-    return Status::Success(Status::Category::Internal);
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
 }
 
-auto EngineContext::RegisterModule(IModule* pModule) -> Status {
-    using Base::TypeId;
-    using Base::Status;
+auto EngineContext::RegisterModule(Slimenano::Core::Module::IModule* pModule) -> Slimenano::Core::Base::Status {
     if (!pModule) {
-        return Status::NullPointerException(Status::Category::Internal);
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::InvalidParameter,
+            "Cannot register nullptr as a module."
+        };
     }
     const auto typeId = pModule->GetModuleId();
     if (m_modules.contains(typeId)) {
-        return {Status::Category::Internal, Status::Code::AlreadyExists, "Module already be register."};
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::AlreadyExists,
+            "Module already be register."
+        };
     }
     m_modules[typeId] = pModule;
-    return Status::Success(Status::Category::Internal);
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
 }
 
-auto EngineContext::UnregisterModule(const IModule* pModule) -> Status {
-    using Base::TypeId;
-    using Base::Status;
+auto EngineContext::UnregisterModule(const Slimenano::Core::Module::IModule* pModule) -> Slimenano::Core::Base::Status {
     if (!pModule) {
-        return Status::NullPointerException(Status::Category::Internal);
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::InvalidParameter,
+            "Cannot unregister a nullptr."
+        };
     }
     const auto typeId = pModule->GetModuleId();
     const auto it = m_modules.find(typeId);
     if (it == m_modules.end()) {
-        return {Status::Category::Internal, Status::Code::NotFound, "Module not found."};
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::NotFound,
+            "Module not found."
+        };
     }
     if (it->second != pModule) {
-        return {Status::Category::Internal, Status::Code::NotPermitted, "Module is not owner."};
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::NotPermitted,
+            "Module is not owner."
+        };
     }
     m_modules.erase(typeId);
-    return Status::Success(Status::Category::Internal);
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
 }
 
 } // namespace Slimenano::Core::Engine
