@@ -23,15 +23,17 @@ Slimenano Engine
 
 #include "../Base/Status.h"
 #include "../Export.h"
-#include "../Module/IBaseModule.h"
+#include "../Module/IModule.h"
+
+SLIMENANO_DECLARE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Memory, IMemoryManager);
 
 namespace Slimenano::Core::Memory {
 
-class SLIMENANO_CORE_API IMemoryManager : public Slimenano::Core::Module::IBaseModule<IMemoryManager> {
+class SLIMENANO_CORE_API IMemoryManager : public TypedIMemoryManager {
 public:
     ~IMemoryManager() override = default;
     [[nodiscard]] virtual auto Malloc(size_t size, size_t alignment) -> void* = 0;
-    [[nodiscard]] virtual auto Malloc(size_t size) -> void*;
+    [[nodiscard]] virtual auto Malloc(size_t size) -> void* = 0;
     virtual auto Free(void* ptr) -> Slimenano::Core::Base::Status = 0;
     virtual auto Reset() -> Slimenano::Core::Base::Status = 0;
 

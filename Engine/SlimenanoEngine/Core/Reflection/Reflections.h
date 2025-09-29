@@ -1,5 +1,5 @@
 /*
-    Slimenano Engine
+Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
     This program is free software: you can redistribute it and/or modify
@@ -15,21 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
-#define SLIMENANO_PROJECT_ENGINE_SLIMENANO_ENGINE_H
 
-#include <SlimenanoEngine/Core/Base/Status.h>
+#ifndef SLIMENANO_PROJECT_ENGINE_CORE_Reflection_Reflections_H
+#define SLIMENANO_PROJECT_ENGINE_CORE_Reflection_Reflections_H
 
-#include <SlimenanoEngine/Core/Application/IApplication.h>
-
-#include <SlimenanoEngine/Core/Engine/Engine.h>
-#include <SlimenanoEngine/Core/Engine/EngineContext.h>
-
-#include <SlimenanoEngine/Core/Exception/IExceptionHandler.h>
-
-#include <SlimenanoEngine/Core/Memory/IMemoryManager.h>
-
-#include <SlimenanoEngine/Core/Log/ILogger.h>
-#include <SlimenanoEngine/Core/Log/ILoggerManager.h>
+#define SLIMENANO_CLASS
+#define SLIMENANO_METHOD
+#define SLIMENANO_FIELD
 
 #endif

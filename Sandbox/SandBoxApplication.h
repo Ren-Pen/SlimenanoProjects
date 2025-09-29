@@ -15,36 +15,41 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_MANAGER_H
-#define SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_MANAGER_H
+#ifndef SLIMENANO_ENGINE_SANDBOX_SANDBOX_APPLICATION_H
+#define SLIMENANO_ENGINE_SANDBOX_SANDBOX_APPLICATION_H
+
+#include "SlimenanoEngine/Core/Engine/Engine.h"
+#include <SlimenanoEngine/Core/Base/Status.h>
+#include <SlimenanoEngine/Core/Log/ILogger.h>
 #include <SlimenanoEngine/Core/Log/ILoggerManager.h>
-#include "../Export.h"
+#include <SlimenanoEngine/Core/Application/IApplication.h>
+namespace Slimenano::SandBox {
 
-namespace Slimenano::Core::Log {
-
-class SLIMENANO_RUNTIME_CORE_API SPDLoggerManager final : public ILoggerManager {
+class SandBoxApplication final : public Slimenano::Core::Application::IApplication {
 public:
-    SPDLoggerManager();
-    ~SPDLoggerManager() override;
+    ~SandBoxApplication() override = default;
 
-    auto GetLogger(const char* name) -> ILogger* override;
-    auto FreeLogger(ILogger* logger) -> Slimenano::Core::Base::Status override;
+    virtual auto OnInstall(Slimenano::Core::Engine::Engine* engine) -> Slimenano::Core::Base::Status override;
+
+    virtual auto OnUninstall() -> void override;
 
     auto OnInit() -> Slimenano::Core::Base::Status override;
-    auto OnShutdown() -> Slimenano::Core::Base::Status override;
-    auto OnUpdate() -> Slimenano::Core::Base::Status override;
-    auto OnInstall(Slimenano::Core::Engine::Engine* context) -> Slimenano::Core::Base::Status override;
-    auto OnUninstall() -> void override;
 
-    auto SetDefaultLevel(const ILogger::Level& level) -> void override;
+    auto OnShutdown() -> Slimenano::Core::Base::Status override;
+
+    auto OnUpdate() -> Slimenano::Core::Base::Status override;
+
     [[nodiscard]] auto GetModuleName() const -> const char* override;
+
+
     [[nodiscard]] auto GetModuleStatusCategory() const -> Slimenano::Core::Base::State override;
 
 private:
-    class Impl;
-    Impl* m_pImpl;
+    unsigned long long startTime = 0;
+    Slimenano::Core::Log::ILogger* pLogger = nullptr;
+    Slimenano::Core::Engine::Engine* pEngine = nullptr;
 };
 
-} // namespace Slimenano::Core::Log
+} // namespace Slimenano::Sandbox
 
 #endif

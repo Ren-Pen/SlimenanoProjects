@@ -19,20 +19,16 @@
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_APPLICATION_I_APPLICATION_H
 #define SLIMENANO_PROJECT_ENGINE_CORE_APPLICATION_I_APPLICATION_H
 #include "../Export.h"
-#include "../Exception/IExceptionHandler.h"
-#include "../Log/ILoggerManager.h"
-#include "../Module/IBaseModule.h"
+#include "../Module/IModule.h"
+
+SLIMENANO_DECLARE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Application, IApplication);
 
 namespace Slimenano::Core::Application {
 
-/**
- * @brief 
- * 
- */
-class SLIMENANO_CORE_API IApplication : public Slimenano::Core::Module::IBaseModule<IApplication> {
-protected:
-    auto GetLoggerManager() -> Slimenano::Core::Log::ILoggerManager*;
-    auto GetExceptionHandler() -> Slimenano::Core::Exception::IExceptionHandler*;
+class SLIMENANO_CORE_API IApplication : public TypedIApplication {
+
 };
+
 } // namespace Slimenano::Core::Application
+
 #endif

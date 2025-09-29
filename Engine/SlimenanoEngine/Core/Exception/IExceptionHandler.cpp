@@ -16,9 +16,6 @@ Slimenano Engine
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "../Export.h"
-#include "../Base/TypesImpl.h"
-
 #include "IExceptionHandler.h"
 
-template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Exception::IExceptionHandler>() -> const Slimenano::Core::Base::TypeId*;
+SLIMENANO_DEFINE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Exception, IExceptionHandler);

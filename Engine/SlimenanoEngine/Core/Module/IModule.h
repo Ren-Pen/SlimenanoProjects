@@ -34,6 +34,21 @@ public:
     virtual ~IModule() = default;
 
     /**
+     * @brief
+     *
+     * @param Engine
+     * @return Slimenano::Core::Base::Status
+     */
+    virtual auto OnInstall(Slimenano::Core::Engine::Engine* context) -> Slimenano::Core::Base::Status = 0;
+
+    /**
+     * @brief
+     *
+     * @return Slimenano::Core::Base::Status
+     */
+    virtual auto OnUninstall() -> void = 0;
+
+    /**
      * @brief Called when the module is initialized during engine startup
      * @return true if initialized successfully
      */
@@ -60,5 +75,23 @@ public:
     [[nodiscard]] virtual auto GetModuleStatusCategory() const -> Slimenano::Core::Base::State = 0;
 };
 } // namespace Slimenano::Core::Module
+
+#define SLIMENANO_DECLARE_MODULE(API, NAMESPACE, MODULE)                                                    \
+    namespace NAMESPACE{                                                                                    \
+        class MODULE;                                                                                       \
+        class API Typed##MODULE : public ::Slimenano::Core::Module::IModule {                               \
+            public:                                                                                         \
+            [[nodiscard]] virtual auto GetModuleId() const -> const Slimenano::Core::Base::TypeId* final;   \
+        };                                                                                                  \
+    }                                                                                                       \
+    SLIMENANO_DECLARE_TYPEID(API, NAMESPACE::MODULE)
+
+#define SLIMENANO_DEFINE_MODULE(API, NAMESPACE, MODULE)                                                     \
+    namespace NAMESPACE {                                                                                   \
+        [[nodiscard]] auto Typed##MODULE::GetModuleId() const -> const Slimenano::Core::Base::TypeId* {     \
+            return Slimenano::Core::Base::TypeId::Get<MODULE>();                                            \
+        }                                                                                                   \
+    }                                                                                                       \
+    SLIMENANO_DEFINE_TYPEID(API, NAMESPACE::MODULE)
 
 #endif

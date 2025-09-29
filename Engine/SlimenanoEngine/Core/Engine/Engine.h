@@ -17,12 +17,15 @@ Slimenano Engine
 */
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
 #define SLIMENANO_PROJECT_ENGINE_CORE_ENGINE_ENGINE_H
+
+#include <vector>
 #include <atomic>
+#include <unordered_map>
 
 #include "../Export.h"
 #include "../Base/Status.h"
-
-#include "EngineContext.h"
+#include "../Base/Types.h"
+#include "../Module/IModule.h"
 
 namespace Slimenano::Core::Engine {
 
@@ -35,43 +38,40 @@ public:
      * @brief Construct the Engine with the given EngineContext.
      * @param context Reference to the engine context which holds global runtime dependencies.
      */
-    SLIMENANO_CORE_API explicit Engine();
+    SLIMENANO_CORE_API explicit Engine() = default;
 
     /**
      * @brief Destructor that ensures the engine is properly stopped.
      */
     SLIMENANO_CORE_API ~Engine();
 
-    /**
-     * @brief Starts the engine and enters the main loop.
-     * Initializes and starts all registered modules.
-     */
+    template <class T>
+    auto FindModule() -> T*;
+
     SLIMENANO_CORE_API auto Start() -> Slimenano::Core::Base::Status;
 
-    /**
-     * @brief Stops the engine and shuts down all running modules.
-     */
     SLIMENANO_CORE_API auto Stop() -> Slimenano::Core::Base::Status;
 
-    SLIMENANO_CORE_API [[nodiscard]] auto getEngineContext() const -> EngineContext*;
+    SLIMENANO_CORE_API auto Install(Slimenano::Core::Module::IModule* pModule) -> Base::Status;
+    SLIMENANO_CORE_API auto Uninstall(const Slimenano::Core::Module::IModule* pModule) -> Base::Status;
+    SLIMENANO_CORE_API auto GetModules(std::vector<Slimenano::Core::Module::IModule*>& outModules) const -> Base::Status;
 
 private:
-    /**
-     * @brief Reference to the engine context shared across all modules.
-     */
-    EngineContext* m_pContext;
+    [[nodiscard]] auto MainLoop() -> Slimenano::Core::Base::Status;
 
-    /**
-     * @brief Whether the engine is currently running.
-     */
+    std::unordered_map<const Slimenano::Core::Base::TypeId*, Slimenano::Core::Module::IModule*> m_modules = std::unordered_map<const Slimenano::Core::Base::TypeId*, Slimenano::Core::Module::IModule*>();
+
     std::atomic<bool> m_running = false;
-
-    /**
-     * @brief The main engine loop that drives all active modules.
-     * This runs until Stop() is called.
-     */
-    [[nodiscard]] auto MainLoop() const -> Slimenano::Core::Base::Status;
 };
+
+template <class T>
+auto Engine::FindModule() -> T* {
+    const auto typeId = Slimenano::Core::Base::TypeId::Get<T>();
+    if (!m_modules.contains(typeId)) {
+        return nullptr;
+    }
+    return static_cast<T*>(m_modules[typeId]);
+}
 } // namespace Slimenano::Core::Engine
 
 #endif

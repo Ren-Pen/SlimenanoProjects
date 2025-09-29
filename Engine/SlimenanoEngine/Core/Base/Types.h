@@ -29,4 +29,15 @@ public:
 
 } // namespace Slimenano::Core::Base
 
+#define SLIMENANO_DEFINE_TYPEID(API, T)                                                             \
+        template<typename U>                                                                        \
+        auto ::Slimenano::Core::Base::TypeId::Get() -> const TypeId* {                              \
+            static TypeId id;                                                                       \
+            return &id;                                                                             \
+        }                                                                                           \
+        template API auto ::Slimenano::Core::Base::TypeId::Get<T>() -> const ::Slimenano::Core::Base::TypeId*
+
+#define SLIMENANO_DECLARE_TYPEID(API, T) \
+        extern template API auto ::Slimenano::Core::Base::TypeId::Get<T>() -> const ::Slimenano::Core::Base::TypeId*
+
 #endif

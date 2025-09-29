@@ -15,36 +15,38 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_MANAGER_H
-#define SLIMENANO_PROJECT_RUNTIME_COMMON_CORE_LOG_SPD_LOGGER_MANAGER_H
+#ifndef SLIMENANO_ENGINE_SANDBOX_SANDBOX_LOGGER_MANAGER_H
+#define SLIMENANO_ENGINE_SANDBOX_SANDBOX_LOGGER_MANAGER_H
+
 #include <SlimenanoEngine/Core/Log/ILoggerManager.h>
-#include "../Export.h"
 
-namespace Slimenano::Core::Log {
+namespace Slimenano::SandBox {
 
-class SLIMENANO_RUNTIME_CORE_API SPDLoggerManager final : public ILoggerManager {
+class SandBoxLoggerManager final : public Slimenano::Core::Log::ILoggerManager {
 public:
-    SPDLoggerManager();
-    ~SPDLoggerManager() override;
+    ~SandBoxLoggerManager() override = default;
+    auto GetLogger(const char* name) -> Slimenano::Core::Log::ILogger* override;
 
-    auto GetLogger(const char* name) -> ILogger* override;
-    auto FreeLogger(ILogger* logger) -> Slimenano::Core::Base::Status override;
+    auto FreeLogger(Slimenano::Core::Log::ILogger* logger) -> Slimenano::Core::Base::Status override;
 
-    auto OnInit() -> Slimenano::Core::Base::Status override;
-    auto OnShutdown() -> Slimenano::Core::Base::Status override;
-    auto OnUpdate() -> Slimenano::Core::Base::Status override;
     auto OnInstall(Slimenano::Core::Engine::Engine* context) -> Slimenano::Core::Base::Status override;
+
     auto OnUninstall() -> void override;
 
-    auto SetDefaultLevel(const ILogger::Level& level) -> void override;
+    auto OnInit() -> Slimenano::Core::Base::Status override;
+
+    auto OnShutdown() -> Slimenano::Core::Base::Status override;
+
+    auto OnUpdate() -> Slimenano::Core::Base::Status override;
+
     [[nodiscard]] auto GetModuleName() const -> const char* override;
+
     [[nodiscard]] auto GetModuleStatusCategory() const -> Slimenano::Core::Base::State override;
 
-private:
-    class Impl;
-    Impl* m_pImpl;
+    auto SetDefaultLevel(const Slimenano::Core::Log::ILogger::Level& level) -> void override;
+
 };
 
-} // namespace Slimenano::Core::Log
+} // namespace Slimenano::SandBox
 
 #endif

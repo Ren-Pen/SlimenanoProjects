@@ -23,6 +23,7 @@ Slimenano Engine
 
 #include "SPDLogger.h"
 #include "SPDLoggerManager.h"
+#include "SlimenanoEngine/Core/Engine/Engine.h"
 #include "SlimenanoEngine/Core/Log/ILogger.h"
 
 namespace Slimenano::Core::Log {
@@ -134,18 +135,27 @@ auto SPDLoggerManager::FreeLogger(ILogger* logger) -> Slimenano::Core::Base::Sta
     return m_pImpl->FreeLogger(logger);
 }
 auto SPDLoggerManager::OnInit() -> Slimenano::Core::Base::Status {
-    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Logger);
+    return Slimenano::Core::Base::Status::Success(this->GetModuleStatusCategory());
 }
 auto SPDLoggerManager::OnShutdown() -> Slimenano::Core::Base::Status {
-    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Logger);
+    return Slimenano::Core::Base::Status::Success(this->GetModuleStatusCategory());
 }
 auto SPDLoggerManager::OnUpdate() -> Slimenano::Core::Base::Status {
-    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Logger);
+    return Slimenano::Core::Base::Status::Success(this->GetModuleStatusCategory());
 }
 void SPDLoggerManager::SetDefaultLevel(const ILogger::Level& level) {
     m_pImpl->SetDefaultLevel(level);
 }
+auto SPDLoggerManager::OnInstall(Slimenano::Core::Engine::Engine* engine) -> Slimenano::Core::Base::Status {
+    return Slimenano::Core::Base::Status::Success(this->GetModuleStatusCategory());
+}
+auto SPDLoggerManager::OnUninstall() -> void {
+}
 auto SPDLoggerManager::GetModuleName() const -> const char* {
     return "SPDLoggerManager";
 }
+auto SPDLoggerManager::GetModuleStatusCategory() const -> Slimenano::Core::Base::State {
+    return Slimenano::Core::Base::Status::Category::Logger;
+}
+
 } // namespace Slimenano::Core::Log

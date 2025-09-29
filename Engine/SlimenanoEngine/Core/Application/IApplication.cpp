@@ -15,21 +15,7 @@ Slimenano Engine
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
-#include "../Export.h"
-#include "../Base/TypesImpl.h"
 #include "IApplication.h"
 
-template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Application::IApplication>() -> const Slimenano::Core::Base::TypeId*;
+SLIMENANO_DEFINE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Application, IApplication);
 
-namespace Slimenano::Core::Application {
-
-auto IApplication::GetLoggerManager() -> Slimenano::Core::Log::ILoggerManager* {
-    return FindModule<Slimenano::Core::Log::ILoggerManager>();
-}
-
-auto IApplication::GetExceptionHandler() -> Slimenano::Core::Exception::IExceptionHandler* {
-    return FindModule<Slimenano::Core::Exception::IExceptionHandler>();
-}
-
-} // namespace Slimenano::Core::Application

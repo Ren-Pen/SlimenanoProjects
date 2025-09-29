@@ -39,8 +39,6 @@ add_library(Slimenano::Engine::Runtime ALIAS ${TARGET_NAME})
 
 target_include_directories(${TARGET_NAME} INTERFACE ${PROJECT_SOURCE_DIR})
 
-target_sources(${TARGET_NAME} INTERFACE ${PROJECT_SOURCE_DIR}/SlimenanoEngine/SlimenanoEngine.h)
-
 if (NOT TARGET Slimenano::Engine::API)
     find_package(Slimenano::Engine REQUIRED)
 endif ()

@@ -28,7 +28,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 set(NAMESPACE Slimenano)
 
-add_executable(SandBox ${PROJECT_SOURCE_DIR}/SandBox.cpp)
+add_executable(SandBox)
+
+target_sources(SandBox PRIVATE ${PROJECT_SOURCE_DIR}/SandBox.cpp)
+target_sources(SandBox PRIVATE ${PROJECT_SOURCE_DIR}/SandBoxApplication.h)
+target_sources(SandBox PRIVATE ${PROJECT_SOURCE_DIR}/SandBoxApplication.cpp)
+target_sources(SandBox PRIVATE ${PROJECT_SOURCE_DIR}/SandBoxLogger.h)
+target_sources(SandBox PRIVATE ${PROJECT_SOURCE_DIR}/SandBoxLogger.cpp)
+target_sources(SandBox PRIVATE ${PROJECT_SOURCE_DIR}/SandBoxLoggerManager.h)
+target_sources(SandBox PRIVATE ${PROJECT_SOURCE_DIR}/SandBoxLoggerManager.cpp)
 
 if (NOT TARGET Slimenano::Engine::Runtime)
     find_package(Slimenano::Engine REQUIRED)

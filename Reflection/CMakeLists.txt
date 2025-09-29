@@ -1,4 +1,4 @@
-/*
+#[[
     Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
@@ -14,18 +14,20 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_IMPL_H
-#define SLIMENANO_PROJECT_ENGINE_CORE_BASE_TYPES_IMPL_H
-#include "Types.h"
+]]#
 
-namespace Slimenano::Core::Base {
-template <typename T>
-auto TypeId::Get() -> const TypeId* {
-    static TypeId id;
-    return &id;
-}
+cmake_minimum_required(VERSION 3.10.0)
 
-} // namespace Slimenano::Core::Base
+project(SlimenanoEngineSandbox
+    VERSION 1.0.0
+    LANGUAGES CXX
+)
 
-#endif
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED 20)
+
+set(NAMESPACE Slimenano)
+
+add_executable(Reflection)
+
+target_sources(Reflection PRIVATE ${PROJECT_SOURCE_DIR}/Reflection.cpp)

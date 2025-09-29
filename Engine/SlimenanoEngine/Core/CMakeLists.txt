@@ -42,14 +42,11 @@ target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Application/IApplica
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Application/IApplication.cpp)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Types.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/TypesImpl.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Export.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Status.h)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/Engine.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/Engine.cpp)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/EngineContext.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/EngineContext.cpp)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Exception/IExceptionHandler.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Exception/IExceptionHandler.cpp)
@@ -62,7 +59,8 @@ target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryManage
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Memory/IMemoryManager.cpp)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Module/IModule.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Module/IBaseModule.h)
+
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Reflection/Reflections.h)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Resource/IResourceManager.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Resource/IResourceManager.cpp)

@@ -17,33 +17,29 @@ Slimenano Engine
 */
 
 #include <vector>
+#include <algorithm>
+#include <iterator>
 
 #include "../Module/IModule.h"
 #include "../Exception/IExceptionHandler.h"
 
 #include "Engine.h"
-#include "EngineContext.h"
 
 namespace Slimenano::Core::Engine {
 
-Engine::Engine() :
-    m_pContext(new EngineContext()) {
-}
-
 Engine::~Engine() {
     Stop();
-    if (this->m_pContext != nullptr) {
-        delete this->m_pContext;
-        this->m_pContext = nullptr;
-    }
 }
 
 auto Engine::Start() -> Slimenano::Core::Base::Status {
+    if (m_running.load(std::memory_order_relaxed)) {
+        return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
+    }
     m_running.store(true, std::memory_order_relaxed);
 
     std::vector<Slimenano::Core::Module::IModule*> modules;
 
-    if (const auto getModuleStatus = m_pContext->GetModules(modules); getModuleStatus.IsFailure()) {
+    if (const auto getModuleStatus = GetModules(modules); getModuleStatus.IsFailure()) {
         return getModuleStatus;
     }
 
@@ -65,12 +61,12 @@ auto Engine::Stop() -> Slimenano::Core::Base::Status {
     return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
 }
 
-auto Engine::MainLoop() const -> Slimenano::Core::Base::Status {
+auto Engine::MainLoop() -> Slimenano::Core::Base::Status {
 
-    const auto pExceptionHandler = m_pContext->FindModule<Exception::IExceptionHandler>();
+    const auto pExceptionHandler = this->FindModule<Exception::IExceptionHandler>();
 
     std::vector<Slimenano::Core::Module::IModule*> modules;
-    if (const auto getModuleStatus = m_pContext->GetModules(modules); getModuleStatus.IsFailure()) {
+    if (const auto getModuleStatus = GetModules(modules); getModuleStatus.IsFailure()) {
         if (pExceptionHandler != nullptr) {
             pExceptionHandler->Handle(getModuleStatus);
         }
@@ -102,8 +98,67 @@ auto Engine::MainLoop() const -> Slimenano::Core::Base::Status {
     return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
 }
 
-auto Engine::getEngineContext() const -> EngineContext* {
-    return m_pContext;
+auto Engine::GetModules(std::vector<Slimenano::Core::Module::IModule*>& outModules) const -> Slimenano::Core::Base::Status {
+    std::ranges::transform(m_modules, std::back_inserter(outModules), [](const auto& pair) {
+        return pair.second;
+    });
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
+}
+
+auto Engine::Install(Slimenano::Core::Module::IModule* pModule) -> Slimenano::Core::Base::Status {
+    if (!pModule) {
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::InvalidParameter,
+            "Cannot install nullptr as a module."
+        };
+    }
+
+    const auto typeId = pModule->GetModuleId();
+    if (m_modules.contains(typeId)) {
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::AlreadyExists,
+            "Module already be install."
+        };
+    }
+
+    const auto installModuleStatus = pModule->OnInstall(this);
+    if (installModuleStatus.IsFailure()) {
+        return installModuleStatus;
+    }
+
+    m_modules[typeId] = pModule;
+
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
+}
+
+auto Engine::Uninstall(const Slimenano::Core::Module::IModule* pModule) -> Slimenano::Core::Base::Status {
+    if (!pModule) {
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::InvalidParameter,
+            "Cannot uninstall a nullptr."
+        };
+    }
+    const auto typeId = pModule->GetModuleId();
+    const auto it = m_modules.find(typeId);
+    if (it == m_modules.end()) {
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::NotFound,
+            "Module not found."
+        };
+    }
+    if (it->second != pModule) {
+        return {
+            Slimenano::Core::Base::Status::Category::Internal,
+            Slimenano::Core::Base::Status::Code::NotPermitted,
+            "Module is not owner."
+        };
+    }
+    m_modules.erase(typeId);
+    return Slimenano::Core::Base::Status::Success(Slimenano::Core::Base::Status::Category::Internal);
 }
 
 } // namespace Slimenano::Core::Engine

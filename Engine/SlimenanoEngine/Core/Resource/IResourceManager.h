@@ -19,13 +19,15 @@ Slimenano Engine
 #define SLIMENANO_PROJECT_ENGINE_CORE_RESOURCE_I_RESOURCE_MANAGER_H
 #include "../Base/Status.h"
 #include "../Export.h"
-#include "../Module/IBaseModule.h"
+#include "../Module/IModule.h"
+
+SLIMENANO_DECLARE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Resource, IResourceManager);
 
 namespace Slimenano::Core::Resource {
 
 using ResourceHandle = unsigned long long;
 
-class SLIMENANO_CORE_API IResourceManager : public Slimenano::Core::Module::IBaseModule<IResourceManager> {
+class SLIMENANO_CORE_API IResourceManager : public TypedIResourceManager {
 public:
     ~IResourceManager() override = default;
     virtual auto Open(const char* location, ResourceHandle* handle) -> Slimenano::Core::Base::Status = 0;

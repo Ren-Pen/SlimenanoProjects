@@ -19,19 +19,20 @@ Slimenano Engine
 #define SLIMENANO_ENGINE_CORE_LOG_I_LOGGER_MANAGER_H
 
 #include "../Export.h"
-#include "../Module/IBaseModule.h"
+#include "../Module/IModule.h"
 
 #include "ILogger.h"
 
+SLIMENANO_DECLARE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Log, ILoggerManager);
+
 namespace Slimenano::Core::Log {
 
-class SLIMENANO_CORE_API ILoggerManager : public Slimenano::Core::Module::IBaseModule<ILoggerManager> {
+class SLIMENANO_CORE_API ILoggerManager : public TypedILoggerManager {
 public:
     ~ILoggerManager() override = default;
     virtual auto GetLogger(const char* name) -> ILogger* = 0;
     virtual auto FreeLogger(ILogger* logger) -> Slimenano::Core::Base::Status = 0;
     virtual auto SetDefaultLevel(const ILogger::Level& level) -> void = 0;
-    [[nodiscard]] auto GetModuleStatusCategory() const -> Slimenano::Core::Base::State override;
 };
 
 } // namespace Slimenano::Core::Log

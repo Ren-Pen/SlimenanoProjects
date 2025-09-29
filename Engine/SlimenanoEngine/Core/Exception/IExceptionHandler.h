@@ -17,15 +17,19 @@ Slimenano Engine
 */
 #ifndef SLIMENANO_PROJECT_ENGINE_CORE_EXCEPTION_I_EXCEPTION_HANDLER_H
 #define SLIMENANO_PROJECT_ENGINE_CORE_EXCEPTION_I_EXCEPTION_HANDLER_H
+
 #include "../Base/Status.h"
 #include "../Export.h"
-#include "../Module/IBaseModule.h"
+#include "../Module/IModule.h"
+
+SLIMENANO_DECLARE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Exception, IExceptionHandler);
 
 namespace Slimenano::Core::Exception {
-class SLIMENANO_CORE_API IExceptionHandler : public Slimenano::Core::Module::IBaseModule<IExceptionHandler> {
+class SLIMENANO_CORE_API IExceptionHandler : public TypedIExceptionHandler {
 public:
     virtual void Handle(Slimenano::Core::Base::Status status) = 0;
     virtual void Handle(Slimenano::Core::Base::Status status, const char* message) = 0;
 };
 } // namespace Slimenano::Core::Exception
+
 #endif

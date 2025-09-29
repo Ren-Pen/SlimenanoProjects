@@ -15,17 +15,6 @@ Slimenano Engine
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "../Export.h"
-#include "../Base/TypesImpl.h"
-
 #include "IMemoryManager.h"
 
-template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Memory::IMemoryManager>() -> const Slimenano::Core::Base::TypeId*;
-
-namespace Slimenano::Core::Memory {
-
-auto IMemoryManager::Malloc(const size_t size) -> void* {
-    return Malloc(size, alignof(std::max_align_t));
-}
-
-} // namespace Slimenano::Core::Memory
+SLIMENANO_DEFINE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Memory, IMemoryManager);

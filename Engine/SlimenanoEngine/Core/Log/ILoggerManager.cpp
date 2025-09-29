@@ -15,15 +15,7 @@ Slimenano Engine
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "../Export.h"
-#include "../Base/TypesImpl.h"
 
 #include "ILoggerManager.h"
 
-template SLIMENANO_CORE_API auto Slimenano::Core::Base::TypeId::Get<Slimenano::Core::Log::ILoggerManager>() -> const Slimenano::Core::Base::TypeId*;
-
-namespace Slimenano::Core::Log {
-Slimenano::Core::Base::State ILoggerManager::GetModuleStatusCategory() const {
-    return Slimenano::Core::Base::Status::Category::Logger;
-}
-} // namespace Slimenano::Core::Log
+SLIMENANO_DEFINE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Log, ILoggerManager);
