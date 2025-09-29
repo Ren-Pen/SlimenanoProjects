@@ -13,3 +13,6 @@
 [submodule "Libraries/json"]
 	path = Libraries/json
 	url = https://github.com/nlohmann/json.git
+[submodule "Libraries/glfw"]
+	path = Libraries/glfw
+	url = https://github.com/glfw/glfw.git
