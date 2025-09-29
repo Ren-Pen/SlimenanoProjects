@@ -26,6 +26,13 @@ project(SlimenanoEngineExternalLibraries
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
-set(NAMESPACE Slimenano)
-
 add_subdirectory(spdlog)
+# target_link_libraries(MyApp spdlog::spdlog)
+add_subdirectory(fmt)
+# target_link_libraries(MyApp fmt::fmt)
+add_subdirectory(tomlplusplus)
+# target_link_libraries(MyApp tomlplusplus::tomlplusplus)
+add_subdirectory(yaml-cpp)
+# target_link_libraries(MyApp yaml-cpp::yaml-cpp)
+add_subdirectory(json)
+# target_link_libraries(MyApp nlohmann_json::nlohmann_json)

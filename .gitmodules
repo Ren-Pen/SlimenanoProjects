@@ -4,3 +4,12 @@
 [submodule "Libraries/fmt"]
 	path = Libraries/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "Libraries/tomlplusplus"]
+	path = Libraries/tomlplusplus
+	url = https://github.com/marzer/tomlplusplus.git
+[submodule "Libraries/yaml-cpp"]
+	path = Libraries/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "Libraries/json"]
+	path = Libraries/json
+	url = https://github.com/nlohmann/json.git
