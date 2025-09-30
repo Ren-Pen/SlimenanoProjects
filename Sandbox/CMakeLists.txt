@@ -43,3 +43,4 @@ if (NOT TARGET Slimenano::Engine::Runtime)
 endif ()
 
 target_link_libraries(SandBox Slimenano::Engine::Runtime)
+target_link_libraries(SandBox glad::wgl opengl32)

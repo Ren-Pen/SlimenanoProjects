@@ -38,11 +38,13 @@ target_compile_definitions(${TARGET_NAME} PRIVATE SLIMENANO_CORE_LIBRARY)
 
 target_compile_options(${TARGET_NAME} PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Export.h)
+
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Application/IApplication.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Application/IApplication.cpp)
 
+target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Result.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Types.h)
-target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Export.h)
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Base/Status.h)
 
 target_sources(${TARGET_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/Engine/Engine.h)

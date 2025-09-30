@@ -1,5 +1,5 @@
-/*
-Slimenano Engine
+#[[
+    Slimenano Engine
     Copyright (C) 2025  zyu.xiao
 
     This program is free software: you can redistribute it and/or modify
@@ -14,21 +14,18 @@ Slimenano Engine
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-#ifndef SLIMENANO_PROJECT_ENGINE_CORE_RESOURCE_I_RESOURCE_MANAGER_H
-#define SLIMENANO_PROJECT_ENGINE_CORE_RESOURCE_I_RESOURCE_MANAGER_H
-#include "../Export.h"
-#include "../Module/IModule.h"
-#include "IResourceBase.h"
+]]#
+cmake_minimum_required(VERSION 3.10.0)
+project(gladglx
+    VERSION 2.0.8
+    LANGUAGES C CXX
+)
 
-SLIMENANO_DECLARE_MODULE(SLIMENANO_CORE_API, Slimenano::Core::Resource, IResourceManager);
+add_library(glad-glx STATIC)
 
-namespace Slimenano::Core::Resource {
+add_library(glad::glx ALIAS glad-glx)
 
-class SLIMENANO_CORE_API IResourceManager : public TypedIResourceManager, public IResourceBase {
-public:
-    ~IResourceManager() override = default;
-};
-} // namespace Slimenano::Core::Resource
+target_sources(glad-glx PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/glx.c")
+target_include_directories(glad-glx PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-#endif
+target_link_libraries(glad-glx PUBLIC glad::glad)

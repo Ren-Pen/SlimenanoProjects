@@ -18,6 +18,9 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(SlimenanoProject)
 
+set(SLIMENANO_PLATFORM "WINDOWS") # Allow value WINDOWS, LINUX, MACOS, ANDROID
+set(SLIMENANO_GRAPHICS "OPENGL") # Allow value OPENGL, VULKAN, DIRECTX
+
 add_subdirectory(Libraries)
 add_subdirectory(Engine)
 add_subdirectory(Runtime)
