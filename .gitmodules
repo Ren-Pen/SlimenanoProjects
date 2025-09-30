@@ -1,15 +1,20 @@
 [submodule "Libraries/spdlog"]
 	path = Libraries/spdlog
 	url = https://github.com/gabime/spdlog.git
+	shallow = true
 [submodule "Libraries/fmt"]
 	path = Libraries/fmt
 	url = https://github.com/fmtlib/fmt.git
+	shallow = true
 [submodule "Libraries/tomlplusplus"]
 	path = Libraries/tomlplusplus
 	url = https://github.com/marzer/tomlplusplus.git
+	shallow = true
 [submodule "Libraries/yaml-cpp"]
 	path = Libraries/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+	shallow = true
 [submodule "Libraries/json"]
 	path = Libraries/json
 	url = https://github.com/nlohmann/json.git
+	shallow = true
